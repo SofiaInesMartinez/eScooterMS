@@ -28,8 +28,8 @@ public class User {
 	private String surname;
 	@Column(nullable=false)
 	private String username;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-	private List<Account> accounts;
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//	private List<Account> accounts;
 	@Column(nullable = false)
 	private String role;
 	
@@ -45,6 +45,7 @@ public class User {
 		this.surname = surname;
 		this.username = username;
 		this.role = role;
+	//	this.accounts = new ArrayList<>();
 	}
 	public long getId() {
 		return id;
@@ -84,7 +85,7 @@ public class User {
 	}
 	
 	
-	
+/*
 	public List<Account> getAccounts() {
 		ArrayList<Account> copy = new ArrayList<>(this.accounts);
 		return copy;
@@ -94,6 +95,7 @@ public class User {
 		if(!this.accounts.contains(a))
 			accounts.add(a);
 	}
+*/
 	public String getRole() {
 		return role;
 	}

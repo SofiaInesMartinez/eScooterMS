@@ -1,6 +1,7 @@
 package tpe.userMS.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -14,8 +15,8 @@ import jakarta.persistence.ManyToMany;
 public class Account {
 	@Id
 	private long id;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "accounts")
-	private List<User> users;
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "accounts")
+//	private List<User> users;
 	//private Wallet wallet;
 	@Column(nullable=false)
 	private int moneyBalance;
@@ -24,15 +25,15 @@ public class Account {
 	
 	
 		
-	public Account(long id, List<User> users, int moneyBalance, Date createdAt) {
+	public Account(long id, int moneyBalance, Date createdAt) {
 		super();
 		this.id = id;
-		this.users = users;
+//		this.users = new ArrayList<>();
 		this.moneyBalance = moneyBalance;
 		this.createdAt = createdAt;
 	}
 
-
+/*
 	public Account(long id, List<User> users) {
 		super();
 		this.id = id;
@@ -41,19 +42,21 @@ public class Account {
 		this.moneyBalance = 0;
 	}
 	
-	
+*/
 	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
 		this.id = id;
 	}
+/*	
 	public List<User> getUsers() {
 		return users;
 	}
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+*/
 	public int getMoneyBalance() {
 		return moneyBalance;
 	}
@@ -87,3 +90,4 @@ public class Account {
 	
 
 }
+

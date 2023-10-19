@@ -30,3 +30,14 @@ CREATE TABLE IF NOT EXISTS account (
   created_at date NOT NULL
 );
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `user_accounts`
+--
+
+CREATE TABLE IF NOT EXISTS account (
+  id_user bigint(20) NOT NULL PRIMARY KEY,
+  id_account bigint(20) NOT NULL PRIMARY KEY
+
+);

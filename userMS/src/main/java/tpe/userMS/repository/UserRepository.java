@@ -14,9 +14,9 @@ import tpe.userMS.model.User;
 public interface UserRepository extends JpaRepository<User, Integer>{
 
 	@Query("SELECT u FROM User u WHERE u.id = :id")
-	public Optional<User> getUserById(long number);
+	public Optional<User> getUserById(long id);
 
-	@Query("SELECT u FROM User u ORDER BY u.createdAt DESC")
+	@Query("SELECT u FROM User u ORDER BY u.surname")
 	public List<User> getUsersBySimpleOrdering();
 	
 
