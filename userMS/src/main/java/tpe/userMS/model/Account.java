@@ -18,12 +18,21 @@ public class Account {
 	private List<User> users;
 	//private Wallet wallet;
 	@Column(nullable=false)
-	private double moneyBalance;
+	private int moneyBalance;
 	@Column(nullable=false)
 	private Date createdAt;
 	
 	
 		
+	public Account(long id, List<User> users, int moneyBalance, Date createdAt) {
+		super();
+		this.id = id;
+		this.users = users;
+		this.moneyBalance = moneyBalance;
+		this.createdAt = createdAt;
+	}
+
+
 	public Account(long id, List<User> users) {
 		super();
 		this.id = id;
@@ -45,10 +54,10 @@ public class Account {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
-	public double getMoneyBalance() {
+	public int getMoneyBalance() {
 		return moneyBalance;
 	}
-	public void setMoneyBalance(double moneyBalance) {
+	public void setMoneyBalance(int moneyBalance) {
 		this.moneyBalance = moneyBalance;
 	}
 	public Date getCreatedAt() {

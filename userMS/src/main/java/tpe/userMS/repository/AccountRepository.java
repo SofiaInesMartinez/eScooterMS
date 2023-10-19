@@ -8,7 +8,7 @@ import tpe.userMS.model.Account;
 
 
 @Repository("accountRepository")
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Integer> {
 
 	@Query("SELECT a FROM Account a WHERE a.id = :id")
 	public Account getAcountById(long id);

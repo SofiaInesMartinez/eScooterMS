@@ -11,7 +11,7 @@ import tpe.userMS.model.User;
 
 
 @Repository("userRepository")
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface UserRepository extends JpaRepository<User, Integer>{
 
 	@Query("SELECT u FROM User u WHERE u.id = :id")
 	public Optional<User> getUserById(long number);
