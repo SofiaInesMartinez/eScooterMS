@@ -31,12 +31,12 @@ public class User {
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private List<Account> accounts;
 	@Column(nullable = false)
-	private Role role;
+	private String role;
 	
 	
 	
 	
-	public User(long id, int phone, String email, String name, String surname, String username, Role role) {
+	public User(long id, int phone, String email, String name, String surname, String username, String role) {
 		super();
 		this.id = id;
 		this.phone = phone;
@@ -94,10 +94,10 @@ public class User {
 		if(!this.accounts.contains(a))
 			accounts.add(a);
 	}
-	public Role getRole() {
+	public String getRole() {
 		return role;
 	}
-	public void setRole(Role role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 	public void setId(long id) {

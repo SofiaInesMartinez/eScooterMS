@@ -2,15 +2,9 @@ package tpe.userMS.model;
 
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
-@Entity
 public class Role {
-	@Id
+
 	private int id;
-	@Column(nullable = false)
 	private String type;
 	
 	

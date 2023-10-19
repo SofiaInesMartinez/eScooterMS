@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToMany;
 public class Account {
 	@Id
 	private long id;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "account")
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "accounts")
 	private List<User> users;
 	//private Wallet wallet;
 	@Column(nullable=false)

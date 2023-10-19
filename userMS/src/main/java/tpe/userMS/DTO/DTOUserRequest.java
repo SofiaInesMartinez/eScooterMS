@@ -2,8 +2,6 @@ package tpe.userMS.DTO;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import tpe.userMS.model.Role;
-
 public class DTOUserRequest {
 	@NotNull(message = "id shouldn't be null")
 	private long id;
@@ -29,9 +27,9 @@ public class DTOUserRequest {
 
 	@NotNull(message = "role shouldn't be null")
 	@NotEmpty(message = "role shouldn't be empty")
-	private Role role;
+	private String role;
 
-	public DTOUserRequest(long id, int phone, String email, String name, String surname, String username, Role role) {
+	public DTOUserRequest(long id, int phone, String email, String name, String surname, String username, String role) {
 		super();
 		this.id = id;
 		this.phone = phone;
@@ -90,11 +88,11 @@ public class DTOUserRequest {
 		this.username = username;
 	}
 
-	public Role getRole() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 
