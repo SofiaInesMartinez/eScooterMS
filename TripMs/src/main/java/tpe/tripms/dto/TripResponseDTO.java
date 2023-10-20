@@ -7,8 +7,8 @@ import tpe.tripms.model.Trip;
 
 @Data
 public class TripResponseDTO {
-	private int idTrip;
-	private int idScooter;
+	private long idTrip;
+	private long idScooter;
 	private int idDestinationStop;
 	private int idOriginStop;
 	private Date startDate;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import tpe.tripms.dto.TripRequestDTO;
 import tpe.tripms.dto.TripResponseDTO;
 import tpe.tripms.service.TripService;
@@ -25,7 +26,7 @@ public class TripController {
 	@Autowired
 	private TripService service;
 	
-	@PutMapping("/end/{id}")
+	@PutMapping("/{id}/end")
 	public ResponseEntity<TripResponseDTO> endTrip(@PathVariable int id) throws Exception {
 		return ResponseEntity.ok(service.endTrip(id));
 	}
@@ -35,8 +36,13 @@ public class TripController {
 		return ResponseEntity.ok(service.findAll());
 	}
 	
+	@GetMapping("/{id}")
+	public ResponseEntity<TripResponseDTO> findById(@PathVariable int id) throws Exception {
+		return ResponseEntity.ok(service.findByid(id));
+	}
+	
 	@PostMapping("")
-	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody TripRequestDTO request) {
+	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) {
 		return new ResponseEntity<>(service.saveTrip(request), HttpStatus.CREATED);
 	}
 	

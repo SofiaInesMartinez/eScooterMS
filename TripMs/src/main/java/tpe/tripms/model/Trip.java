@@ -4,31 +4,28 @@ import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import tpe.tripms.dto.TripRequestDTO;
-import tpe.tripms.dto.TripResponseDTO;
 
 @Entity
 @Data
-@IdClass(TripPK.class)
+@NoArgsConstructor
 public class Trip {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idTrip;
-	@Id
+	@Column(nullable = false)
 	private int idUser;
-	@Id
+	@Column(nullable = false)
 	private int idScooter;
 	@Column(nullable = false)
 	private int idOriginStop;
 	@Column
-	private int idDestinationStop;
+	private int idDestinationStop; // init with 0 >:( and cannot be Integer
 	@Column(nullable = false)
 	private Date startDate;
 	@Column

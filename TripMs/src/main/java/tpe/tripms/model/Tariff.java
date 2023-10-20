@@ -8,10 +8,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import tpe.tripms.dto.TariffRequestDTO;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Tariff {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

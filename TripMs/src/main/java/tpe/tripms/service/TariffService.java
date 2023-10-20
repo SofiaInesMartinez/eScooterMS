@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import tpe.tripms.dto.TariffRequestDTO;
 import tpe.tripms.dto.TariffResponseDTO;
 import tpe.tripms.model.Tariff;
@@ -18,12 +18,12 @@ public class TariffService {
 	@Autowired
 	private TariffRepository repository;
 	
-	@Transactional
+	@Transactional( readOnly = true )
 	public List<TariffResponseDTO> findAll() {
 		return repository.findAll().stream().map( TariffResponseDTO::new ).toList();
 	}
 	
-	@Transactional
+	@Transactional( readOnly = true )
 	public TariffResponseDTO findById(int id) throws Exception {
 		return repository.findById(id)
 				.map( TariffResponseDTO::new )
