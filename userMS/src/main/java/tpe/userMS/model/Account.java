@@ -4,20 +4,18 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Account {
 	@Id
 	private long id;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "accountId")
-	private List<UserAccount> users;
+	
+	@ManyToMany(mappedBy = "accounts")
+	private List<User> users;
 	//private Wallet wallet;
 	@Column(nullable=false)
 	private int moneyBalance;
@@ -51,10 +49,10 @@ public class Account {
 		this.id = id;
 	}
 	
-	public List<UserAccount> getUsers() {
+	public List<User> getUsers() {
 		return users;
 	}
-	public void setUsers(List<UserAccount> users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
 

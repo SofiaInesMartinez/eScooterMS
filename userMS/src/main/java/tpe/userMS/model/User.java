@@ -6,13 +6,13 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-//import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinTable;
+
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 @JsonIgnoreProperties(value = {"accounts"})
@@ -29,8 +29,13 @@ public class User {
 	private String surname;
 	@Column(nullable=false)
 	private String username;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "userId")
-	private List<UserAccount> accounts;
+	
+	@ManyToMany
+    @JoinTable(name = "user_account",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "accountId"))
+	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "userId")
+	private List<Account> accounts;
 	@Column(nullable = false)
 	private String role;
 	
@@ -90,23 +95,14 @@ public class User {
 	
 	
 	
-public List<UserAccount> getAccounts() {
+public List<Account> getAccounts() {
 		return accounts;
 	}
-	public void setAccounts(List<UserAccount> accounts) {
+	public void setAccounts(List<Account> accounts) {
 		this.accounts = accounts;
 	}
-	/*
-	public List<Account> getAccounts() {
-		ArrayList<Account> copy = new ArrayList<>(this.accounts);
-		return copy;
-	}
-	
-	public void addAccounts(Account a) {
-		if(!this.accounts.contains(a))
-			accounts.add(a);
-	}
-*/
+
+
 	public String getRole() {
 		return role;
 	}

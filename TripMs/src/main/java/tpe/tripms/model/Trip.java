@@ -43,6 +43,11 @@ public class Trip {
 	private float tripAmount;
 	@Column(nullable = false)
 	private String pauseTime; //minutes
+	
+	//CREAR CRONOMETRO ACA Y PERSISTIR
+	private Timer cronometer;
+	
+	
 //	@Column
 //	private long timerId;
 	
