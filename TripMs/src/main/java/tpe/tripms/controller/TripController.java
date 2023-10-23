@@ -26,6 +26,16 @@ public class TripController {
 	@Autowired
 	private TripService service;
 	
+	@PutMapping("/{id}/endPause")
+	public ResponseEntity<TripResponseDTO> endPause(@PathVariable int id) throws Exception {
+		return ResponseEntity.ok(service.endPause(id));
+	}
+	
+	@PutMapping("/{id}/startPause")
+	public ResponseEntity<TripResponseDTO> startPause(@PathVariable int id) throws Exception {
+		return ResponseEntity.ok(service.startPause(id));
+	}
+	
 	@PutMapping("/{id}/end")
 	public ResponseEntity<TripResponseDTO> endTrip(@PathVariable int id) throws Exception {
 		return ResponseEntity.ok(service.endTrip(id));
@@ -42,7 +52,7 @@ public class TripController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) {
+	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) throws InterruptedException {
 		return new ResponseEntity<>(service.saveTrip(request), HttpStatus.CREATED);
 	}
 	

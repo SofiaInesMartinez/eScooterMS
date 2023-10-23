@@ -13,6 +13,7 @@ public class TripResponseDTO {
 	private int idOriginStop;
 	private Date startDate;
 	private Date endDate;
+	private String pauseTime;
 	
 	public TripResponseDTO(Trip trip) {
 		this.idTrip = trip.getIdTrip();
@@ -21,6 +22,7 @@ public class TripResponseDTO {
 		this.idOriginStop = trip.getIdOriginStop();
 		this.startDate = trip.getStartDate();
 		this.endDate = trip.getEndDate();
+		this.pauseTime = trip.getPauseTime();
 	}
 }
 //public class TripResponseDTO {
