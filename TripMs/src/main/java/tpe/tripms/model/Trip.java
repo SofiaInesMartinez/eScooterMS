@@ -5,9 +5,11 @@ import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +19,7 @@ import lombok.ToString;
 import tpe.tripms.dto.TripRequestDTO;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Trip {
 	@Id
@@ -54,16 +55,6 @@ public class Trip {
 		this.tripAmount = 0;
 		this.pauseTime = "0:0";
 //		this.timerId = -1;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		try {
-			Trip anotherTrip = (Trip) obj;
-			return this.getIdTrip() == anotherTrip.getIdTrip();
-		} catch (Exception e) {
-			return false;
-		}
 	}
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
