@@ -36,8 +36,9 @@ CREATE TABLE IF NOT EXISTS account (
 -- Estructura de tabla para la tabla `user_accounts`
 --
 
-CREATE TABLE IF NOT EXISTS account (
-  id_user bigint(20) NOT NULL PRIMARY KEY,
-  id_account bigint(20) NOT NULL PRIMARY KEY
+CREATE TABLE IF NOT EXISTS user_account (
+  id bigint(20) NOT NULL PRIMARY KEY,
+  user_id bigint(20) NOT NULL,
+  account_id bigint(20) NOT NULL
 
 );

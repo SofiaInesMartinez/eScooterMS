@@ -10,13 +10,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Account {
 	@Id
 	private long id;
-//	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "accounts")
-//	private List<User> users;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "accountId")
+	private List<UserAccount> users;
 	//private Wallet wallet;
 	@Column(nullable=false)
 	private int moneyBalance;
@@ -28,7 +29,7 @@ public class Account {
 	public Account(long id, int moneyBalance, Date createdAt) {
 		super();
 		this.id = id;
-//		this.users = new ArrayList<>();
+		this.users = new ArrayList<>();
 		this.moneyBalance = moneyBalance;
 		this.createdAt = createdAt;
 	}
@@ -49,14 +50,14 @@ public class Account {
 	public void setId(long id) {
 		this.id = id;
 	}
-/*	
-	public List<User> getUsers() {
+	
+	public List<UserAccount> getUsers() {
 		return users;
 	}
-	public void setUsers(List<User> users) {
+	public void setUsers(List<UserAccount> users) {
 		this.users = users;
 	}
-*/
+
 	public int getMoneyBalance() {
 		return moneyBalance;
 	}
@@ -69,6 +70,8 @@ public class Account {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
+	
+	
 	@Override
 	public String toString() {
 		return "Account [id=" + id + ", moneyBalance=" + moneyBalance + "]";
@@ -84,6 +87,11 @@ public class Account {
 			return false;
 		Account other = (Account) obj;
 		return id == other.id;
+	}
+
+	public Account() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	
 	

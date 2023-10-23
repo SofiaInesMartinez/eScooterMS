@@ -11,7 +11,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+//import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @JsonIgnoreProperties(value = {"accounts"})
@@ -28,14 +29,17 @@ public class User {
 	private String surname;
 	@Column(nullable=false)
 	private String username;
-//	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//	private List<Account> accounts;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "userId")
+	private List<UserAccount> accounts;
 	@Column(nullable = false)
 	private String role;
 	
 	
 	
 	
+	public User() {
+		super();
+	}
 	public User(long id, int phone, String email, String name, String surname, String username, String role) {
 		super();
 		this.id = id;
@@ -45,7 +49,7 @@ public class User {
 		this.surname = surname;
 		this.username = username;
 		this.role = role;
-	//	this.accounts = new ArrayList<>();
+		this.accounts = new ArrayList<>();
 	}
 	public long getId() {
 		return id;
@@ -85,7 +89,14 @@ public class User {
 	}
 	
 	
-/*
+	
+public List<UserAccount> getAccounts() {
+		return accounts;
+	}
+	public void setAccounts(List<UserAccount> accounts) {
+		this.accounts = accounts;
+	}
+	/*
 	public List<Account> getAccounts() {
 		ArrayList<Account> copy = new ArrayList<>(this.accounts);
 		return copy;
