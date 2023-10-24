@@ -21,6 +21,6 @@ public interface ScooterRepository extends JpaRepository<Scooter, Integer>{
 	@Query("DELETE FROM Scooter s WHERE s.id = :id")
     void deleteScooterById(@Param("id") long id);
 	
-	@Query("SELECT s FROM Scooter s ORDER BY s.id DESC")
+	@Query("SELECT s FROM Scooter s ORDER BY s.kilometers DESC")
 	public List<Scooter> getScootersReportByKm();
 }
