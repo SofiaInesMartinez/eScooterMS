@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @SuppressWarnings("serial")
-@Entity
 @Data
 @NoArgsConstructor
 public class User implements Serializable {

@@ -37,9 +37,6 @@ public class Trip implements Serializable {
 	//CREAR CRONOMETRO ACA Y PERSISTIR
 //	private Timer cronometer; comentado por ahora
 	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private User user;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Scooter scooter;
 	

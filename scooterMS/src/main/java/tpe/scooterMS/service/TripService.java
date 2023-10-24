@@ -1,7 +1,6 @@
 package tpe.scooterMS.service;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Timer;
@@ -143,7 +142,7 @@ public class TripService {
 				.orElseThrow(() -> new Exception());
 	}
 	
-	@Transactional // USAR WEBCLIENT PARA OBTENER EL USER 
+	@Transactional // USAR WEBCLIENT PARA OBTENER EL USER
 	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception {
 		Optional<User> userOptional = userRepository.findById(request.getIdUser());
 		Optional<Scooter> scooterOptional = scooterRepository.findById(request.getIdScooter());
