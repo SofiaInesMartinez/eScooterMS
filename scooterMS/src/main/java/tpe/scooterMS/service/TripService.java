@@ -12,7 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
+import tpe.scooterMS.model.Scooter;
+import tpe.scooterMS.model.Stop;
 import tpe.scooterMS.model.Trip;
+import tpe.scooterMS.repository.ScooterRepository;
+import tpe.scooterMS.repository.StopRepository;
 import tpe.scooterMS.repository.TripRepository;
 import tpe.scooterMS.utils.TripTimer;
 
@@ -21,6 +25,13 @@ public class TripService {
 
 	@Autowired
 	private TripRepository repository;
+	
+	@Autowired
+	private StopRepository stopRepository;
+	
+	@Autowired
+	private ScooterRepository scooterRepository;
+	
 	
 //	@Transactional( readOnly = true )
 //	public List<ScooterByKmsDTO> getKmsReport() {
@@ -41,11 +52,11 @@ public class TripService {
 	 * Eliminar el mapping de un determinado trip. Si el trip no tenia timer tira error
 	 * Por alguna razón siempre tira error !!!
 	 */
-	@Transactional
-	public TripResponseDTO endPause(int id) throws Exception {
-		Optional<Trip> optional = repository.findById(id);
-		if (optional.isPresent()) {
-			Trip trip = optional.get();
+//	@Transactional //COMENTADO POR AHORA
+//	public TripResponseDTO endPause(int id) throws Exception {
+//		Optional<Trip> optional = repository.findById(id);
+//		if (optional.isPresent()) {
+//			Trip trip = optional.get();
 			
 //			if (trip.getTimerId() != -1) {
 //				for (Thread thread : Thread.getAllStackTraces().keySet()) {
@@ -56,29 +67,29 @@ public class TripService {
 //					}
 //				}
 //				return new TripResponseDTO(repository.save(trip));
-			System.out.println(timers);
-			TripTimer tripTimer = timers.remove(trip.getIdTrip());
-			System.out.println(timers);
-			if (tripTimer != null) {
-				tripTimer.cancel();
-				return new TripResponseDTO(repository.save(trip));
-			} else {
-				throw new Exception();
-			}
-		} else {
-			throw new Exception();
-		}
-	}
+//			System.out.println(timers);
+//			TripTimer tripTimer = timers.remove(trip.getIdTrip());
+//			System.out.println(timers);
+//			if (tripTimer != null) {
+//				tripTimer.cancel();
+//				return new TripResponseDTO(repository.save(trip));
+//			} else {
+//				throw new Exception();
+//			}
+//		} else {
+//			throw new Exception();
+//		}
+//	}
 	
 	/*
 	 * Crea un timer y ejecuta el run de la clase TripTimer cada segundo
 	 * No suma bien los segundo y minutos !!!
 	 */
-	@Transactional
-	public TripResponseDTO startPause(int id) throws Exception {
-		Optional<Trip> optional = repository.findById(id);
-		if (optional.isPresent()) {
-			Trip trip = optional.get();
+//	@Transactional //COMENTADO POR AHORA
+//	public TripResponseDTO startPause(int id) throws Exception {
+//		Optional<Trip> optional = repository.findById(id);
+//		if (optional.isPresent()) {
+//			Trip trip = optional.get();
 			
 //			if (trip.getTimerId() == -1) {
 //				TimerThread timerThread = new TimerThread(trip);
@@ -90,18 +101,19 @@ public class TripService {
 //				throw new Exception();
 //			}
 			
-			Timer timer = new Timer();
-			TripTimer tripTimer = new TripTimer(trip);
-			timer.scheduleAtFixedRate(tripTimer, 0, 1000);
-			timers.put(trip.getIdTrip(), tripTimer);
-			System.out.println(timers);
-			
-			return new TripResponseDTO(repository.save(trip));
-		} else {
-			throw new Exception();
-		}
-	}
+//			Timer timer = new Timer();
+//			TripTimer tripTimer = new TripTimer(trip);
+//			timer.scheduleAtFixedRate(tripTimer, 0, 1000);
+//			timers.put(trip.getIdTrip(), tripTimer);
+//			System.out.println(timers);
+//			
+//			return new TripResponseDTO(repository.save(trip));
+//		} else {
+//			throw new Exception();
+//		}
+//	}
 	
+	// VERIFICAR QUE EL MONOPATIN ESTE UBICADO EN UNA PARADA, SINO ERROR
 	@Transactional
 	public TripResponseDTO endTrip(int id) throws Exception {
 		Optional<Trip> optional = repository.findById(id);
@@ -127,9 +139,18 @@ public class TripService {
 	}
 	
 	@Transactional
-	public TripResponseDTO saveTrip(TripRequestDTO request) throws InterruptedException {
-		Trip trip = repository.save(new Trip(request));
-		return new TripResponseDTO(trip);
+	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception {
+		Optional<Scooter> scooterOptional = scooterRepository.findById(request.getIdScooter());
+		Optional<Stop> stopOptional = stopRepository.findById(request.getIdOriginStop());
+		
+		if (scooterOptional.isPresent() && stopOptional.isPresent()) {
+			Scooter scooter = scooterOptional.get();
+			Stop originStop = stopOptional.get();
+			Trip trip = repository.save(new Trip(request.getIdUser(), scooter, originStop));
+			return new TripResponseDTO(trip);
+		} else {
+			throw new Exception();
+		}
 	}
 	
 	@Transactional

@@ -1,7 +1,6 @@
 package tpe.scooterMS.model;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -10,14 +9,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import tpe.scooterMS.DTO.TripRequestDTO;
 
 @SuppressWarnings("serial")
 @Entity
@@ -30,12 +24,6 @@ public class Trip implements Serializable {
 	@Column(nullable = false)
 	private int idUser;
 	@Column(nullable = false)
-	private int idScooter;
-	@Column(nullable = false)
-	private int idOriginStop;
-	@Column
-	private int idDestinationStop; // init with 0 >:( and cannot be Integer
-	@Column(nullable = false)
 	private Date startDate;
 	@Column
 	private Date endDate;
@@ -47,32 +35,27 @@ public class Trip implements Serializable {
 	private String pauseTime; //minutes
 	
 	//CREAR CRONOMETRO ACA Y PERSISTIR
-	private Timer cronometer;
+//	private Timer cronometer; comentado por ahora
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Scooter scooter;
 	
-//	@Column
-//	private long timerId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Stop originStop;
 	
-	public Trip(TripRequestDTO request) throws InterruptedException {
-		this.idUser = request.getIdUser();
-		this.idScooter = request.getIdScooter();
-		this.idOriginStop = request.getIdOriginStop();
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Stop destinationStop;
+	
+	public Trip(int idUser, Scooter scooter, Stop originStop) {
+		this.idUser = idUser;
 		this.startDate = new Date(System.currentTimeMillis());
 		this.kms = 0;
 		this.tripAmount = 0;
 		this.pauseTime = "0:0";
-//		this.timerId = -1;
+		this.scooter = scooter;
+		this.originStop = originStop;
 	}
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	private User user;
-//	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private Scooter scooter;
-//	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private Stop originStop;
-//	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private Stop destinationStop;
 }

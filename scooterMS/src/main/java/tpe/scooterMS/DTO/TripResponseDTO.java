@@ -8,39 +8,16 @@ import tpe.scooterMS.model.Trip;
 @Data
 public class TripResponseDTO {
 	private long idTrip;
+	private long idUser;
 	private long idScooter;
-	private int idDestinationStop;
-	private int idOriginStop;
 	private Date startDate;
 	private Date endDate;
-	private String pauseTime;
 	
 	public TripResponseDTO(Trip trip) {
 		this.idTrip = trip.getIdTrip();
-		this.idScooter = trip.getIdScooter();
-		this.idDestinationStop = trip.getIdDestinationStop();
-		this.idOriginStop = trip.getIdOriginStop();
+		this.idUser = trip.getIdUser();
+		this.idScooter = trip.getScooter().getId();
 		this.startDate = trip.getStartDate();
 		this.endDate = trip.getEndDate();
-		this.pauseTime = trip.getPauseTime();
 	}
 }
-//public class TripResponseDTO {
-//	private int idTrip;
-//	private UserResponseDTO user;
-//	private ScooterResponseDTO scooter;
-//	private StopResponseDTO destinationStop;
-//	private StopResponseDTO originStop;
-//	private Date startDate;
-//	private Date endDate;
-//	
-//	public TripResponseDTO(Trip trip) {
-//		this.idTrip = trip.getIdTrip();
-//		this.user = new UserResponseDTO(trip.getUser());
-//		this.scooter = new ScooterResponseDTO(trip.getScooter());
-//		this.destinationStop = new StopResponseDTO(trip.getDestinationStop());
-//		this.originStop = new StopResponseDTO(trip.getOriginStop());
-//		this.startDate = trip.getStartDate();
-//		this.endDate = trip.getEndDate();
-//	}
-//}
