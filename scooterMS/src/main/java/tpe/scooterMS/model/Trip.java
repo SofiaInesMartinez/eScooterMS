@@ -56,4 +56,129 @@ public class Trip implements Serializable {
 		this.scooter = scooter;
 		this.originStop = originStop;
 	}
+
+
+	public int getIdTrip() {
+		return idTrip;
+	}
+
+
+	public void setIdTrip(int idTrip) {
+		this.idTrip = idTrip;
+	}
+
+
+	public int getIdUser() {
+		return idUser;
+	}
+
+
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
+	}
+
+
+	public int getIdScooter() {
+		return idScooter;
+	}
+
+
+	public void setIdScooter(int idScooter) {
+		this.idScooter = idScooter;
+	}
+
+
+	public int getIdOriginStop() {
+		return idOriginStop;
+	}
+
+
+	public void setIdOriginStop(int idOriginStop) {
+		this.idOriginStop = idOriginStop;
+	}
+
+
+	public int getIdDestinationStop() {
+		return idDestinationStop;
+	}
+
+
+	public void setIdDestinationStop(int idDestinationStop) {
+		this.idDestinationStop = idDestinationStop;
+	}
+
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+
+	public float getKms() {
+		return kms;
+	}
+
+
+	public void setKms(float kms) {
+		this.kms = kms;
+	}
+
+
+	public float getTripAmount() {
+		return tripAmount;
+	}
+
+
+	public void setTripAmount(float tripAmount) {
+		this.tripAmount = tripAmount;
+	}
+
+
+	public String getPauseTime() {
+		return pauseTime;
+	}
+
+
+	public void setPauseTime(String pauseTime) {
+		this.pauseTime = pauseTime;
+	}
+
+
+	public Timer getCronometer() {
+		return cronometer;
+	}
+
+
+	public void setCronometer(Timer cronometer) {
+		this.cronometer = cronometer;
+	}
+	
+	
+	
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	private User user;
+//	
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	private Scooter scooter;
+//	
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	private Stop originStop;
+//	
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	private Stop destinationStop;
+
 }
