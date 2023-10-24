@@ -17,12 +17,15 @@ public class Scooter implements Serializable {
 	private Date lastMaintenanceDate;
 	@Column(nullable= true)
 	private float kilometers;
+	@Column(nullable = false)
+	private String status;
 	
 	public Scooter(long id, Date lastMaintenanceDate, float kilometers) {
 		super();
 		this.id = id;
 		this.lastMaintenanceDate = lastMaintenanceDate;
 		this.kilometers = kilometers;
+		this.status = "available";
 	}
 
 	public long getId() {
@@ -47,6 +50,14 @@ public class Scooter implements Serializable {
 
 	public void setLastMaintenanceDate(Date lastMaintenanceDate) {
 		this.lastMaintenanceDate = lastMaintenanceDate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	
