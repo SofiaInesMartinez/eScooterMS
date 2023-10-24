@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
+import tpe.userMS.model.Account;
 import tpe.userMS.model.User;
+import tpe.userMS.repository.AccountRepository;
 import tpe.userMS.repository.UserRepository;
 
 @Service("userService")
@@ -16,6 +18,8 @@ public class UserService {
 
 	@Autowired
 	private UserRepository repository;
+	@Autowired
+	private AccountRepository accountRepository;
 
 	@Transactional(readOnly = true)
 	public List<DTOUserResponse> findAll() throws Exception {
@@ -61,18 +65,32 @@ public class UserService {
 		try {
 			repository.deleteUserById(id);
 		} catch (NumberFormatException e) {
-	        throw new Exception("Invalid ID format");
+			throw new Exception("Invalid ID format");
 		}
 	}
 
+	@Transactional
+	public void updateStatus(long id, String status) throws Exception {
+		try {
+			repository.updateUser(status, id);
+		} catch (Exception e) {
+			throw new Exception("Failed to update user status: " + e.getMessage());
+		}
+	}
 
-    @Transactional
-    public void updateStatus(long id, String status) throws Exception {
-        try {
-            repository.updateUser(status, id);
-        } catch (Exception e) {
-            throw new Exception("Failed to update user status: " + e.getMessage());
-        }
-    }
+	@Transactional
+	public void addAccountToUser(Long id, Long accountId) throws Exception {
+		try {
+			User user = repository.findById(id)
+					.orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+			Account account = accountRepository.findById(accountId)
+					.orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
+			user.getAccounts().add(account);
+			repository.save(user);
+			
+		} catch (Exception e) {
+			throw new Exception("Failed to update user account: " + e.getMessage());
+		}
+	}
 
 }

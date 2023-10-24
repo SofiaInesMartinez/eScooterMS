@@ -65,6 +65,16 @@ public class UserController {
         }
     }
 	
+	@PostMapping("/{id}/addAccount/{accountId}")
+    public ResponseEntity<?> addAccountToUser(@PathVariable Long id, @PathVariable Long accountId) {
+		try {
+        service.addAccountToUser(id, accountId);
+        return ResponseEntity.ok("Added account " + accountId + " to user " +id);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
+		}
+    }
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getUserById(@PathVariable long id) {
 		try {

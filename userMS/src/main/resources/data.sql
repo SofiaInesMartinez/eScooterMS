@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS account (
 --
 
 CREATE TABLE IF NOT EXISTS user_account (
-  id bigint(20) NOT NULL PRIMARY KEY,
+  id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   user_id bigint(20) NOT NULL,
   account_id bigint(20) NOT NULL
 
