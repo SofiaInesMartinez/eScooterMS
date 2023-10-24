@@ -32,7 +32,7 @@ public class Trip implements Serializable {
 	@Column(nullable = false)
 	private String pauseTime; //minutes
 	@Column(nullable = false)
-	private int idUser;
+	private long idUser;
 	
 	//CREAR CRONOMETRO ACA Y PERSISTIR
 //	private Timer cronometer; comentado por ahora
@@ -46,7 +46,7 @@ public class Trip implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Stop destinationStop;
 	
-	public Trip(int idUser, Scooter scooter, Stop originStop) {
+	public Trip(long idUser, Scooter scooter, Stop originStop) {
 		this.startDate = new Date(System.currentTimeMillis());
 		this.kms = 0;
 		this.tripAmount = 0;
@@ -67,12 +67,12 @@ public class Trip implements Serializable {
 	}
 
 
-	public int getIdUser() {
+	public long getIdUser() {
 		return idUser;
 	}
 
 
-	public void setIdUser(int idUser) {
+	public void setIdUser(long idUser) {
 		this.idUser = idUser;
 	}
 

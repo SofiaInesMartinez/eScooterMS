@@ -8,6 +8,7 @@ import java.util.Timer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
@@ -18,17 +19,16 @@ import tpe.scooterMS.model.User;
 import tpe.scooterMS.repository.ScooterRepository;
 import tpe.scooterMS.repository.StopRepository;
 import tpe.scooterMS.repository.TripRepository;
-import tpe.scooterMS.repository.UserRepository;
 import tpe.scooterMS.utils.TripTimer;
 
 @Service("tripService")
 public class TripService {
+	
+	@Autowired
+	private WebClient.Builder webClientBuilder;
 
 	@Autowired
 	private TripRepository repository;
-	
-	@Autowired
-	private UserRepository userRepository;
 	
 	@Autowired
 	private ScooterRepository scooterRepository;
@@ -144,12 +144,17 @@ public class TripService {
 	
 	@Transactional // USAR WEBCLIENT PARA OBTENER EL USER
 	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception {
-		Optional<User> userOptional = userRepository.findById(request.getIdUser());
+		User user = webClientBuilder.build()
+				.get()
+				.uri("http://localhost:8003/user/" + request.getIdUser())
+				.retrieve()
+				.bodyToMono(User.class)
+				.block();
+		
 		Optional<Scooter> scooterOptional = scooterRepository.findById(request.getIdScooter());
 		Optional<Stop> stopOptional = stopRepository.findById(request.getIdOriginStop());
 		
-		if (scooterOptional.isPresent() && stopOptional.isPresent()) {
-			User user = userOptional.get();
+		if (scooterOptional.isPresent() && stopOptional.isPresent() && user != null) {
 			Scooter scooter = scooterOptional.get();
 			Stop originStop = stopOptional.get();
 			Trip trip = repository.save(new Trip(user.getId(), scooter, originStop));

@@ -3,6 +3,7 @@ package tpe.userMS.DTO;
 import tpe.userMS.model.User;
 
 public class DTOUserResponse {
+	private long id;
 	private String surname;
 	private String email;
 	private int phone;
@@ -11,6 +12,7 @@ public class DTOUserResponse {
 	
 	public DTOUserResponse(User user) {
 		super();
+		this.id = user.getId();
 		this.surname = user.getSurname();
 		this.email = user.getEmail();
 		this.phone = user.getPhone();
@@ -18,8 +20,9 @@ public class DTOUserResponse {
 	}
 	
 	
-	public DTOUserResponse(String surname, String email, int phone, int status) {
+	public DTOUserResponse(long id, String surname, String email, int phone, int status) {
 		super();
+		this.id = id;
 		this.surname = surname;
 		this.email = email;
 		this.phone = phone;
@@ -46,6 +49,16 @@ public class DTOUserResponse {
 	}
 	
 	
+	public long getId() {
+		return id;
+	}
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 	public Integer getStatus() {
 		return status;
 	}

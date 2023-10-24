@@ -103,7 +103,7 @@ COMMIT;
 
 
 ----------------
---poblate la tabla `account`
+-- poblate la tabla `account`
 
 insert into account (id, money_balance, created_at) values (1, 805103, '2023-04-12 11:32:13');
 insert into account (id, money_balance, created_at) values (2, 908227, '2023-09-25 13:27:24');

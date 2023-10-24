@@ -2,9 +2,6 @@ package tpe.scooterMS.model;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,12 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class User implements Serializable {
-	@Id
-	private int id;
-	@Column(nullable=false)
-	private int phone;
-	@Column(nullable=false)
+	private long id;
+	private String surname;
 	private String email;
-	@Column (nullable=false)
-	private String status;
+	private int phone;
+	private int status;
 }
