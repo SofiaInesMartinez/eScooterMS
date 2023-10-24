@@ -1,16 +1,21 @@
 package tpe.userMS.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
+@SuppressWarnings("serial")
 @Entity
-public class Account {
+@JsonIgnoreProperties(value = {"users"})
+public class Account implements Serializable{
 	@Id
 	private long id;
 	
@@ -23,25 +28,21 @@ public class Account {
 	private Date createdAt;
 	
 	
+
+	public Account() {
+		super();
+	}
 		
-	public Account(long id, int moneyBalance, Date createdAt) {
+	public Account(long id, int moneyBalance) {
 		super();
 		this.id = id;
 		this.users = new ArrayList<>();
 		this.moneyBalance = moneyBalance;
-		this.createdAt = createdAt;
+		this.createdAt = new Date(System.currentTimeMillis());
 	}
 
-/*
-	public Account(long id, List<User> users) {
-		super();
-		this.id = id;
-		this.users = users;
-		this.createdAt = new Date(System.currentTimeMillis());
-		this.moneyBalance = 0;
-	}
+
 	
-*/
 	public long getId() {
 		return id;
 	}
@@ -87,13 +88,8 @@ public class Account {
 		return id == other.id;
 	}
 
-	public Account() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	
-	
-	
+
 
 }
 

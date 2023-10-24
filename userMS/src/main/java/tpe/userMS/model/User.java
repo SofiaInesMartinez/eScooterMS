@@ -1,5 +1,6 @@
 package tpe.userMS.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,9 +15,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 
+@SuppressWarnings("serial")
 @Entity
 @JsonIgnoreProperties(value = {"accounts"})
-public class User {
+public class User implements Serializable{
 	@Id
 	private long id;
 	@Column(nullable=false)
@@ -29,12 +31,13 @@ public class User {
 	private String surname;
 	@Column(nullable=false)
 	private String username;
+	@Column (nullable=false)
+	private String status;
 	
 	@ManyToMany
     @JoinTable(name = "user_account",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "accountId"))
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "userId")
 	private List<Account> accounts;
 	@Column(nullable = false)
 	private String role;
@@ -55,6 +58,7 @@ public class User {
 		this.username = username;
 		this.role = role;
 		this.accounts = new ArrayList<>();
+		this.status = "active";
 	}
 	public long getId() {
 		return id;
@@ -112,9 +116,17 @@ public List<Account> getAccounts() {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", surname=" + surname + ", username=" + username + "]";
+		return "User [name=" + name + ", surname=" + surname + ", username=" + username + ", status=" + status + "]";
 	}
 
 	@Override

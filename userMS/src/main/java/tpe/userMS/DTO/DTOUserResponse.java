@@ -6,6 +6,7 @@ public class DTOUserResponse {
 	private String surname;
 	private String email;
 	private int phone;
+	private String status;
 	
 	
 	public DTOUserResponse(User user) {
@@ -13,14 +14,16 @@ public class DTOUserResponse {
 		this.surname = user.getSurname();
 		this.email = user.getEmail();
 		this.phone = user.getPhone();
+		this.status = user.getStatus();
 	}
 	
 	
-	public DTOUserResponse(String surname, String email, int phone) {
+	public DTOUserResponse(String surname, String email, int phone, String status) {
 		super();
 		this.surname = surname;
 		this.email = email;
 		this.phone = phone;
+		this.status = status;
 	}
 	
 	public String getSurname() {
@@ -41,9 +44,21 @@ public class DTOUserResponse {
 	public void setPhone(int phone) {
 		this.phone = phone;
 	}
+	
+	
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
 	@Override
 	public String toString() {
-		return "DTOUserResponse [surname=" + surname + ", email=" + email + ", phone=" + phone + "]";
+		return "DTOUserResponse [surname=" + surname + ", email=" + email + ", phone=" + phone + ", status=" + status +"]";
 	}
 	
 	

@@ -6,13 +6,11 @@ import lombok.Data;
 @Data
 public class TripRequestDTO {
 	@NotNull(message = "idUser shouldn't be null")
-	private int idUser;
+	private long idUser;
 	@NotNull(message = "idScooter shouldn't be null")
 	private int idScooter;
 	@NotNull(message = "idOriginStop shouldn't be null")
 	private int idOriginStop;
-	
-	
 	
 	public TripRequestDTO(int idUser,int idScooter, int idOriginStop) {
 		super();
@@ -21,7 +19,7 @@ public class TripRequestDTO {
 		this.idOriginStop = idOriginStop;
 	}
 
-	public int getIdUser() {
+	public long getIdUser() {
 		return idUser;
 	}
 	public void setIdUser(int idUser) {
@@ -48,3 +46,5 @@ public class TripRequestDTO {
 //	private Stop destinationStop;
 //	private Stop originStop;
 //}
+
+
