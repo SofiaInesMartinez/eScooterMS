@@ -32,4 +32,38 @@ public class Tariff implements Serializable {
 		this.extra = request.getExtra();
 		this.startDate = request.getStartDate();
 	}
+
+	public int getIdTariff() {
+		return idTariff;
+	}
+
+	public void setIdTariff(int idTariff) {
+		this.idTariff = idTariff;
+	}
+
+	public float getNormal() {
+		return normal;
+	}
+
+	public void setNormal(float normal) {
+		this.normal = normal;
+	}
+
+	public float getExtra() {
+		return extra;
+	}
+
+	public void setExtra(float extra) {
+		this.extra = extra;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	
+	
 }

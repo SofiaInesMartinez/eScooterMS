@@ -55,5 +55,14 @@ public class ScooterService {
 			throw new Exception(e.getMessage());
 		}
 	}
+	
+	@Transactional
+	public void deleteScooter(long id) throws Exception {
+		try {
+	          repository.deleteScooterById(id);
+	    } catch (Exception e) {
+	        throw new Exception(e.getMessage());
+	    }
+	}
 
 }
