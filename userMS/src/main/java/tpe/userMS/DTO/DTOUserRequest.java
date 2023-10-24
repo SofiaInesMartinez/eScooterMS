@@ -28,6 +28,7 @@ public class DTOUserRequest {
 	@NotNull(message = "role shouldn't be null")
 	@NotEmpty(message = "role shouldn't be empty")
 	private String role;
+	
 
 	public DTOUserRequest(long id, int phone, String email, String name, String surname, String username, String role) {
 		super();

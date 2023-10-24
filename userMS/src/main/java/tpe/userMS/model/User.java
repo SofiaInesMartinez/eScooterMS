@@ -29,6 +29,8 @@ public class User {
 	private String surname;
 	@Column(nullable=false)
 	private String username;
+	@Column (nullable=false)
+	private String status;
 	
 	@ManyToMany
     @JoinTable(name = "user_account",
@@ -55,6 +57,7 @@ public class User {
 		this.username = username;
 		this.role = role;
 		this.accounts = new ArrayList<>();
+		this.status = "active";
 	}
 	public long getId() {
 		return id;
@@ -112,9 +115,17 @@ public List<Account> getAccounts() {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", surname=" + surname + ", username=" + username + "]";
+		return "User [name=" + name + ", surname=" + surname + ", username=" + username + ", status=" + status + "]";
 	}
 
 	@Override

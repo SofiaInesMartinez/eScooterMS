@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS user (
   name varchar(255) NOT NULL,
   surname varchar(255) NOT NULL,
   username varchar(255) NOT NULL,
-  role varchar(255) NOT NULL
+  role varchar(255) NOT NULL,
+  status varchar(50) NOT NULL
 );
 
 -- --------------------------------------------------------
