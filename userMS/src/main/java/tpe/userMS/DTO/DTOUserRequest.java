@@ -27,10 +27,10 @@ public class DTOUserRequest {
 
 	@NotNull(message = "role shouldn't be null")
 	@NotEmpty(message = "role shouldn't be empty")
-	private String role;
+	private int role;
 	
 
-	public DTOUserRequest(long id, int phone, String email, String name, String surname, String username, String role) {
+	public DTOUserRequest(long id, int phone, String email, String name, String surname, String username, int role) {
 		super();
 		this.id = id;
 		this.phone = phone;
@@ -89,11 +89,11 @@ public class DTOUserRequest {
 		this.username = username;
 	}
 
-	public String getRole() {
+	public Integer getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(int role) {
 		this.role = role;
 	}
 
