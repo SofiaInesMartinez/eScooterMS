@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS account (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `user_accounts`
+-- Estructura de tabla para la tabla `user_account`
 --
 
 CREATE TABLE IF NOT EXISTS user_account (
