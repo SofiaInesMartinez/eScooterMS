@@ -1,5 +1,6 @@
 package tpe.userMS.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,9 +15,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 
+@SuppressWarnings("serial")
 @Entity
 @JsonIgnoreProperties(value = {"accounts"})
-public class User {
+public class User implements Serializable{
 	@Id
 	private long id;
 	@Column(nullable=false)
@@ -36,7 +38,6 @@ public class User {
     @JoinTable(name = "user_account",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "accountId"))
-	//@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "userId")
 	private List<Account> accounts;
 	@Column(nullable = false)
 	private String role;
