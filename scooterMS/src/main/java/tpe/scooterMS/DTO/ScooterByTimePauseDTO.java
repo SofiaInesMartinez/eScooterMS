@@ -4,20 +4,20 @@ import lombok.Data;
 import tpe.scooterMS.model.Scooter;
 
 @Data
-public class ScooterByTimeDTO {
+public class ScooterByTimePauseDTO {
 	private long idScooter;
 	private long time;
 	
-	public ScooterByTimeDTO(long id, long time) {
+	public ScooterByTimePauseDTO(long id, long time) {
 		super();
 		this.idScooter = id;
 		this.time = time;
 	}
 	
-	public ScooterByTimeDTO(Scooter scooter) {
+	public ScooterByTimePauseDTO(Scooter scooter) {
 		super();
 		this.idScooter = scooter.getId();
-		this.time = scooter.getTime();
+		this.time = scooter.getTimePause();
 	}
 	
 	

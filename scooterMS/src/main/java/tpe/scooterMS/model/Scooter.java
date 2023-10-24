@@ -19,6 +19,10 @@ public class Scooter implements Serializable {
 	private float kilometers;
 	@Column(nullable = false)
 	private String status;
+	@Column(nullable = true)
+	private long totalTime;
+	@Column(nullable = true)
+	private long timePause;
 	
 	public Scooter(long id, Date lastMaintenanceDate, float kilometers) {
 		super();
@@ -26,6 +30,8 @@ public class Scooter implements Serializable {
 		this.lastMaintenanceDate = lastMaintenanceDate;
 		this.kilometers = kilometers;
 		this.status = "available";
+		this.totalTime = 0;
+		this.timePause = 0;
 	}
 
 	public long getId() {
@@ -58,6 +64,22 @@ public class Scooter implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public long getTime() {
+		return totalTime;
+	}
+
+	public void setTime(long time) {
+		this.totalTime = time;
+	}
+
+	public long getTimePause() {
+		return timePause;
+	}
+
+	public void setTimePause(long timePause) {
+		this.timePause = timePause;
 	}
 	
 	
