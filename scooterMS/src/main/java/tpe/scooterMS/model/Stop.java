@@ -1,13 +1,15 @@
 package tpe.scooterMS.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+@SuppressWarnings("serial")
 @Entity
-public class Stop {
+public class Stop implements Serializable {
 	
 	@Id
 	private long id;
