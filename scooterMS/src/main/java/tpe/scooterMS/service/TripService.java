@@ -143,7 +143,7 @@ public class TripService {
 				.orElseThrow(() -> new Exception());
 	}
 	
-	@Transactional
+	@Transactional // USAR WEBCLIENT PARA OBTENER EL USER 
 	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception {
 		Optional<User> userOptional = userRepository.findById(request.getIdUser());
 		Optional<Scooter> scooterOptional = scooterRepository.findById(request.getIdScooter());
@@ -153,7 +153,7 @@ public class TripService {
 			User user = userOptional.get();
 			Scooter scooter = scooterOptional.get();
 			Stop originStop = stopOptional.get();
-			Trip trip = repository.save(new Trip(user, scooter, originStop));
+			Trip trip = repository.save(new Trip(user.getId(), scooter, originStop));
 			return new TripResponseDTO(trip);
 		} else {
 			throw new Exception();

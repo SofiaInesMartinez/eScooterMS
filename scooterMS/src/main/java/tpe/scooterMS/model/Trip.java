@@ -31,12 +31,14 @@ public class Trip implements Serializable {
 	private float tripAmount;
 	@Column(nullable = false)
 	private String pauseTime; //minutes
+	@Column(nullable = false)
+	private int idUser;
 	
 	//CREAR CRONOMETRO ACA Y PERSISTIR
 //	private Timer cronometer; comentado por ahora
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	private User user;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	private User user;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Scooter scooter;
@@ -47,12 +49,12 @@ public class Trip implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Stop destinationStop;
 	
-	public Trip(User user, Scooter scooter, Stop originStop) {
+	public Trip(int idUser, Scooter scooter, Stop originStop) {
 		this.startDate = new Date(System.currentTimeMillis());
 		this.kms = 0;
 		this.tripAmount = 0;
 		this.pauseTime = "0:0";
-		this.user = user;
+		this.idUser = idUser;
 		this.scooter = scooter;
 		this.originStop = originStop;
 	}
@@ -76,37 +78,6 @@ public class Trip implements Serializable {
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
-
-
-	public int getIdScooter() {
-		return idScooter;
-	}
-
-
-	public void setIdScooter(int idScooter) {
-		this.idScooter = idScooter;
-	}
-
-
-	public int getIdOriginStop() {
-		return idOriginStop;
-	}
-
-
-	public void setIdOriginStop(int idOriginStop) {
-		this.idOriginStop = idOriginStop;
-	}
-
-
-	public int getIdDestinationStop() {
-		return idDestinationStop;
-	}
-
-
-	public void setIdDestinationStop(int idDestinationStop) {
-		this.idDestinationStop = idDestinationStop;
-	}
-
 
 	public Date getStartDate() {
 		return startDate;
@@ -158,14 +129,14 @@ public class Trip implements Serializable {
 	}
 
 
-	public Timer getCronometer() {
-		return cronometer;
-	}
-
-
-	public void setCronometer(Timer cronometer) {
-		this.cronometer = cronometer;
-	}
+//	public Timer getCronometer() {
+//		return cronometer;
+//	}
+//
+//
+//	public void setCronometer(Timer cronometer) {
+//		this.cronometer = cronometer;
+//	}
 	
 	
 	

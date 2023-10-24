@@ -15,7 +15,7 @@ public class TripResponseDTO {
 	
 	public TripResponseDTO(Trip trip) {
 		this.idTrip = trip.getIdTrip();
-		this.idUser = trip.getUser().getId();
+		this.idUser = trip.getIdUser();
 		this.idScooter = trip.getScooter().getId();
 		this.startDate = trip.getStartDate();
 		this.endDate = trip.getEndDate();

@@ -1,35 +1,5 @@
+INSERT INTO stop(id, coordinates) VALUES(1, 123), (2, 456);
 
--- Drop tables if they exist
-DROP TABLE IF EXISTS scooter;
-DROP TABLE IF EXISTS stop;
+INSERT INTO tariff(id_tariff, normal, extra, start_date) VALUES(1, 50, 100, "2023-10-23 10:00:00"), (2, 50, 120, "2023-10-29 10:00:00");
 
-
--- --------------------------------------------------------
---
--- Estructura de tabla para la tabla `scooter`
---
-
-CREATE TABLE IF NOT EXISTS scooter (
-  id bigint(20) NOT NULL PRIMARY KEY,
-  last_maintenance_date DATE,
-  kilometers double(10,2),
-  status varchar(25),
-  total_time bigint(20),
-  time_pause bigint(20)
-);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `stop`
---
-
-CREATE TABLE IF NOT EXISTS stop (
-  id bigint(20) NOT NULL PRIMARY KEY,
-  coordinates bigint(20) NOT NULL
-);
-
--- --------------------------------------------------------
-
-
-
+INSERT INTO scooter(id, last_maintenance_date, kilometers, status, total_time, time_pause) VALUES (1, null, null, "available", null, null), (2, null, null, "available", null, null);
