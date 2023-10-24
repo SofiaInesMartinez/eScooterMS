@@ -15,9 +15,11 @@ import tpe.scooterMS.DTO.TripResponseDTO;
 import tpe.scooterMS.model.Scooter;
 import tpe.scooterMS.model.Stop;
 import tpe.scooterMS.model.Trip;
+import tpe.scooterMS.model.User;
 import tpe.scooterMS.repository.ScooterRepository;
 import tpe.scooterMS.repository.StopRepository;
 import tpe.scooterMS.repository.TripRepository;
+import tpe.scooterMS.repository.UserRepository;
 import tpe.scooterMS.utils.TripTimer;
 
 @Service("tripService")
@@ -27,10 +29,13 @@ public class TripService {
 	private TripRepository repository;
 	
 	@Autowired
-	private StopRepository stopRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
 	private ScooterRepository scooterRepository;
+	
+	@Autowired
+	private StopRepository stopRepository;
 	
 	
 //	@Transactional( readOnly = true )
@@ -140,13 +145,15 @@ public class TripService {
 	
 	@Transactional
 	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception {
+		Optional<User> userOptional = userRepository.findById(request.getIdUser());
 		Optional<Scooter> scooterOptional = scooterRepository.findById(request.getIdScooter());
 		Optional<Stop> stopOptional = stopRepository.findById(request.getIdOriginStop());
 		
 		if (scooterOptional.isPresent() && stopOptional.isPresent()) {
+			User user = userOptional.get();
 			Scooter scooter = scooterOptional.get();
 			Stop originStop = stopOptional.get();
-			Trip trip = repository.save(new Trip(request.getIdUser(), scooter, originStop));
+			Trip trip = repository.save(new Trip(user, scooter, originStop));
 			return new TripResponseDTO(trip);
 		} else {
 			throw new Exception();

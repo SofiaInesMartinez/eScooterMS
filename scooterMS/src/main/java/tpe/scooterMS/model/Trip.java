@@ -22,8 +22,6 @@ public class Trip implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idTrip;
 	@Column(nullable = false)
-	private int idUser;
-	@Column(nullable = false)
 	private Date startDate;
 	@Column
 	private Date endDate;
@@ -38,6 +36,9 @@ public class Trip implements Serializable {
 //	private Timer cronometer; comentado por ahora
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	private User user;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Scooter scooter;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -46,16 +47,13 @@ public class Trip implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Stop destinationStop;
 	
-	public Trip(int idUser, Scooter scooter, Stop originStop) {
-		this.idUser = idUser;
+	public Trip(User user, Scooter scooter, Stop originStop) {
 		this.startDate = new Date(System.currentTimeMillis());
 		this.kms = 0;
 		this.tripAmount = 0;
 		this.pauseTime = "0:0";
+		this.user = user;
 		this.scooter = scooter;
 		this.originStop = originStop;
 	}
-	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private User user;
 }
