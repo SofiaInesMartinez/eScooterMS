@@ -72,4 +72,13 @@ public class ScooterController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: Error interno del servidor");
 	    }
 	}
+	
+	@GetMapping("/byId")
+	public ResponseEntity<?> getScootersReportByKm() {
+		try {
+			return ResponseEntity.ok(service.getScootersReportByKm());
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body("Error: Internal server error");
+		}
+	}
 }

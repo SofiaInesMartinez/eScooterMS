@@ -17,4 +17,7 @@ public interface StopRepository extends JpaRepository<Stop, Integer>{
 
 	@Query("SELECT s FROM Stop s ORDER BY s.id DESC")
 	public List<Stop> getStopsBySimpleOrdering();
+	
+	@Query("DELETE FROM Stop s WHERE s.id = :id")
+    void deleteStopById(@Param("id") long id);
 }

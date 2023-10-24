@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.DTOScooterRequest;
 import tpe.scooterMS.DTO.DTOScooterResponse;
+import tpe.scooterMS.DTO.ScooterByKmsDTO;
 import tpe.scooterMS.model.Scooter;
 import tpe.scooterMS.repository.ScooterRepository;
 
@@ -30,7 +31,7 @@ public class ScooterService {
 	@Transactional
 	public DTOScooterResponse save(@Valid DTOScooterRequest request) throws Exception {
 		try {
-			Scooter scooter = new Scooter(request.getId(),request.getLastMaintenanceDate());
+			Scooter scooter = new Scooter(request.getId(),request.getLastMaintenanceDate(),request.getKms());
 			scooter = repository.save(scooter);
 			return new DTOScooterResponse(scooter);
 		} catch (Exception e) {
@@ -63,6 +64,15 @@ public class ScooterService {
 	    } catch (Exception e) {
 	        throw new Exception(e.getMessage());
 	    }
+	}
+	
+	@Transactional ( readOnly = true )
+	public List<ScooterByKmsDTO> getScootersReportByKm() throws Exception {
+		try {
+			return repository.getScootersReportByKm().stream().map( ScooterByKmsDTO::new ).toList();
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
 	}
 
 }

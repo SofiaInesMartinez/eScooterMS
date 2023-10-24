@@ -56,4 +56,13 @@ public class StopService {
 			throw new Exception(e.getMessage());
 		}
 	}
+	
+	@Transactional
+	public void deleteStop(long id) throws Exception {
+		try {
+	          repository.deleteStopById(id);
+	    } catch (Exception e) {
+	        throw new Exception(e.getMessage());
+	    }
+	}
 }
