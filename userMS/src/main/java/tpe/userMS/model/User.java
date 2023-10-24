@@ -32,7 +32,7 @@ public class User implements Serializable{
 	@Column(nullable=false)
 	private String username;
 	@Column (nullable=false)
-	private String status;
+	private int status;
 	
 	@ManyToMany
     @JoinTable(name = "user_account",
@@ -40,7 +40,7 @@ public class User implements Serializable{
             inverseJoinColumns = @JoinColumn(name = "accountId"))
 	private List<Account> accounts;
 	@Column(nullable = false)
-	private String role;
+	private int role;
 	
 	
 	
@@ -48,7 +48,7 @@ public class User implements Serializable{
 	public User() {
 		super();
 	}
-	public User(long id, int phone, String email, String name, String surname, String username, String role) {
+	public User(long id, int phone, String email, String name, String surname, String username, int role) {
 		super();
 		this.id = id;
 		this.phone = phone;
@@ -58,7 +58,7 @@ public class User implements Serializable{
 		this.username = username;
 		this.role = role;
 		this.accounts = new ArrayList<>();
-		this.status = "active";
+		this.status = 3;
 	}
 	public long getId() {
 		return id;
@@ -107,10 +107,10 @@ public List<Account> getAccounts() {
 	}
 
 
-	public String getRole() {
+	public Integer getRole() {
 		return role;
 	}
-	public void setRole(String role) {
+	public void setRole(int role) {
 		this.role = role;
 	}
 	public void setId(long id) {
@@ -118,10 +118,10 @@ public List<Account> getAccounts() {
 	}
 	
 	
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 	@Override

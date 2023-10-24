@@ -6,7 +6,7 @@ public class DTOUserResponse {
 	private String surname;
 	private String email;
 	private int phone;
-	private String status;
+	private int status;
 	
 	
 	public DTOUserResponse(User user) {
@@ -18,7 +18,7 @@ public class DTOUserResponse {
 	}
 	
 	
-	public DTOUserResponse(String surname, String email, int phone, String status) {
+	public DTOUserResponse(String surname, String email, int phone, int status) {
 		super();
 		this.surname = surname;
 		this.email = email;
@@ -46,12 +46,12 @@ public class DTOUserResponse {
 	}
 	
 	
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
 
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
