@@ -73,10 +73,28 @@ public class ScooterController {
 	    }
 	}
 	
-	@GetMapping("/byId")
+	@GetMapping("/reportByKm")
 	public ResponseEntity<?> getScootersReportByKm() {
 		try {
 			return ResponseEntity.ok(service.getScootersReportByKm());
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body("Error: Internal server error");
+		}
+	}
+	
+	@GetMapping("/reportByTotalTime")
+	public ResponseEntity<?> getScootersReportByTotalTime() {
+		try {
+			return ResponseEntity.ok(service.getScootersReportByTotalTime());
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body("Error: Internal server error");
+		}
+	}
+	
+	@GetMapping("/reportByTimeWithoutPauses")
+	public ResponseEntity<?> getScootersReportByWithoutPauses() {
+		try {
+			return ResponseEntity.ok(service.getScootersReportByWithoutPauses());
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().body("Error: Internal server error");
 		}

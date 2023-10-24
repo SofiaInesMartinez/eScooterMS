@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.DTOScooterRequest;
 import tpe.scooterMS.DTO.DTOScooterResponse;
 import tpe.scooterMS.DTO.ScooterByKmsDTO;
+import tpe.scooterMS.DTO.ScooterByTimeDTO;
+import tpe.scooterMS.DTO.ScooterByTimePauseDTO;
 import tpe.scooterMS.model.Scooter;
 import tpe.scooterMS.repository.ScooterRepository;
 
@@ -70,6 +72,24 @@ public class ScooterService {
 	public List<ScooterByKmsDTO> getScootersReportByKm() throws Exception {
 		try {
 			return repository.getScootersReportByKm().stream().map( ScooterByKmsDTO::new ).toList();
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+	
+	@Transactional ( readOnly = true )
+	public List<ScooterByTimePauseDTO> getScootersReportByTotalTime() throws Exception {
+		try {
+			return repository.getScootersReportByTotalTime().stream().map( ScooterByTimePauseDTO::new ).toList();
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+	
+	@Transactional ( readOnly = true )
+	public List<ScooterByTimeDTO> getScootersReportByWithoutPauses() throws Exception {
+		try {
+			return repository.getScootersReportByWithoutPauses().stream().map( ScooterByTimeDTO::new ).toList();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}

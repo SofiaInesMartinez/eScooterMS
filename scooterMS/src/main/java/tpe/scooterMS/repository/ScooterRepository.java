@@ -23,4 +23,10 @@ public interface ScooterRepository extends JpaRepository<Scooter, Integer>{
 	
 	@Query("SELECT s FROM Scooter s ORDER BY s.kilometers DESC")
 	public List<Scooter> getScootersReportByKm();
+	
+	@Query("SELECT s FROM Scooter s ORDER BY s.totalTime DESC")
+	public List<Scooter> getScootersReportByTotalTime();
+	
+	@Query("SELECT s FROM Scooter s ORDER BY s.time DESC")
+	public List<Scooter> getScootersReportByWithoutPauses();
 }
