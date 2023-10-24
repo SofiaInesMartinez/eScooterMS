@@ -10,13 +10,17 @@ import jakarta.validation.Valid;
 import tpe.userMS.DTO.DTOAccountRequest;
 import tpe.userMS.DTO.DTOAccountResponse;
 import tpe.userMS.model.Account;
+import tpe.userMS.model.User;
 import tpe.userMS.repository.AccountRepository;
+import tpe.userMS.repository.UserRepository;
 
 @Service("accountService")
 public class AccountService {
 	
 	@Autowired
 	private AccountRepository repository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@Transactional(readOnly = true)
 	public List<DTOAccountResponse> findAll() throws Exception {
@@ -79,5 +83,19 @@ public class AccountService {
         }
     }
 
+	@Transactional
+	public void addUserToAccount(Long id, Long userId) throws Exception {
+		try {
+			User user = userRepository.findById(userId)
+					.orElseThrow(() -> new RuntimeException("User not found with userId: " + userId));
+			Account account = repository.findById(id)
+					.orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
+			account.getUsers().add(user);
+			repository.save(account);
+			
+		} catch (Exception e) {
+			throw new Exception("Failed to update account user: " + e.getMessage());
+		}
+	}
 
 }

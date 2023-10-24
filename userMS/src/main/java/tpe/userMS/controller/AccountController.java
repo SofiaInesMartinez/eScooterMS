@@ -82,5 +82,15 @@ public class AccountController {
 			return ResponseEntity.internalServerError().body("Error: Internal server error");
 		}
 	}
+	
+	@PostMapping("/{id}/addUser/{userId}")
+    public ResponseEntity<?> addUserToAccount(@PathVariable Long id, @PathVariable Long userId) {
+		try {
+        service.addUserToAccount(id, userId);
+        return ResponseEntity.ok("Added user " + userId + " to account " +id);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
+		}
+    }
 
 }
