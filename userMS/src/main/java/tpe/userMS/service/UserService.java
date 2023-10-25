@@ -70,9 +70,10 @@ public class UserService {
 	}
 
 	@Transactional
-	public void updateStatus(long id, String status) throws Exception {
+	public DTOUserResponse updateStatus(long id, String status) throws Exception {
 		try {
 			repository.updateUser(status, id);
+			return repository.getUserById(id).map(DTOUserResponse::new).get();
 		} catch (Exception e) {
 			throw new Exception("Failed to update user status: " + e.getMessage());
 		}
