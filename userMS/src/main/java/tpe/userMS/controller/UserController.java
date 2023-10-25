@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
+import tpe.userMS.DTO.DTOUserStatusRequest;
 import tpe.userMS.service.UserService;
 
 @RestController
@@ -56,10 +57,10 @@ public class UserController {
 		}
 	}
 	
-	@PutMapping("/{id}/status/{status}")
-    public ResponseEntity<?> updateUserStatus(@PathVariable long id, @PathVariable String status) {
+	@PutMapping("/{id}/status")
+    public ResponseEntity<?> updateUserStatus(@PathVariable long id, @RequestBody DTOUserStatusRequest request) {
         try {
-            DTOUserResponse updatedUser = service.updateStatus(id, status);
+            DTOUserResponse updatedUser = service.updateStatus(id, request);
             return ResponseEntity.ok(updatedUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
