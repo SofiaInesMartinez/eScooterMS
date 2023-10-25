@@ -1,4 +1,4 @@
-package tpe.tripms.service;
+package tpe.maintenanceMS.service;
 
 import java.sql.Date;
 import java.util.List;
@@ -13,12 +13,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import jakarta.validation.Valid;
-import tpe.tripms.dto.DTOMaintenanceRequest;
-import tpe.tripms.dto.DTOMaintenanceResponse;
-import tpe.tripms.dto.DTOScooterResponse;
-import tpe.tripms.dto.DTOScooterStatusRequest;
-import tpe.tripms.model.Maintenance;
-import tpe.tripms.repository.MaintenanceRepository;
+import tpe.maintenanceMS.dto.DTOMaintenanceRequest;
+import tpe.maintenanceMS.dto.DTOMaintenanceResponse;
+import tpe.maintenanceMS.dto.DTOScooterResponse;
+import tpe.maintenanceMS.dto.DTOScooterStatusRequest;
+import tpe.maintenanceMS.model.Maintenance;
+import tpe.maintenanceMS.repository.MaintenanceRepository;
 
 @Service("maintenanceService")
 public class MaintenanceService {

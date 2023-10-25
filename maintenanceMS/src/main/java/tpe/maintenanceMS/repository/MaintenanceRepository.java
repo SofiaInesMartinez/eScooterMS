@@ -1,4 +1,4 @@
-package tpe.tripms.repository;
+package tpe.maintenanceMS.repository;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import tpe.tripms.model.Maintenance;
+import tpe.maintenanceMS.model.Maintenance;
 
 @Repository("maintenanceRepository")
 public interface MaintenanceRepository extends JpaRepository<Maintenance, Integer>{

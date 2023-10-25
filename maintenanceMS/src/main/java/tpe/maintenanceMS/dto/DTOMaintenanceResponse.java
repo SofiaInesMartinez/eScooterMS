@@ -1,9 +1,9 @@
-package tpe.tripms.dto;
+package tpe.maintenanceMS.dto;
 
 import java.sql.Date;
 import java.util.Objects;
 
-import tpe.tripms.model.Maintenance;
+import tpe.maintenanceMS.model.Maintenance;
 
 public class DTOMaintenanceResponse {
 

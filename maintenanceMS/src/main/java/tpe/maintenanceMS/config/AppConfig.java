@@ -1,4 +1,4 @@
-package tpe.tripms.config;
+package tpe.maintenanceMS.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package tpe.tripms.model;
+package tpe.maintenanceMS.model;
 
 import java.io.Serializable;
 import java.sql.Date;

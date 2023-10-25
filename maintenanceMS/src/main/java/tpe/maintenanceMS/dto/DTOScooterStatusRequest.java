@@ -1,4 +1,4 @@
-package tpe.tripms.dto;
+package tpe.maintenanceMS.dto;
 
 import java.util.Objects;
 

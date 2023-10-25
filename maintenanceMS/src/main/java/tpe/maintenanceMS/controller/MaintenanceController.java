@@ -1,4 +1,4 @@
-package tpe.tripms.controller;
+package tpe.maintenanceMS.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import tpe.tripms.dto.DTOMaintenanceRequest;
-import tpe.tripms.dto.DTOScooterStatusRequest;
-import tpe.tripms.service.MaintenanceService;
+import tpe.maintenanceMS.dto.DTOMaintenanceRequest;
+import tpe.maintenanceMS.dto.DTOScooterStatusRequest;
+import tpe.maintenanceMS.service.MaintenanceService;
 
 @RestController
 @RequestMapping("maintenance")
