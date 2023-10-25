@@ -10,6 +10,10 @@ public class DTOScooterResponse {
 	private float kilometers;
 	private String status;
 	
+	public DTOScooterResponse() {
+		super();
+	}
+	
 	public DTOScooterResponse(long id, Date lastMaintenanceDate, float kilometers, String status) {
 		super();
 		this.id = id;
