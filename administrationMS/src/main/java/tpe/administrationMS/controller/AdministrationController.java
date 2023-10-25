@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import reactor.core.publisher.Mono;
 import tpe.administrationMS.DTO.DTOUserResponse;
@@ -69,27 +70,18 @@ public class AdministrationController {
 		}
 	}
 
-	//Guarda bien pero muestra el save como String
-	 @PostMapping("/scooter")
-	    public Mono<ResponseEntity<String>> saveScooter(@RequestBody DTOScooterRequest request) {
-	        return restClient.method(HttpMethod.POST)
-	                .uri("http://localhost:8002/scooter")
-	                .body(BodyInserters.fromValue(request))
-	                .retrieve()
-	                .bodyToMono(String.class)
-	                .map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody))
-	                .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage())));
-	    }
-	
+	@PostMapping("/scooter")
+	public Mono<?> saveScooter(@RequestBody DTOScooterRequest request) throws WebClientResponseException {
+		return restClient.method(HttpMethod.POST).uri("http://localhost:8002/scooter")
+				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOScooterResponse.class)
+				.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
+	}
+
 	@PutMapping("/scooter/{id}/status")
-	public Mono<ResponseEntity<String>> updateScooterStatus(@PathVariable Long id,
-			@RequestBody DTOScooterStatusRequest request) {
-		return restClient.method(HttpMethod.PUT)
-                .uri("http://localhost:8002/scooter/{id}/status", id)
-                .body(BodyInserters.fromValue(request))
-                .retrieve()
-                .bodyToMono(String.class)
-                .map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody))
-                .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage())));
-    }
+	public Mono<?> updateScooterStatus(@PathVariable Long id, @RequestBody DTOScooterStatusRequest request)
+			throws WebClientResponseException {
+		return restClient.method(HttpMethod.PUT).uri("http://localhost:8002/scooter/{id}/status", id)
+				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOScooterResponse.class)
+				.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
+	}
 }
