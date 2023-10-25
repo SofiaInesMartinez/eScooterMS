@@ -3,12 +3,12 @@ package tpe.scooterMS.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Timer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
@@ -19,7 +19,6 @@ import tpe.scooterMS.model.User;
 import tpe.scooterMS.repository.ScooterRepository;
 import tpe.scooterMS.repository.StopRepository;
 import tpe.scooterMS.repository.TripRepository;
-import tpe.scooterMS.utils.TripTimer;
 
 @Service("tripService")
 public class TripService {
@@ -142,9 +141,9 @@ public class TripService {
 				.orElseThrow(() -> new Exception());
 	}
 	
-	@Transactional // USAR WEBCLIENT PARA OBTENER EL USER
-	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception {
-		User user = webClientBuilder.build()
+	@Transactional
+	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception, WebClientResponseException {
+		User user = webClientBuilder.build() // status >= 400: = WebClientResponseException
 				.get()
 				.uri("http://localhost:8003/user/" + request.getIdUser())
 				.retrieve()

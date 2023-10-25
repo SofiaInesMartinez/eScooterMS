@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tpe.scooterMS.DTO.DTOScooterRequest;
+import tpe.scooterMS.DTO.DTOScooterStatusRequest;
 import tpe.scooterMS.service.ScooterService;
 
 @RestController
@@ -23,6 +25,15 @@ public class ScooterController {
 	
 	public ScooterController(ScooterService service) {
 		this.service = service;
+	}
+	
+	@PutMapping("/{id}/status")
+	public ResponseEntity<?> updateScooterStatus(@PathVariable long id, @RequestBody DTOScooterStatusRequest request) {
+		try {
+			return ResponseEntity.ok(service.updateScooterStatus(id, request));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body("Error: Bad request");
+		}
 	}
 	
 	@GetMapping("")
