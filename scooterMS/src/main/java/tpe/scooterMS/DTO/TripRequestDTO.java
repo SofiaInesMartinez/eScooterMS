@@ -1,9 +1,9 @@
 package tpe.scooterMS.DTO;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import java.util.Objects;
 
-@Data
+import jakarta.validation.constraints.NotNull;
+
 public class TripRequestDTO {
 	@NotNull(message = "idUser shouldn't be null")
 	private long idUser;
@@ -22,29 +22,41 @@ public class TripRequestDTO {
 	public long getIdUser() {
 		return idUser;
 	}
-	public void setIdUser(int idUser) {
+
+	public void setIdUser(long idUser) {
 		this.idUser = idUser;
 	}
+
 	public int getIdScooter() {
 		return idScooter;
 	}
+
 	public void setIdScooter(int idScooter) {
 		this.idScooter = idScooter;
 	}
+
 	public int getIdOriginStop() {
 		return idOriginStop;
 	}
+
 	public void setIdOriginStop(int idOriginStop) {
 		this.idOriginStop = idOriginStop;
 	}
-	
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(idOriginStop, idScooter, idUser);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TripRequestDTO other = (TripRequestDTO) obj;
+		return idOriginStop == other.idOriginStop && idScooter == other.idScooter && idUser == other.idUser;
+	}
 }
-//public class TripRequestDTO {
-//	private User user;
-//	private Scooter scooter;
-//	private Stop destinationStop;
-//	private Stop originStop;
-//}
-
-
