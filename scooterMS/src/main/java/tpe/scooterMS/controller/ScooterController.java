@@ -74,11 +74,11 @@ public class ScooterController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteScooter(@PathVariable long idScooter
+	public ResponseEntity<?> deleteScooter(@PathVariable long id
 	) {
 	    try {
-	        service.deleteScooter(idScooter);
-	        return ResponseEntity.ok("Scooter con ID " + idScooter + " eliminado con éxito.");
+	        service.deleteScooter(id);
+	        return ResponseEntity.ok("Scooter con ID " + id + " eliminado con éxito.");
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: Error interno del servidor");
 	    }
