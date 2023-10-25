@@ -31,6 +31,10 @@ public class Maintenance implements Serializable {
 //	@JoinColumn(name="id_scooter")
 //	private Scooter scooter;
 	
+	public Maintenance() {
+		super();
+	}
+	
 	public Maintenance(long id, String description, Date startDate, Date finishDate, long idScooter) {
 		super();
 		this.id = id;

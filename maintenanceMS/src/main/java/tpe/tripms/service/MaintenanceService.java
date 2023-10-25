@@ -1,5 +1,6 @@
 package tpe.tripms.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,26 @@ public class MaintenanceService {
 	private WebClient.Builder webClientBuilder;
 	
 	@Transactional
+	public DTOMaintenanceResponse finishMaintenance(long id) throws Exception {
+		Maintenance maintenance = repository.getMaintenanceById(id);
+		if (maintenance != null && maintenance.getFinishDate() == null) {
+			webClientBuilder.build()
+				.put()
+				.uri("http://localhost:8002/scooter/" + maintenance.getIdScooter() + "/status")
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.body(BodyInserters.fromValue(new DTOScooterStatusRequest("available")))
+				.retrieve()
+				.bodyToMono(DTOScooterResponse.class)
+				.block();
+			
+			maintenance.setFinishDate(new Date(System.currentTimeMillis()));
+			return new DTOMaintenanceResponse(repository.save(maintenance));
+		} else {
+			throw new Exception("maintenance not found or already finished");
+		}
+	}
+	
+	@Transactional
 	public DTOScooterResponse updateScooterStatus(long id, DTOScooterStatusRequest request) throws WebClientResponseException {
 		DTOScooterResponse scooter = webClientBuilder.build()
 			.put()
@@ -53,6 +74,15 @@ public class MaintenanceService {
 	@Transactional
 	public DTOMaintenanceResponse save(@Valid DTOMaintenanceRequest request) throws Exception {
 		try {
+			webClientBuilder.build()
+				.put()
+				.uri("http://localhost:8002/scooter/" + request.getIdScooter() + "/status")
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.body(BodyInserters.fromValue(new DTOScooterStatusRequest("in maintenance")))
+				.retrieve()
+				.bodyToMono(DTOScooterResponse.class)
+				.block();
+			
 			Maintenance maintenance = new Maintenance(request.getId(), request.getDescription(),request.getStartDate(),request.getFinishDate(),request.getIdScooter());
 			maintenance = repository.save(maintenance);
 			return new DTOMaintenanceResponse(maintenance);

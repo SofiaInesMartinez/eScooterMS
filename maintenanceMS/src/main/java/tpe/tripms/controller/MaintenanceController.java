@@ -27,6 +27,15 @@ public class MaintenanceController {
 		this.service = service;
 	}
 	
+	@PutMapping("/{id}/finish")
+	public ResponseEntity<?> finishMaintenance(@PathVariable long id) {
+		try {
+			return ResponseEntity.ok(service.finishMaintenance(id));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+	
 	@PutMapping("/scooter/{id}/status")
 	public ResponseEntity<?> updateScooterStatus(@PathVariable long id, @RequestBody DTOScooterStatusRequest request) throws WebClientResponseException {
 		try {
