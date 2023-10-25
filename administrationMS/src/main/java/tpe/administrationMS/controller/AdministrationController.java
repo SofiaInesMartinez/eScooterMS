@@ -88,19 +88,10 @@ public class AdministrationController {
 	
 	
 	@DeleteMapping("scooter/{id}")
-    public Mono<ResponseEntity<Object>> deleteScooter(@PathVariable Long idScooter) throws WebClientResponseException{
+    public Mono<?> deleteScooter(@PathVariable Long id) throws WebClientResponseException{
         return restClient.method(HttpMethod.DELETE)
-                .uri("http://localhost:8002/scooter/{id}", idScooter)
-                .exchangeToMono(response -> {
-                    if (response.statusCode().is2xxSuccessful()) {
-                        return Mono.just(ResponseEntity.status(HttpStatus.OK).build());
-                    } else if (response.statusCode().is4xxClientError()) {
-                        return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-                    } else {
-                        return response.createException()
-                                .flatMap(Mono::error);
-                    }
-                });
+                .uri("http://localhost:8002/scooter/{id}", id)
+                .retrieve().bodyToMono(String.class);
     }
 	
 }
