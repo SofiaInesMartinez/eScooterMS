@@ -103,9 +103,9 @@ public class ScooterController {
 	}
 	
 	@GetMapping("/reportByTimeWithPauses")
-	public ResponseEntity<?> getScootersReportByWithPauses() {
+	public ResponseEntity<?> getScootersReportByTimeWithPauses() {
 		try {
-			return ResponseEntity.ok(service.getScootersReportByWithPauses());
+			return ResponseEntity.ok(service.getScootersReportByTimeWithPauses());
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().body("Error: Internal server error");
 		}

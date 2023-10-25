@@ -28,5 +28,5 @@ public interface ScooterRepository extends JpaRepository<Scooter, Integer>{
 	public List<Scooter> getScootersReportByTotalTime();
 	
 	@Query("SELECT s FROM Scooter s ORDER BY (s.totalTime - s.timePause) DESC")
-	public List<Scooter> getScootersReportByWithPauses();
+	public List<Scooter> getScootersReportByTimeWithPauses();
 }

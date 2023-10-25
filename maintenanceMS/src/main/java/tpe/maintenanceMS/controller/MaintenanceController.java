@@ -27,6 +27,24 @@ public class MaintenanceController {
 		this.service = service;
 	}
 	
+	@GetMapping("/reportByTimeWithPauses")
+	public ResponseEntity<?> getScootersReportByTimeWithPauses() {
+		try {
+			return ResponseEntity.ok(service.getScootersReportByTimeWithPauses());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+	}
+	
+	@GetMapping("/reportByTotalTime")
+	public ResponseEntity<?> getScootersReportByTotalTime() {
+		try {
+			return ResponseEntity.ok(service.getScootersReportByTotalTime());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+	}
+	
 	@PutMapping("/{id}/finish")
 	public ResponseEntity<?> finishMaintenance(@PathVariable long id) {
 		try {

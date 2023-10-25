@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ import tpe.maintenanceMS.dto.DTOMaintenanceRequest;
 import tpe.maintenanceMS.dto.DTOMaintenanceResponse;
 import tpe.maintenanceMS.dto.DTOScooterResponse;
 import tpe.maintenanceMS.dto.DTOScooterStatusRequest;
+import tpe.maintenanceMS.dto.ScooterByTimeDTO;
+import tpe.maintenanceMS.dto.ScooterByTimePauseDTO;
 import tpe.maintenanceMS.model.Maintenance;
 import tpe.maintenanceMS.repository.MaintenanceRepository;
 
@@ -28,6 +31,30 @@ public class MaintenanceService {
 	
 	@Autowired
 	private WebClient.Builder webClientBuilder;
+	
+	@Transactional
+	public List<ScooterByTimePauseDTO> getScootersReportByTimeWithPauses() throws WebClientResponseException {
+		List<ScooterByTimePauseDTO> scooters = webClientBuilder.build()
+				.get()
+				.uri("http://localhost:8002/scooter/reportByTimeWithPauses")
+				.retrieve()
+				.bodyToMono(new ParameterizedTypeReference<List<ScooterByTimePauseDTO>>(){})
+				.block();
+		
+		return scooters;
+	}
+	
+	@Transactional
+	public List<ScooterByTimeDTO> getScootersReportByTotalTime() throws WebClientResponseException {
+		List<ScooterByTimeDTO> scooters = webClientBuilder.build()
+				.get()
+				.uri("http://localhost:8002/scooter/reportByTotalTime")
+				.retrieve()
+				.bodyToMono(new ParameterizedTypeReference<List<ScooterByTimeDTO>>(){})
+				.block();
+		
+		return scooters;
+	}
 	
 	@Transactional
 	public DTOMaintenanceResponse finishMaintenance(long id) throws Exception {
