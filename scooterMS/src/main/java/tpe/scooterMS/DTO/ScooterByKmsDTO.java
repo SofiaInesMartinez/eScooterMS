@@ -1,14 +1,16 @@
 package tpe.scooterMS.DTO;
 
-import java.sql.Date;
+import java.util.Objects;
 
-import lombok.Data;
 import tpe.scooterMS.model.Scooter;
 
-@Data
 public class ScooterByKmsDTO {
 	private long idScooter;
 	private float kilometers;
+	
+	public ScooterByKmsDTO() {
+		super();
+	}
 	
 	public ScooterByKmsDTO(long id, float kilometers) {
 		super();
@@ -21,18 +23,38 @@ public class ScooterByKmsDTO {
 		this.idScooter = scooter.getId();
 		this.kilometers = scooter.getKms();
 	}
-	
-	public float getKms() {
+
+	public long getIdScooter() {
+		return idScooter;
+	}
+
+	public void setIdScooter(long idScooter) {
+		this.idScooter = idScooter;
+	}
+
+	public float getKilometers() {
 		return kilometers;
 	}
 
-	public void setKms(float kilometers) {
+	public void setKilometers(float kilometers) {
 		this.kilometers = kilometers;
 	}
-	public long getId() {
-		return idScooter;
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(idScooter, kilometers);
 	}
-	public void setId(long id) {
-		this.idScooter = id;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ScooterByKmsDTO other = (ScooterByKmsDTO) obj;
+		return idScooter == other.idScooter
+				&& Float.floatToIntBits(kilometers) == Float.floatToIntBits(other.kilometers);
 	}
 }

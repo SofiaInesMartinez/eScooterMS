@@ -3,9 +3,7 @@ package tpe.scooterMS.DTO;
 import java.util.Date;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 
-@Data
 public class TariffRequestDTO {
 	@NotNull(message = "normal shouldn't be null")
 	private float normal;
@@ -14,6 +12,9 @@ public class TariffRequestDTO {
 	@NotNull(message = "startDate shouldn't be null")
 	private Date startDate;
 	
+	public TariffRequestDTO() {
+		super();
+	}
 	
 	public TariffRequestDTO(float normal, float extra, Date startDate) {
 		super();
@@ -51,8 +52,4 @@ public class TariffRequestDTO {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	
-	
-	
-	
 }

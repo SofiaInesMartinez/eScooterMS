@@ -1,12 +1,15 @@
 package tpe.scooterMS.DTO;
 
-import lombok.Data;
 import tpe.scooterMS.model.Scooter;
 
-@Data
+
 public class ScooterByTimeDTO {
 	private long idScooter;
 	private long time;
+	
+	public ScooterByTimeDTO() {
+		super();
+	}
 	
 	public ScooterByTimeDTO(long id, long time) {
 		super();

@@ -1,11 +1,10 @@
 package tpe.scooterMS.DTO;
 
 import java.util.Date;
+import java.util.Objects;
 
-import lombok.Data;
 import tpe.scooterMS.model.Trip;
 
-@Data
 public class TripResponseDTO {
 	private long idTrip;
 	private long idUser;
@@ -19,5 +18,63 @@ public class TripResponseDTO {
 		this.idScooter = trip.getScooter().getId();
 		this.startDate = trip.getStartDate();
 		this.endDate = trip.getEndDate();
+	}
+
+	public long getIdTrip() {
+		return idTrip;
+	}
+
+	public void setIdTrip(long idTrip) {
+		this.idTrip = idTrip;
+	}
+
+	public long getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(long idUser) {
+		this.idUser = idUser;
+	}
+
+	public long getIdScooter() {
+		return idScooter;
+	}
+
+	public void setIdScooter(long idScooter) {
+		this.idScooter = idScooter;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(endDate, idScooter, idTrip, idUser, startDate);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TripResponseDTO other = (TripResponseDTO) obj;
+		return Objects.equals(endDate, other.endDate) && idScooter == other.idScooter && idTrip == other.idTrip
+				&& idUser == other.idUser && Objects.equals(startDate, other.startDate);
 	}
 }
