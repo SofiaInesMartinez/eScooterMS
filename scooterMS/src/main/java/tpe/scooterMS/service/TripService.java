@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,6 +25,7 @@ import tpe.scooterMS.repository.StopRepository;
 import tpe.scooterMS.repository.TripRepository;
 
 @Service("tripService")
+@EnableAsync
 public class TripService {
 	
 	@Autowired
@@ -116,6 +120,23 @@ public class TripService {
 //			throw new Exception();
 //		}
 //	}
+	
+	@Transactional
+	@Async
+	@Scheduled(fixedRate = 60000) // un minuto
+	public void updatePause(int id) throws Exception {
+		Optional<Trip> optional = repository.findById(id);
+		if (optional.isPresent()) {
+			Trip trip = optional.get();
+			long pauseTime = trip.getPauseTime();
+			if (pauseTime > 0) {
+				trip.setPauseTime(pauseTime - 1);
+				repository.save(trip);
+			}
+		} else {
+			throw new Exception();
+		}
+	}
 	
 	@Transactional
 	public DTOInvoicedAmountResponse getInvoicedAmountByYearAndMonthRange(int year, int month1, int month2) {
