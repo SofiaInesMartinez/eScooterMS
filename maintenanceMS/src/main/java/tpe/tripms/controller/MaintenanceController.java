@@ -6,11 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import tpe.tripms.dto.DTOMaintenanceRequest;
+import tpe.tripms.dto.DTOScooterStatusRequest;
 import tpe.tripms.service.MaintenanceService;
 
 @RestController
@@ -22,6 +25,11 @@ public class MaintenanceController {
 	
 	public MaintenanceController(MaintenanceService service) {
 		this.service = service;
+	}
+	
+	@PutMapping("maintenance/scooter/{id}/status")
+	public ResponseEntity<?> updateScooterStatus(@PathVariable long idScooter, @RequestBody DTOScooterStatusRequest request) throws WebClientResponseException {
+		return ResponseEntity.ok(service.updateScooterStatus(idScooter, request));
 	}
 	
 	@GetMapping("")

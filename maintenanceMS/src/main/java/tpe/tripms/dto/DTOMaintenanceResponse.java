@@ -1,9 +1,9 @@
 package tpe.tripms.dto;
 
 import java.sql.Date;
+import java.util.Objects;
 
-import tpe.scooterMS.model.Maintenance;
-import tpe.scooterMS.model.Scooter;
+import tpe.tripms.model.Maintenance;
 
 public class DTOMaintenanceResponse {
 
@@ -11,15 +11,15 @@ public class DTOMaintenanceResponse {
 	private String description;
 	private Date startDate;
 	private Date finishDate;
-	private Scooter scooter;
+	private long idScooter;
 	
-	public DTOMaintenanceResponse(long id, String description, Date startDate, Date finishDate, Scooter scooter) {
+	public DTOMaintenanceResponse(long id, String description, Date startDate, Date finishDate, long idScooter) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.startDate = startDate;
 		this.finishDate = finishDate;
-		this.scooter = scooter;
+		this.idScooter = idScooter;
 	}
 
 	public DTOMaintenanceResponse(Maintenance maintenance) {
@@ -28,7 +28,7 @@ public class DTOMaintenanceResponse {
 		this.description = maintenance.getDescription();
 		this.startDate = maintenance.getStartDate();
 		this.finishDate = maintenance.getFinishDate();
-		this.scooter = maintenance.getScooter();
+		this.idScooter = maintenance.getIdScooter();
 	}
 
 	public long getId() {
@@ -63,21 +63,30 @@ public class DTOMaintenanceResponse {
 		this.finishDate = finishDate;
 	}
 
-	public Scooter getScooter() {
-		return scooter;
+	public long getIdScooter() {
+		return idScooter;
 	}
 
-	public void setStudent(Scooter scooter) {
-		this.scooter = scooter;
+	public void setIdScooter(long idScooter) {
+		this.idScooter = idScooter;
 	}
 
 	@Override
 	public String toString() {
-		return "DTOMaintenanceResponse [id=" + id + ", Description=" + description + ", startDate=" + startDate
-				+ ", finishDate=" + finishDate + ", scooter=" + scooter + "]";
+		return "DTOMaintenanceResponse [id=" + id + ", description=" + description + ", startDate=" + startDate
+				+ ", finishDate=" + finishDate + ", idScooter=" + idScooter + "]";
 	}
-	
-	
-	
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DTOMaintenanceResponse other = (DTOMaintenanceResponse) obj;
+		return Objects.equals(description, other.description) && Objects.equals(finishDate, other.finishDate)
+				&& id == other.id && idScooter == other.idScooter && Objects.equals(startDate, other.startDate);
+	}
 }

@@ -24,18 +24,20 @@ public class Maintenance implements Serializable {
 	private Date startDate;
 	@Column(nullable = true)
 	private Date finishDate;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("idScooter")
-	@JoinColumn(name="id_scooter")
-	private Scooter scooter;
+	@Column(name = "id_scooter")
+	private long idScooter;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@MapsId("idScooter")
+//	@JoinColumn(name="id_scooter")
+//	private Scooter scooter;
 	
-	public Maintenance(long id, String description, Date startDate, Date finishDate, Scooter scooter) {
+	public Maintenance(long id, String description, Date startDate, Date finishDate, long idScooter) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.startDate = startDate;
 		this.finishDate = finishDate;
-		this.scooter = scooter;
+		this.idScooter = idScooter;
 	}
 
 	public long getId() {
@@ -69,19 +71,24 @@ public class Maintenance implements Serializable {
 	public void setFinishDate(Date finishDate) {
 		this.finishDate = finishDate;
 	}
-
-	public Scooter getScooter() {
-		return scooter;
+	
+	public long getIdScooter() {
+		return idScooter;
 	}
 
-	public void setScooter(Scooter scooter) {
-		this.scooter = scooter;
+	public void setIdScooter(long idScooter) {
+		this.idScooter = idScooter;
 	}
 	
 	@Override
 	public String toString() {
 		return "Maintenance [id=" + id + ", description=" + description + ", startDate=" + startDate + ", finishDate="
-				+ finishDate + ", scooter=" + scooter + "]";
+				+ finishDate + ", idScooter=" + idScooter + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, finishDate, id, idScooter, startDate);
 	}
 
 	@Override
@@ -94,11 +101,6 @@ public class Maintenance implements Serializable {
 			return false;
 		Maintenance other = (Maintenance) obj;
 		return Objects.equals(description, other.description) && Objects.equals(finishDate, other.finishDate)
-				&& id == other.id && Objects.equals(startDate, other.startDate)
-				&& Objects.equals(scooter, other.scooter);
+				&& id == other.id && idScooter == other.idScooter && Objects.equals(startDate, other.startDate);
 	}
-	
-	
-	
-	
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.TripRequestDTO;
@@ -52,7 +53,7 @@ public class TripController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) throws Exception {
+	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) throws Exception, WebClientResponseException {
 		return new ResponseEntity<>(service.saveTrip(request), HttpStatus.CREATED);
 	}
 	

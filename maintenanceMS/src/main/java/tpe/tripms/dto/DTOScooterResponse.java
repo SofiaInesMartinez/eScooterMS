@@ -1,9 +1,6 @@
-package tpe.scooterMS.DTO;
+package tpe.tripms.dto;
 
 import java.sql.Date;
-import java.util.Objects;
-
-import tpe.scooterMS.model.Scooter;
 
 
 
@@ -19,14 +16,6 @@ public class DTOScooterResponse {
 		this.lastMaintenanceDate = lastMaintenanceDate;
 		this.kilometers = kilometers;
 		this.status = status;
-	}
-	
-	public DTOScooterResponse(Scooter scooter) {
-		super();
-		this.id = scooter.getId();
-		this.lastMaintenanceDate = scooter.getLastMaintenanceDate();
-		this.kilometers = scooter.getKms();
-		this.status = scooter.getStatus();
 	}
 	
 	public float getKms() {
