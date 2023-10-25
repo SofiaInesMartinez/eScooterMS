@@ -19,7 +19,7 @@ import tpe.scooterMS.DTO.TariffRequestDTO;
 public class Tariff implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idTariff;
+	private int id;
 	@Column(nullable = false)
 	private float normal;
 	@Column(nullable = false)
@@ -34,11 +34,11 @@ public class Tariff implements Serializable {
 	}
 
 	public int getIdTariff() {
-		return idTariff;
+		return id;
 	}
 
 	public void setIdTariff(int idTariff) {
-		this.idTariff = idTariff;
+		this.id = idTariff;
 	}
 
 	public float getNormal() {

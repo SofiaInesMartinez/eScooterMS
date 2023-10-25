@@ -16,6 +16,10 @@ public class Stop implements Serializable {
 	@Column(nullable=false)
 	private long coordinates;
 	
+	public Stop() {
+		super();
+	}
+	
 	public Stop(long id, long coordinates) {
 		super();
 		this.id = id;

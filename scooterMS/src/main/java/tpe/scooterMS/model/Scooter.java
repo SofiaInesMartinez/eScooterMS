@@ -15,14 +15,18 @@ public class Scooter implements Serializable {
 	private long id;
 	@Column(nullable = true)
 	private Date lastMaintenanceDate;
-	@Column(nullable= true)
+	@Column(nullable= false)
 	private float kilometers;
 	@Column(nullable = false)
 	private String status;
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private long totalTime;
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private long timePause;
+	
+	public Scooter() {
+		super();
+	}
 	
 	public Scooter(long id, Date lastMaintenanceDate, float kilometers) {
 		super();

@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Trip implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idTrip;
+	private int id;
 	@Column(nullable = false)
 	private Date startDate;
 	@Column
@@ -58,12 +58,12 @@ public class Trip implements Serializable {
 
 
 	public int getIdTrip() {
-		return idTrip;
+		return id;
 	}
 
 
 	public void setIdTrip(int idTrip) {
-		this.idTrip = idTrip;
+		this.id = idTrip;
 	}
 
 
