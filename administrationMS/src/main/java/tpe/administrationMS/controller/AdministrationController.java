@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -84,4 +85,22 @@ public class AdministrationController {
 				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOScooterResponse.class)
 				.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
 	}
+	
+	
+	@DeleteMapping("scooter/{id}")
+    public Mono<ResponseEntity<Object>> deleteScooter(@PathVariable Long idScooter) throws WebClientResponseException{
+        return restClient.method(HttpMethod.DELETE)
+                .uri("http://localhost:8002/scooter/{id}", idScooter)
+                .exchangeToMono(response -> {
+                    if (response.statusCode().is2xxSuccessful()) {
+                        return Mono.just(ResponseEntity.status(HttpStatus.OK).build());
+                    } else if (response.statusCode().is4xxClientError()) {
+                        return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                    } else {
+                        return response.createException()
+                                .flatMap(Mono::error);
+                    }
+                });
+    }
+	
 }
