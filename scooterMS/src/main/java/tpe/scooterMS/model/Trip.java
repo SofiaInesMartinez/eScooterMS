@@ -10,13 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @SuppressWarnings("serial")
 @Entity
-@Data
-@NoArgsConstructor
 public class Trip implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +41,10 @@ public class Trip implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Stop destinationStop;
+	
+	public Trip() {
+		super();
+	}
 	
 	public Trip(long idUser, Scooter scooter, Stop originStop) {
 		this.startDate = new Date(System.currentTimeMillis());
@@ -126,6 +126,46 @@ public class Trip implements Serializable {
 	}
 
 
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public Scooter getScooter() {
+		return scooter;
+	}
+
+
+	public void setScooter(Scooter scooter) {
+		this.scooter = scooter;
+	}
+
+
+	public Stop getOriginStop() {
+		return originStop;
+	}
+
+
+	public void setOriginStop(Stop originStop) {
+		this.originStop = originStop;
+	}
+
+
+	public Stop getDestinationStop() {
+		return destinationStop;
+	}
+
+
+	public void setDestinationStop(Stop destinationStop) {
+		this.destinationStop = destinationStop;
+	}
+
+
 //	public Timer getCronometer() {
 //		return cronometer;
 //	}
@@ -134,19 +174,4 @@ public class Trip implements Serializable {
 //	public void setCronometer(Timer cronometer) {
 //		this.cronometer = cronometer;
 //	}
-	
-	
-	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private User user;
-//	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private Scooter scooter;
-//	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private Stop originStop;
-//	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	private Stop destinationStop;
-
 }
