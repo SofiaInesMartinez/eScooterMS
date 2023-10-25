@@ -29,10 +29,10 @@ public class MaintenanceService {
 	private WebClient.Builder webClientBuilder;
 	
 	@Transactional
-	public DTOScooterResponse updateScooterStatus(long idScooter, DTOScooterStatusRequest request) throws WebClientResponseException {
+	public DTOScooterResponse updateScooterStatus(long id, DTOScooterStatusRequest request) throws WebClientResponseException {
 		DTOScooterResponse scooter = webClientBuilder.build()
 			.put()
-			.uri("http://localhost:8002/scooter/" + idScooter + "/status")
+			.uri("http://localhost:8002/scooter/" + id + "/status")
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			.body(BodyInserters.fromValue(request))
 			.retrieve()

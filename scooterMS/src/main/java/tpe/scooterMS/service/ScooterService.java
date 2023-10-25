@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.DTOScooterRequest;
 import tpe.scooterMS.DTO.DTOScooterResponse;
+import tpe.scooterMS.DTO.DTOScooterStatusRequest;
 import tpe.scooterMS.DTO.ScooterByKmsDTO;
 import tpe.scooterMS.DTO.ScooterByTimeDTO;
 import tpe.scooterMS.DTO.ScooterByTimePauseDTO;
@@ -20,6 +21,17 @@ public class ScooterService {
 	
 	@Autowired
 	private ScooterRepository repository;
+	
+	@Transactional
+	public DTOScooterResponse updateScooterStatus(long id, DTOScooterStatusRequest request) throws Exception {
+		Scooter scooter = repository.getScooterById(id);
+		if (scooter != null) {
+			scooter.setStatus(request.getStatus());
+			return new DTOScooterResponse(repository.save(scooter));
+		} else {
+			throw new Exception("scooter not found");
+		}
+	}
 	
 	@Transactional ( readOnly = true )
 	public List<DTOScooterResponse> findAll() throws Exception {
