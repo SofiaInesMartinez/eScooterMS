@@ -1,5 +1,6 @@
 
 -- Drop tables if they exist
+DROP TABLE IF EXISTS user_account;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS account;
 
