@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import tpe.scooterMS.DTO.DTOInvoicedAmountResponse;
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
 import tpe.scooterMS.model.Scooter;
@@ -115,6 +116,16 @@ public class TripService {
 //			throw new Exception();
 //		}
 //	}
+	
+	@Transactional
+	public DTOInvoicedAmountResponse getInvoicedAmountByYearAndMonthRange(int year, int month1, int month2) {
+		Float invoiceAmount = repository.getInvoicedAmountByYearAndMonthRange(year, month1, month2);
+		if (invoiceAmount != null) {
+			return new DTOInvoicedAmountResponse(year, month1, month2, invoiceAmount.floatValue());
+		} else {
+			return new DTOInvoicedAmountResponse(year, month1, month2, 0);
+		}
+	}
 	
 	// VERIFICAR QUE EL MONOPATIN ESTE UBICADO EN UNA PARADA, SINO ERROR
 	@Transactional
