@@ -101,7 +101,7 @@ public class ScooterService {
 	@Transactional ( readOnly = true )
 	public List<ScooterByTimeDTO> getScootersReportByWithPauses() throws Exception {
 		try {
-			return repository.getScootersReportByWithoutPauses().stream().map( ScooterByTimeDTO::new ).toList();
+			return repository.getScootersReportByWithPauses().stream().map( ScooterByTimeDTO::new ).toList();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
