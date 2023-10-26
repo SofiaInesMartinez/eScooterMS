@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import tpe.scooterMS.model.Scooter;
 
 @Repository("scooterRepository")
-public interface ScooterRepository extends JpaRepository<Scooter, Integer>{
+public interface ScooterRepository extends JpaRepository<Scooter, Long>{
 	@Query("SELECT s FROM Scooter s WHERE s.id = :id")
 	public Scooter getScooterById(@Param("id")long id);
 
