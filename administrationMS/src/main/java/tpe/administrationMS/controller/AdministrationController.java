@@ -41,6 +41,8 @@ public class AdministrationController {
 		this.restClient = restClient;
 	}
 
+/// USER SERVICES
+	
 	@GetMapping("/user")
 	public Mono<ResponseEntity<?>> getUsers() {
 		try {
@@ -60,6 +62,8 @@ public class AdministrationController {
 				.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
 	}
 
+//// SCOOTER SERVICES
+	
 	@GetMapping("/scooter")
 	public Mono<ResponseEntity<?>> getScooters() {
 		try {
@@ -92,6 +96,9 @@ public class AdministrationController {
 				.bodyToMono(String.class);
 	}
 
+
+////// STOP SERIVCES
+	
 	@GetMapping("/stop")
 	public Mono<ResponseEntity<?>> getStops() {
 		try {
@@ -116,6 +123,9 @@ public class AdministrationController {
 				.bodyToMono(String.class);
 	}
 
+	
+//// TARIFF SERVICES
+	
 	@GetMapping("/tariff")
 	public Mono<ResponseEntity<?>> getTariffs() {
 		try {
@@ -133,6 +143,9 @@ public class AdministrationController {
 				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOTariffResponse.class)
 				.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
 	}
+
+	
+//// REPORTS
 	
 	@GetMapping("/reportByKm")
 	public Mono<ResponseEntity<?>> getScootersReportByKm() {
@@ -144,5 +157,17 @@ public class AdministrationController {
 			return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage()));
 		}
 	}
+	
+	@GetMapping("/minimumNumberOfTrips/{number}/year/{year}")
+	public Mono<ResponseEntity<?>> getScootersByMinimumNumberOfTrips(@PathVariable int number,@PathVariable int year) {
+		try {
+			return restClient.method(HttpMethod.GET).uri("http://localhost:8002/scooter/minimumNumberOfTrips/{number}/year/{year}").retrieve()
+					.bodyToFlux(DTOScooterResponse.class).collectList()
+					.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
+		} catch (Exception e) {
+			return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage()));
+		}
+	}
+			
 
 }
