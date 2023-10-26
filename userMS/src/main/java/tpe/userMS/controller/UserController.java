@@ -58,7 +58,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/{id}/status")
-    public ResponseEntity<?> updateUserStatus(@PathVariable long id, @RequestBody DTOUserStatusRequest request) {
+    public ResponseEntity<?> updateUserStatus(@PathVariable long id, @RequestBody @Valid DTOUserStatusRequest request) {
         try {
             DTOUserResponse updatedUser = service.updateStatus(id, request);
             return ResponseEntity.ok(updatedUser);

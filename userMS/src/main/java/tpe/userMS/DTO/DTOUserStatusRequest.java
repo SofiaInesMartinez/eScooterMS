@@ -2,7 +2,10 @@ package tpe.userMS.DTO;
 
 import java.util.Objects;
 
+import jakarta.validation.constraints.NotNull;
+
 public class DTOUserStatusRequest {
+	@NotNull(message = "status shouldn't be null")
 	private int status;
 	
 	public DTOUserStatusRequest() {

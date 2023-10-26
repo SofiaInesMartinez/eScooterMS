@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import jakarta.validation.Valid;
 import tpe.maintenanceMS.dto.DTOMaintenanceRequest;
 import tpe.maintenanceMS.dto.DTOScooterStatusRequest;
 import tpe.maintenanceMS.service.MaintenanceService;
@@ -55,7 +56,7 @@ public class MaintenanceController {
 	}
 	
 	@PutMapping("/scooter/{id}/status")
-	public ResponseEntity<?> updateScooterStatus(@PathVariable long id, @RequestBody DTOScooterStatusRequest request) throws WebClientResponseException {
+	public ResponseEntity<?> updateScooterStatus(@PathVariable long id, @RequestBody @Valid DTOScooterStatusRequest request) throws WebClientResponseException {
 		try {
 			return ResponseEntity.ok(service.updateScooterStatus(id, request));
 		} catch (Exception e) {
