@@ -43,8 +43,8 @@ public class TripService {
 	@Transactional
 	@Async
 	@Scheduled(fixedRate = 60000) // un minuto
-	public void updatePause(int id) throws Exception {
-		Optional<Trip> optional = repository.findById(id);
+	public void updatePause(/*int id*/) throws Exception { //Comenta para que no de error
+		Optional<Trip> optional = repository.findById(/*id*/1);
 		if (optional.isPresent()) {
 			Trip trip = optional.get();
 			long pauseTime = trip.getPauseTime();
