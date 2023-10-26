@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.DTOScooterRequest;
 import tpe.scooterMS.DTO.DTOScooterStatusRequest;
 import tpe.scooterMS.service.ScooterService;
@@ -28,7 +29,7 @@ public class ScooterController {
 	}
 	
 	@PutMapping("/{id}/status")
-	public ResponseEntity<?> updateScooterStatus(@PathVariable long id, @RequestBody DTOScooterStatusRequest request) {
+	public ResponseEntity<?> updateScooterStatus(@PathVariable long id, @RequestBody @Valid DTOScooterStatusRequest request) {
 		try {
 			return ResponseEntity.ok(service.updateScooterStatus(id, request));
 		} catch (Exception e) {

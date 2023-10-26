@@ -17,6 +17,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import jakarta.validation.Valid;
 import reactor.core.publisher.Mono;
 import tpe.administrationMS.DTO.DTOUserResponse;
 import tpe.administrationMS.DTO.DTOUserStatusRequest;
@@ -52,7 +53,7 @@ public class AdministrationController {
 	}
 
 	@PutMapping("/user/{id}/status")
-	public Mono<ResponseEntity<?>> updateUserStatus(@PathVariable long id, @RequestBody DTOUserStatusRequest request)
+	public Mono<ResponseEntity<?>> updateUserStatus(@PathVariable long id, @RequestBody @Valid DTOUserStatusRequest request)
 			throws WebClientResponseException {
 		return restClient.method(HttpMethod.PUT).uri("http://localhost:8003/user/{id}/status", id)
 				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOUserResponse.class)
@@ -71,14 +72,14 @@ public class AdministrationController {
 	}
 
 	@PostMapping("/scooter")
-	public Mono<?> saveScooter(@RequestBody DTOScooterRequest request) throws WebClientResponseException {
+	public Mono<?> saveScooter(@RequestBody @Valid DTOScooterRequest request) throws WebClientResponseException {
 		return restClient.method(HttpMethod.POST).uri("http://localhost:8002/scooter")
 				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOScooterResponse.class)
 				.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
 	}
 
 	@PutMapping("/scooter/{id}/status")
-	public Mono<?> updateScooterStatus(@PathVariable Long id, @RequestBody DTOScooterStatusRequest request)
+	public Mono<?> updateScooterStatus(@PathVariable Long id, @RequestBody @Valid DTOScooterStatusRequest request)
 			throws WebClientResponseException {
 		return restClient.method(HttpMethod.PUT).uri("http://localhost:8002/scooter/{id}/status", id)
 				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOScooterResponse.class)
@@ -103,7 +104,7 @@ public class AdministrationController {
 	}
 
 	@PostMapping("/stop")
-	public Mono<?> saveStop(@RequestBody DTOStopRequest request) throws WebClientResponseException {
+	public Mono<?> saveStop(@RequestBody @Valid DTOStopRequest request) throws WebClientResponseException {
 		return restClient.method(HttpMethod.POST).uri("http://localhost:8002/stop")
 				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOStopResponse.class)
 				.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
@@ -127,7 +128,7 @@ public class AdministrationController {
 	}
 
 	@PostMapping("/tariff")
-	public Mono<?> saveTariff(@RequestBody DTOTariffRequest request) throws WebClientResponseException {
+	public Mono<?> saveTariff(@RequestBody @Valid DTOTariffRequest request) throws WebClientResponseException {
 		return restClient.method(HttpMethod.POST).uri("http://localhost:8002/tariff")
 				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOTariffResponse.class)
 				.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));

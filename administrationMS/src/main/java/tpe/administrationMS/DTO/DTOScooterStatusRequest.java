@@ -2,10 +2,14 @@ package tpe.administrationMS.DTO;
 
 import java.util.Objects;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 
 public class DTOScooterStatusRequest {
-
-private String status;
+	@NotNull(message = "status shouldn't be null")
+	@NotBlank(message = "status shouldn't be empty")
+	private String status;
 	
 	public DTOScooterStatusRequest() {
 		super();
