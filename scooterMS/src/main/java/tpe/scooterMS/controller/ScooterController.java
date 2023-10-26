@@ -110,4 +110,13 @@ public class ScooterController {
 			return ResponseEntity.internalServerError().body("Error: Internal server error");
 		}
 	}
+	
+	@GetMapping("/minimumNumberOfTrips/{number}/year/{year}")
+	public ResponseEntity<?> getScootersByMinimumNumberOfTrips(@PathVariable int number,@PathVariable int year) {
+		try {
+			return ResponseEntity.ok(service.getScootersByMinimumNumberOfTrips(number,year));
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body("Error: Internal server error");
+		}
+	}
 }

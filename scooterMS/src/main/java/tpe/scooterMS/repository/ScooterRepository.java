@@ -31,4 +31,15 @@ public interface ScooterRepository extends JpaRepository<Scooter, Integer>{
 	
 	@Query("SELECT s FROM Scooter s ORDER BY (s.totalTime - s.timePause) DESC")
 	public List<Scooter> getScootersReportByTimeWithPauses();
+	
+	@Query("SELECT s "
+			+ "FROM Scooter s "
+			+ "WHERE s.id IN ("
+			+ "    SELECT t.scooter.id "
+			+ "    FROM Trip t"
+			+ "    WHERE YEAR(t.startDate) = :year"
+			+ "    GROUP BY t.scooter.id"
+			+ "    HAVING COUNT(*) > :number"
+			+ ")")
+	public List<Scooter> getScootersByMinimumNumberOfTrips(@Param("number") int number,@Param("year") int year);
 }

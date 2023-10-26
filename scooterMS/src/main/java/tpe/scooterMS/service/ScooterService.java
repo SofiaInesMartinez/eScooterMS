@@ -106,5 +106,14 @@ public class ScooterService {
 			throw new Exception(e.getMessage());
 		}
 	}
+	
+	@Transactional ( readOnly = true )
+	public List<DTOScooterResponse> getScootersByMinimumNumberOfTrips(int number, int year) throws Exception {
+		try {
+			return repository.getScootersByMinimumNumberOfTrips(number,year).stream().map( DTOScooterResponse::new ).toList();
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
 
 }
