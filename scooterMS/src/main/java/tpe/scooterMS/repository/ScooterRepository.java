@@ -42,4 +42,9 @@ public interface ScooterRepository extends JpaRepository<Scooter, Long>{
 			+ "    HAVING COUNT(*) > :number"
 			+ ")")
 	public List<Scooter> getScootersByMinimumNumberOfTrips(@Param("number") int number,@Param("year") int year);
+	
+
+	@Modifying
+	@Query("UPDATE Scooter s SET s.status = :status WHERE s.id = :id")
+	public void updateScooterStatus(@Param("id") long id, @Param("status") String status);
 }

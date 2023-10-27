@@ -8,9 +8,9 @@ public class TripRequestDTO {
 	@NotNull(message = "idUser shouldn't be null")
 	private long idUser;
 	@NotNull(message = "idScooter shouldn't be null")
-	private int idScooter;
+	private long idScooter;
 	@NotNull(message = "idOriginStop shouldn't be null")
-	private int idOriginStop;
+	private long idOriginStop;
 	
 	public TripRequestDTO(int idUser,int idScooter, int idOriginStop) {
 		super();
@@ -27,19 +27,19 @@ public class TripRequestDTO {
 		this.idUser = idUser;
 	}
 
-	public int getIdScooter() {
+	public long getIdScooter() {
 		return idScooter;
 	}
 
-	public void setIdScooter(int idScooter) {
+	public void setIdScooter(long idScooter) {
 		this.idScooter = idScooter;
 	}
 
-	public int getIdOriginStop() {
+	public long getIdOriginStop() {
 		return idOriginStop;
 	}
 
-	public void setIdOriginStop(int idOriginStop) {
+	public void setIdOriginStop(long idOriginStop) {
 		this.idOriginStop = idOriginStop;
 	}
 

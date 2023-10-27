@@ -107,10 +107,21 @@ public class TripService {
 		if (scooterOptional.isPresent() && stopOptional.isPresent() && user != null) {
 			Scooter scooter = scooterOptional.get();
 			Stop originStop = stopOptional.get();
-			Trip trip = repository.save(new Trip(user.getId(), scooter, originStop));
-			return new TripResponseDTO(trip);
+			
+			if (scooter.getStatus().equals("available")) {
+				Trip activeTrip = repository.getActiveTripByIdUser(user.getId());
+				if (activeTrip == null) {
+					Trip trip = repository.save(new Trip(user.getId(), scooter, originStop));
+					scooterRepository.updateScooterStatus(scooter.getId(), "in use");
+					return new TripResponseDTO(trip);
+				} else {
+					throw new Exception("The specified user is on a trip");
+				}
+			} else {
+				throw new Exception("The scooter is unavailable");
+			}
 		} else {
-			throw new Exception();
+			throw new Exception("The scooter or the stop or the user doesn't exist");
 		}
 	}
 	
