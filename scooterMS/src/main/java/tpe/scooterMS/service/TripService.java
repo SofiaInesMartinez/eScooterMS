@@ -73,10 +73,15 @@ public class TripService {
 		Optional<Trip> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			Trip trip = optional.get();
-			trip.setEndDate(new Date(System.currentTimeMillis()));
-			return new TripResponseDTO(repository.save(trip));
+			if (trip.getEndDate() == null) {
+				trip.setEndDate(new Date(System.currentTimeMillis()));
+				scooterRepository.updateScooterStatus(trip.getScooter().getId(), "available");
+				return new TripResponseDTO(repository.save(trip));
+			} else {
+				throw new Exception("The trip already ended");
+			}
 		} else {
-			throw new Exception();
+			throw new Exception("The trip with id " + id + "doesn't exist");
 		}
 	}
 	
