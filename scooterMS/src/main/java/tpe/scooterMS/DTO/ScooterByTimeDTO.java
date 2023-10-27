@@ -5,7 +5,7 @@ import tpe.scooterMS.model.Scooter;
 
 public class ScooterByTimeDTO {
 	private long idScooter;
-	private long time;
+	private long time; //minutes
 	
 	public ScooterByTimeDTO() {
 		super();

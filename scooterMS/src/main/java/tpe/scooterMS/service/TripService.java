@@ -18,10 +18,12 @@ import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
 import tpe.scooterMS.model.Scooter;
 import tpe.scooterMS.model.Stop;
+import tpe.scooterMS.model.Tariff;
 import tpe.scooterMS.model.Trip;
 import tpe.scooterMS.model.User;
 import tpe.scooterMS.repository.ScooterRepository;
 import tpe.scooterMS.repository.StopRepository;
+import tpe.scooterMS.repository.TariffRepository;
 import tpe.scooterMS.repository.TripRepository;
 
 @Service("tripService")
@@ -39,6 +41,9 @@ public class TripService {
 	
 	@Autowired
 	private StopRepository stopRepository;
+	
+	@Autowired
+	private TariffRepository tariffRepository;
 	
 	@Transactional
 	@Async
@@ -75,7 +80,26 @@ public class TripService {
 			Trip trip = optional.get();
 			if (trip.getEndDate() == null) {
 				trip.setEndDate(new Date(System.currentTimeMillis()));
-				scooterRepository.updateScooterStatus(trip.getScooter().getId(), "available");
+				
+				long time = (trip.getEndDate().getTime() - trip.getStartDate().getTime()) / 60000; // minutos
+				Tariff tariff = tariffRepository.getTariffByDate(trip.getEndDate());  
+				float kms = 3 * time; // El 3 es un numero random, podria ser cualquiera. Es para calcular de alguna forma los kms
+				float amount = tariff.getNormal() * time; // Por cada minuto le cobra la tarifa normal
+				
+				if (trip.getPauseTime() == 0) {
+					amount += tariff.getExtra();
+				}
+				
+				trip.setKms(kms);
+				trip.setTripAmount(amount);
+				
+				
+				long idScooter = trip.getScooter().getId();
+				scooterRepository.updateScooterStatus(idScooter, "available");
+				scooterRepository.incrementScooterKms(idScooter, kms);
+				scooterRepository.incrementScooterTotalTime(idScooter, time);
+				scooterRepository.incrementScooterTimePause(idScooter, 15 - trip.getPauseTime()); // CONSTANTE EN CODIGO
+				
 				return new TripResponseDTO(repository.save(trip));
 			} else {
 				throw new Exception("The trip already ended");

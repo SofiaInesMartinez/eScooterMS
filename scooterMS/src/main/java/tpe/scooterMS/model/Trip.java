@@ -26,7 +26,7 @@ public class Trip implements Serializable {
 	@Column(nullable = false)
 	private float tripAmount;
 	@Column(nullable = false)
-	private long pauseTime; //minutes
+	private long pauseTime; //minutos
 	@Column(nullable = false)
 	private long idUser;
 	

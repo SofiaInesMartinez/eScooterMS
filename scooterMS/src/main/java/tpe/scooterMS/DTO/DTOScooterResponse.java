@@ -28,13 +28,6 @@ public class DTOScooterResponse {
 		this.status = scooter.getStatus();
 	}
 	
-	public float getKms() {
-		return kilometers;
-	}
-
-	public void setKms(float kilometers) {
-		this.kilometers = kilometers;
-	}
 	public long getId() {
 		return id;
 	}

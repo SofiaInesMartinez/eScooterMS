@@ -9,6 +9,8 @@ public class TripResponseDTO {
 	private long idTrip;
 	private long idUser;
 	private long idScooter;
+	private float kms;
+	private float amount;
 	private Date startDate;
 	private Date endDate;
 	
@@ -16,6 +18,8 @@ public class TripResponseDTO {
 		this.idTrip = trip.getIdTrip();
 		this.idUser = trip.getIdUser();
 		this.idScooter = trip.getScooter().getId();
+		this.kms = trip.getKms();
+		this.amount = trip.getTripAmount();
 		this.startDate = trip.getStartDate();
 		this.endDate = trip.getEndDate();
 	}
@@ -42,6 +46,22 @@ public class TripResponseDTO {
 
 	public void setIdScooter(long idScooter) {
 		this.idScooter = idScooter;
+	}
+
+	public float getKms() {
+		return kms;
+	}
+
+	public void setKms(float kms) {
+		this.kms = kms;
+	}
+
+	public float getAmount() {
+		return amount;
+	}
+
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
 
 	public Date getStartDate() {

@@ -20,9 +20,9 @@ public class Scooter implements Serializable {
 	@Column(nullable = false)
 	private String status;
 	@Column(nullable = false)
-	private long totalTime;
+	private long totalTime; // minutos
 	@Column(nullable = false)
-	private long timePause;
+	private long timePause; // minutos
 	
 	public Scooter() {
 		super();

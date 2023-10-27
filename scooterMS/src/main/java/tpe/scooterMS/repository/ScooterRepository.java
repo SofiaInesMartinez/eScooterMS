@@ -47,4 +47,16 @@ public interface ScooterRepository extends JpaRepository<Scooter, Long>{
 	@Modifying
 	@Query("UPDATE Scooter s SET s.status = :status WHERE s.id = :id")
 	public void updateScooterStatus(@Param("id") long id, @Param("status") String status);
+	
+	@Modifying
+	@Query("UPDATE Scooter s SET s.kilometers = s.kilometers + :kilometers WHERE s.id = :id")
+	public void incrementScooterKms(@Param("id") long id, @Param("kilometers") float kilometers);
+	
+	@Modifying
+	@Query("UPDATE Scooter s SET s.totalTime = s.totalTime + :time WHERE s.id = :id")
+	public void incrementScooterTotalTime(@Param("id") long id, @Param("time") float time);
+	
+	@Modifying
+	@Query("UPDATE Scooter s SET s.timePause = s.timePause + :timePause WHERE s.id = :id")
+	public void incrementScooterTimePause(@Param("id") long id, @Param("timePause") float timePause);
 }
