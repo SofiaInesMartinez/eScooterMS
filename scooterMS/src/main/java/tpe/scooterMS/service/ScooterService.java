@@ -1,6 +1,7 @@
 package tpe.scooterMS.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -111,6 +112,15 @@ public class ScooterService {
 	public List<DTOScooterResponse> getScootersByMinimumNumberOfTrips(int number, int year) throws Exception {
 		try {
 			return repository.getScootersByMinimumNumberOfTrips(number,year).stream().map( DTOScooterResponse::new ).toList();
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+	
+	@Transactional ( readOnly = true )
+	public  Map<String, Long> getScootersByStatus() throws Exception {
+		try {
+			return repository.getScootersByStatus();
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}

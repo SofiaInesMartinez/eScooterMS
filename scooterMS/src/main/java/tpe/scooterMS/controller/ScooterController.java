@@ -120,4 +120,13 @@ public class ScooterController {
 			return ResponseEntity.internalServerError().body("Error: Internal server error");
 		}
 	}
+	
+	@GetMapping("/reportByStatus")
+	public ResponseEntity<?> getScootersByStatus() {
+		try {
+			return ResponseEntity.ok(service.getScootersByStatus());
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body("Error: Internal server error");
+		}
+	}
 }

@@ -1,7 +1,7 @@
 package tpe.scooterMS.repository;
 
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,6 +28,12 @@ public interface ScooterRepository extends JpaRepository<Scooter, Long>{
 	
 	@Query("SELECT s FROM Scooter s ORDER BY s.totalTime DESC")
 	public List<Scooter> getScootersReportByTotalTime();
+	
+	@Query("SELECT "
+			+ "    SUM(CASE WHEN status = 'available' THEN 1 ELSE 0 END) AS en_operacion, "
+			+ "    SUM(CASE WHEN status = 'maintenance' THEN 1 ELSE 0 END) AS en_mantenimiento "
+			+ "FROM Scooter")
+	public Map<String, Long> getScootersByStatus();
 	
 	@Query("SELECT s FROM Scooter s ORDER BY (s.totalTime - s.timePause) DESC")
 	public List<Scooter> getScootersReportByTimeWithPauses();
