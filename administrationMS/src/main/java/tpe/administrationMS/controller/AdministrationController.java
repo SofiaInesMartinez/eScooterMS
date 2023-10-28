@@ -164,7 +164,7 @@ public class AdministrationController {
 	@GetMapping("/minimumNumberOfTrips/{number}/year/{year}")
 	public Mono<ResponseEntity<?>> getScootersByMinimumNumberOfTrips(@PathVariable int number,@PathVariable int year) {
 		try {
-			return restClient.method(HttpMethod.GET).uri("http://localhost:8002/scooter/minimumNumberOfTrips/{number}/year/{year}").retrieve()
+			return restClient.method(HttpMethod.GET).uri("http://localhost:8002/scooter/minimumNumberOfTrips/{number}/year/{year}",number,year).retrieve()
 					.bodyToFlux(DTOScooterResponse.class).collectList()
 					.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
 		} catch (Exception e) {
