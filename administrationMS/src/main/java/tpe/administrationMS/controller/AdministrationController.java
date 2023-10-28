@@ -1,7 +1,10 @@
 package tpe.administrationMS.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -164,6 +167,17 @@ public class AdministrationController {
 			return restClient.method(HttpMethod.GET).uri("http://localhost:8002/scooter/minimumNumberOfTrips/{number}/year/{year}").retrieve()
 					.bodyToFlux(DTOScooterResponse.class).collectList()
 					.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
+		} catch (Exception e) {
+			return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage()));
+		}
+	}
+	
+	@GetMapping("/reportByScooterStatus")
+	public Mono<ResponseEntity<?>> getScootersByStatus() {
+		try {
+			return restClient.method(HttpMethod.GET).uri("http://localhost:8002/scooter/reportByStatus").retrieve()
+					.bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {})
+		            .map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
 		} catch (Exception e) {
 			return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage()));
 		}
