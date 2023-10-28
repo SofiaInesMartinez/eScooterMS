@@ -1,6 +1,7 @@
 package tpe.userMS.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,17 @@ public class AccountService {
 	private AccountRepository repository;
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Transactional(readOnly = true)
+	public DTOAccountResponse getAccountByUserIdWithBalance(long userId) throws Exception, NoSuchElementException {
+		try {
+			return repository.getAccountByUserIdWithBalance(userId)
+					.map( DTOAccountResponse::new )
+					.orElseThrow(() -> new Exception("Accounts associated to user with id" + userId + " don't exist or they do not have balance"));
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
 
 	@Transactional(readOnly = true)
 	public List<DTOAccountResponse> findAll() throws Exception {
@@ -90,8 +102,11 @@ public class AccountService {
 					.orElseThrow(() -> new RuntimeException("User not found with userId: " + userId));
 			Account account = repository.findById(id)
 					.orElseThrow(() -> new RuntimeException("Account not found with id: " + id));
-			account.getUsers().add(user);
-			repository.save(account);
+//			account.getUsers().add(user);
+//			repository.save(account); No funciona porque user es el duenio de la relacion
+			
+			user.getAccounts().add(account);
+			userRepository.save(user);
 			
 		} catch (Exception e) {
 			throw new Exception("Failed to update account user: " + e.getMessage());

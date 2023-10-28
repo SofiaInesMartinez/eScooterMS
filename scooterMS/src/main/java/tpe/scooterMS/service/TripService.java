@@ -5,17 +5,21 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import tpe.scooterMS.DTO.DTOInvoicedAmountResponse;
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
+import tpe.scooterMS.model.Account;
 import tpe.scooterMS.model.Scooter;
 import tpe.scooterMS.model.Stop;
 import tpe.scooterMS.model.Tariff;
@@ -100,6 +104,11 @@ public class TripService {
 				scooterRepository.incrementScooterTotalTime(idScooter, time);
 				scooterRepository.incrementScooterTimePause(idScooter, 15 - trip.getPauseTime()); // CONSTANTE EN CODIGO
 				
+//				webClientBuilder.build()
+//					.put()
+//					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+//					.body(BodyInserters.fromValue());
+				
 				return new TripResponseDTO(repository.save(trip));
 			} else {
 				throw new Exception("The trip already ended");
@@ -123,24 +132,31 @@ public class TripService {
 	
 	@Transactional
 	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception, WebClientResponseException {
-		User user = webClientBuilder.build() // status >= 400: = WebClientResponseException
+//		User user = webClientBuilder.build() // status >= 400: = WebClientResponseException
+//				.get()
+//				.uri("http://localhost:8003/user/" + request.getIdUser())
+//				.retrieve()
+//				.bodyToMono(User.class)
+//				.block();
+		
+		Account account = webClientBuilder.build()
 				.get()
-				.uri("http://localhost:8003/user/" + request.getIdUser())
+				.uri("http://localhost:8003/account/user/" + request.getIdUser() + "/withBalance")
 				.retrieve()
-				.bodyToMono(User.class)
+				.bodyToMono(Account.class)
 				.block();
 		
 		Optional<Scooter> scooterOptional = scooterRepository.findById(request.getIdScooter());
 		Optional<Stop> stopOptional = stopRepository.findById(request.getIdOriginStop());
 		
-		if (scooterOptional.isPresent() && stopOptional.isPresent() && user != null) {
+		if (scooterOptional.isPresent() && stopOptional.isPresent() && account.getMoneyBalance() > 0) {
 			Scooter scooter = scooterOptional.get();
 			Stop originStop = stopOptional.get();
 			
 			if (scooter.getStatus().equals("available")) {
-				Trip activeTrip = repository.getActiveTripByIdUser(user.getId());
+				Trip activeTrip = repository.getActiveTripByIdUser(request.getIdUser());
 				if (activeTrip == null) {
-					Trip trip = repository.save(new Trip(user.getId(), scooter, originStop));
+					Trip trip = repository.save(new Trip(request.getIdUser(), account.getId(), scooter, originStop));
 					scooterRepository.updateScooterStatus(scooter.getId(), "in use");
 					return new TripResponseDTO(trip);
 				} else {
@@ -150,7 +166,7 @@ public class TripService {
 				throw new Exception("The scooter is unavailable");
 			}
 		} else {
-			throw new Exception("The scooter or the stop or the user doesn't exist");
+			throw new Exception("The scooter, the stop or the user doesn't exist or the user doesn't have money in any account");
 		}
 	}
 	

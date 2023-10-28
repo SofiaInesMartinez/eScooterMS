@@ -28,6 +28,24 @@ public class UserController {
 	public UserController(UserService service) {
 		this.service = service;
 	}
+	
+	@GetMapping("/{id}/accounts")
+	public ResponseEntity<?> getUserAccounts(@PathVariable long id) {
+		try {
+			return ResponseEntity.ok(service.getUserAccounts(id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
+		}
+	}
+	
+	@GetMapping("/{id}/account/withBalance")
+	public ResponseEntity<?> getAccountByUserIdWithBalance(@PathVariable long id) {
+		try {
+			return ResponseEntity.ok(service.getAccountByUserIdWithBalance(id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
+		}
+	}
 
 	@GetMapping("")
 	public ResponseEntity<?> getUsers() {
@@ -48,7 +66,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?>  deleteUser(@PathVariable long id) {
+	public ResponseEntity<?> deleteUser(@PathVariable long id) {
 		try {
 			service.delete(id);
 			return ResponseEntity.ok("The user with id " + id + " has been succesfully deleted."); 

@@ -26,6 +26,15 @@ public class AccountController {
 	public AccountController(AccountService service) {
 		this.service = service;
 	}
+	
+	@GetMapping("/user/{userId}/withBalance")
+	public ResponseEntity<?> getAccountByUserIdWithBalance(@PathVariable long userId) {
+		try {
+			return ResponseEntity.ok(service.getAccountByUserIdWithBalance(userId));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
+		}
+	}
 
 	@GetMapping("")
 	public ResponseEntity<?> getAccounts() {

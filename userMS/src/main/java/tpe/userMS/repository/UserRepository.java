@@ -9,11 +9,26 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tpe.userMS.model.Account;
 import tpe.userMS.model.User;
 
 
 @Repository("userRepository")
 public interface UserRepository extends JpaRepository<User, Long>{
+	
+	@Query("SELECT a"
+			+ " FROM User u"
+			+ " JOIN u.accounts a"
+			+ " JOIN a.users u2"
+			+ " WHERE u2 = :user")
+	public List<Account> getUserAccounts(@Param("user") User user);
+	
+	@Query("SELECT a"
+			+ " FROM User u"
+			+ " JOIN Account a"
+			+ " WHERE u.id = :id"
+			+ " AND a.moneyBalance > 0")
+	public Optional<Account> getAccountByUserIdWithBalance(@Param("id") long id);
 
 	@Query("SELECT u FROM User u WHERE u.id = :id")
 	public Optional<User> getUserById(long id);

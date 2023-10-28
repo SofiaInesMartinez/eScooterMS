@@ -13,10 +13,16 @@ import tpe.userMS.model.Account;
 
 @Repository("accountRepository")
 public interface AccountRepository extends JpaRepository<Account, Long> {
+	
+	@Query("SELECT a"
+			+ " FROM Account a"
+			+ " JOIN a.users u"
+			+ " WHERE u.id = :userId"
+			+ " AND a.moneyBalance > 0") 
+	public Optional<Account> getAccountByUserIdWithBalance(@Param("userId") long userId);
 
 	@Query("SELECT a FROM Account a WHERE a.id = :id")
 	public Optional<Account> getAccountById(long id);
-
 
 	@Query("SELECT a FROM Account a ORDER BY a.id")
 	public List<Account> getAccountsBySimpleOrdering();

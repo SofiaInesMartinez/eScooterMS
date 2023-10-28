@@ -1,11 +1,13 @@
 package tpe.userMS.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
+import tpe.userMS.DTO.DTOAccountResponse;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
 import tpe.userMS.DTO.DTOUserStatusRequest;
@@ -21,6 +23,24 @@ public class UserService {
 	private UserRepository repository;
 	@Autowired
 	private AccountRepository accountRepository;
+	
+	@Transactional(readOnly = true)
+	public List<DTOAccountResponse> getUserAccounts(long id) throws Exception {
+		Optional<User> optional = repository.findById(id);
+		if (optional.isPresent()) {
+			User user = optional.get();
+			return repository.getUserAccounts(user).stream().map( DTOAccountResponse::new ).toList();
+		} else {
+			throw new Exception("User with id " + id + " not found");
+		}
+	}
+	
+	@Transactional(readOnly = true)
+	public DTOAccountResponse getAccountByUserIdWithBalance(long id) {
+		return repository.getAccountByUserIdWithBalance(id)
+				.map( DTOAccountResponse::new )
+				.orElseThrow(() -> new RuntimeException("Accounts associated to user with id " + id + " don't exist or they do not have balance"));
+	}
 
 	@Transactional(readOnly = true)
 	public List<DTOUserResponse> findAll() throws Exception {

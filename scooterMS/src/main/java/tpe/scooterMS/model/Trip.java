@@ -29,6 +29,8 @@ public class Trip implements Serializable {
 	private long pauseTime; //minutos
 	@Column(nullable = false)
 	private long idUser;
+	@Column(nullable = false)
+	private long idAccount;
 	
 	//CREAR CRONOMETRO ACA Y PERSISTIR
 //	private Timer cronometer; comentado por ahora
@@ -46,12 +48,13 @@ public class Trip implements Serializable {
 		super();
 	}
 	
-	public Trip(long idUser, Scooter scooter, Stop originStop) {
+	public Trip(long idUser, long idAccount, Scooter scooter, Stop originStop) {
 		this.startDate = new Date(System.currentTimeMillis());
 		this.kms = 0;
 		this.tripAmount = 0;
 		this.pauseTime = 15;
 		this.idUser = idUser;
+		this.idAccount = idAccount;
 		this.scooter = scooter;
 		this.originStop = originStop;
 	}
@@ -74,6 +77,14 @@ public class Trip implements Serializable {
 
 	public void setIdUser(long idUser) {
 		this.idUser = idUser;
+	}
+
+	public long getIdAccount() {
+		return idAccount;
+	}
+
+	public void setIdAccount(long idAccount) {
+		this.idAccount = idAccount;
 	}
 
 	public Date getStartDate() {
