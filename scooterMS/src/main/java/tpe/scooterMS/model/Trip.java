@@ -30,12 +30,11 @@ public class Trip implements Serializable {
 	@Column(nullable = false)
 	private long initialPauseTime;
 	@Column(nullable = false)
+	private boolean isPaused;
+	@Column(nullable = false)
 	private long idUser;
 	@Column(nullable = false)
 	private long idAccount;
-	
-	//CREAR CRONOMETRO ACA Y PERSISTIR
-//	private Timer cronometer; comentado por ahora
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Scooter scooter;
@@ -56,6 +55,7 @@ public class Trip implements Serializable {
 		this.tripAmount = 0;
 		this.pauseTime = 15;
 		this.initialPauseTime = 15;
+		this.isPaused = false;
 		this.idUser = idUser;
 		this.idAccount = idAccount;
 		this.scooter = scooter;
@@ -145,6 +145,14 @@ public class Trip implements Serializable {
 
 	public void setInitialPauseTime(long initialPauseTime) {
 		this.initialPauseTime = initialPauseTime;
+	}
+
+	public boolean isPaused() {
+		return isPaused;
+	}
+
+	public void setPaused(boolean isPaused) {
+		this.isPaused = isPaused;
 	}
 
 	public int getId() {

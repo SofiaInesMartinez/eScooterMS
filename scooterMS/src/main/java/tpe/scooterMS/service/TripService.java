@@ -50,20 +50,53 @@ public class TripService {
 	private TariffRepository tariffRepository;
 	
 	@Transactional
-	@Async
-	@Scheduled(fixedRate = 60000) // un minuto
-	public void updatePause(/*int id*/) throws Exception { //Comenta para que no de error
-		Optional<Trip> optional = repository.findById(/*id*/1);
+	public TripResponseDTO endPause(int id) throws Exception {
+		Optional<Trip> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			Trip trip = optional.get();
-			long pauseTime = trip.getPauseTime();
-			if (pauseTime > 0) {
-				trip.setPauseTime(pauseTime - 1);
-				repository.save(trip);
+			
+			if (!trip.isPaused()) {
+				throw new Exception("Trip with id " + id + " is not paused");
 			}
+			if (trip.getEndDate() != null) {
+				throw new Exception("Trip with id " + id + " already ended");
+			}
+			
+			trip.setPaused(false);
+			return new TripResponseDTO(repository.save(trip));
 		} else {
-			throw new Exception();
+			throw new Exception("Trip with id " + id + " does not exist");
 		}
+	}
+	
+	public TripResponseDTO startPause(int id) throws Exception {
+		Optional<Trip> optional = repository.findById(id);
+		if (optional.isPresent()) {
+			Trip trip = optional.get();
+			
+			if (trip.isPaused()) {
+				throw new Exception("Trip with id " + id + " is already in pause");
+			}
+			if (trip.getEndDate() != null) {
+				throw new Exception("Trip with id " + id + " already ended");
+			}
+			if (trip.getPauseTime() == 0) {
+				throw new Exception("Trip with id " + id + " reached pause limit");
+			}
+			
+			trip.setPaused(true);
+			return new TripResponseDTO(repository.save(trip));
+		} else {
+			throw new Exception("Trip with id " + id + " does not exist");
+		}
+	}
+	
+	@Transactional
+	@Async
+	@Scheduled(fixedRate = 60000) // un minuto
+	public void updatePause() {
+		repository.updatePause();
+		repository.updateIsPausedOfTripsReachedLimit();
 	}
 	
 	@Transactional
@@ -96,6 +129,7 @@ public class TripService {
 				
 				trip.setKms(kms);
 				trip.setTripAmount(amount);
+				trip.setPaused(false);
 				
 				long idScooter = trip.getScooter().getId();
 				scooterRepository.updateScooterStatus(idScooter, "available");
@@ -135,13 +169,6 @@ public class TripService {
 	
 	@Transactional
 	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception, WebClientResponseException {
-//		User user = webClientBuilder.build() // status >= 400: = WebClientResponseException
-//				.get()
-//				.uri("http://localhost:8003/user/" + request.getIdUser())
-//				.retrieve()
-//				.bodyToMono(User.class)
-//				.block();
-		
 		Account account = webClientBuilder.build()
 				.get()
 				.uri("http://localhost:8003/account/user/" + request.getIdUser() + "/withBalance")

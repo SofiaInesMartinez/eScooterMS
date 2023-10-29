@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import jakarta.validation.Valid;
-import tpe.scooterMS.DTO.DTOInvoicedAmountResponse;
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
 import tpe.scooterMS.service.TripService;
@@ -28,15 +27,15 @@ public class TripController {
 	@Autowired
 	private TripService service;
 	
-//	@PutMapping("/{id}/endPause")
-//	public ResponseEntity<TripResponseDTO> endPause(@PathVariable int id) throws Exception {
-//		return ResponseEntity.ok(service.endPause(id));
-//	}
-//	
-//	@PutMapping("/{id}/startPause")
-//	public ResponseEntity<TripResponseDTO> startPause(@PathVariable int id) throws Exception {
-//		return ResponseEntity.ok(service.startPause(id));
-//	}
+	@PutMapping("/{id}/endPause")
+	public ResponseEntity<TripResponseDTO> endPause(@PathVariable int id) throws Exception {
+		return ResponseEntity.ok(service.endPause(id));
+	}
+	
+	@PutMapping("/{id}/startPause")
+	public ResponseEntity<TripResponseDTO> startPause(@PathVariable int id) throws Exception {
+		return ResponseEntity.ok(service.startPause(id));
+	}
 	
 	@GetMapping("/year/{year}/fromMonth/{month1}/ToMonth/{month2}")
 	public ResponseEntity<?> getInvoicedAmountByYearAndMonthRange(@PathVariable int year, @PathVariable int month1, @PathVariable int month2) {
