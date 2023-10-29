@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import tpe.userMS.DTO.DTOAccountRequest;
+import tpe.userMS.DTO.DTOReduceBalanceRequest;
 import tpe.userMS.service.AccountService;
 
 @RestController
@@ -63,6 +64,16 @@ public class AccountController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
 		}
 	}
+	
+	@PutMapping("/{id}/reduceMoneyBalance")
+    public ResponseEntity<?> reduceAccountMoneyBalance(@PathVariable long id, @RequestBody DTOReduceBalanceRequest request) {
+        try {
+            service.reduceMoneyBalance(id, request);
+            return ResponseEntity.ok("Account with ID " + id + " has reduced its balance an amount of " + request.getMoney());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
 	
 	@PutMapping("/{id}/moneyBalance/{moneyBalance}")
     public ResponseEntity<?> updateAccountMoneyBalance(@PathVariable long id, @PathVariable int moneyBalance) {

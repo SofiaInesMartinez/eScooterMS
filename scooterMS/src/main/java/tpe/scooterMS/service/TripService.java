@@ -17,6 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import tpe.scooterMS.DTO.DTOInvoicedAmountResponse;
+import tpe.scooterMS.DTO.DTOReduceBalanceRequest;
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
 import tpe.scooterMS.model.Account;
@@ -24,7 +25,6 @@ import tpe.scooterMS.model.Scooter;
 import tpe.scooterMS.model.Stop;
 import tpe.scooterMS.model.Tariff;
 import tpe.scooterMS.model.Trip;
-import tpe.scooterMS.model.User;
 import tpe.scooterMS.repository.ScooterRepository;
 import tpe.scooterMS.repository.StopRepository;
 import tpe.scooterMS.repository.TariffRepository;
@@ -97,17 +97,20 @@ public class TripService {
 				trip.setKms(kms);
 				trip.setTripAmount(amount);
 				
-				
 				long idScooter = trip.getScooter().getId();
 				scooterRepository.updateScooterStatus(idScooter, "available");
 				scooterRepository.incrementScooterKms(idScooter, kms);
 				scooterRepository.incrementScooterTotalTime(idScooter, time);
 				scooterRepository.incrementScooterTimePause(idScooter, 15 - trip.getPauseTime()); // CONSTANTE EN CODIGO
 				
-//				webClientBuilder.build()
-//					.put()
-//					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//					.body(BodyInserters.fromValue());
+				webClientBuilder.build()
+					.put()
+					.uri("http://localhost:8003/account/" + trip.getIdAccount() + "/reduceMoneyBalance")
+					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+					.body(BodyInserters.fromValue(new DTOReduceBalanceRequest((int) amount)))
+					.retrieve()
+					.bodyToMono(String.class)
+					.block();
 				
 				return new TripResponseDTO(repository.save(trip));
 			} else {

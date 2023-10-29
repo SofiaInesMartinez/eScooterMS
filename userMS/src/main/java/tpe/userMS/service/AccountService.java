@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import tpe.userMS.DTO.DTOAccountRequest;
 import tpe.userMS.DTO.DTOAccountResponse;
+import tpe.userMS.DTO.DTOReduceBalanceRequest;
 import tpe.userMS.model.Account;
 import tpe.userMS.model.User;
 import tpe.userMS.repository.AccountRepository;
@@ -84,6 +85,15 @@ public class AccountService {
 	        throw new Exception("Invalid ID format");
 		}
 	}
+	
+	@Transactional
+    public void reduceMoneyBalance(long id, DTOReduceBalanceRequest request) throws Exception {
+        try {
+            repository.reduceAccountMoneyBalance(request.getMoney(), id);
+        } catch (Exception e) {
+            throw new Exception("Failed to reduce account money balance: " + e.getMessage());
+        }
+    }
 
 
     @Transactional
