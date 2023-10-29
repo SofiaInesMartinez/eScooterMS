@@ -28,6 +28,8 @@ public class Trip implements Serializable {
 	@Column(nullable = false)
 	private long pauseTime; //minutos
 	@Column(nullable = false)
+	private long initialPauseTime;
+	@Column(nullable = false)
 	private long idUser;
 	@Column(nullable = false)
 	private long idAccount;
@@ -53,6 +55,7 @@ public class Trip implements Serializable {
 		this.kms = 0;
 		this.tripAmount = 0;
 		this.pauseTime = 15;
+		this.initialPauseTime = 15;
 		this.idUser = idUser;
 		this.idAccount = idAccount;
 		this.scooter = scooter;
@@ -136,6 +139,13 @@ public class Trip implements Serializable {
 		this.pauseTime = pauseTime;
 	}
 
+	public long getInitialPauseTime() {
+		return initialPauseTime;
+	}
+
+	public void setInitialPauseTime(long initialPauseTime) {
+		this.initialPauseTime = initialPauseTime;
+	}
 
 	public int getId() {
 		return id;

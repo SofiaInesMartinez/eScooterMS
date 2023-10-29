@@ -101,7 +101,7 @@ public class TripService {
 				scooterRepository.updateScooterStatus(idScooter, "available");
 				scooterRepository.incrementScooterKms(idScooter, kms);
 				scooterRepository.incrementScooterTotalTime(idScooter, time);
-				scooterRepository.incrementScooterTimePause(idScooter, 15 - trip.getPauseTime()); // CONSTANTE EN CODIGO
+				scooterRepository.incrementScooterTimePause(idScooter, trip.getInitialPauseTime() - trip.getPauseTime());
 				
 				webClientBuilder.build()
 					.put()
