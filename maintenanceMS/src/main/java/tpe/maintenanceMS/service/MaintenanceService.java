@@ -105,7 +105,7 @@ public class MaintenanceService {
 				.put()
 				.uri("http://localhost:8002/scooter/" + request.getIdScooter() + "/status")
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.body(BodyInserters.fromValue(new DTOScooterStatusRequest("in maintenance")))
+				.body(BodyInserters.fromValue(new DTOScooterStatusRequest("maintenance")))
 				.retrieve()
 				.bodyToMono(DTOScooterResponse.class)
 				.block();

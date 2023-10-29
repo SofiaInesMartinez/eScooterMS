@@ -66,7 +66,7 @@ public class AccountController {
 	}
 	
 	@PutMapping("/{id}/reduceMoneyBalance")
-    public ResponseEntity<?> reduceAccountMoneyBalance(@PathVariable long id, @RequestBody DTOReduceBalanceRequest request) {
+    public ResponseEntity<?> reduceAccountMoneyBalance(@PathVariable long id, @RequestBody @Valid DTOReduceBalanceRequest request) {
         try {
             service.reduceMoneyBalance(id, request);
             return ResponseEntity.ok("Account with ID " + id + " has reduced its balance an amount of " + request.getMoney());

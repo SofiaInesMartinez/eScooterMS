@@ -2,7 +2,10 @@ package tpe.userMS.DTO;
 
 import java.util.Objects;
 
+import jakarta.validation.constraints.NotNull;
+
 public class DTOReduceBalanceRequest {
+	@NotNull(message = "money shouldn't be null")
 	private int money;
 	
 	public DTOReduceBalanceRequest() {
