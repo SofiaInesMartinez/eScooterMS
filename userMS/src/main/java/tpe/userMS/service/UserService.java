@@ -4,10 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import jakarta.validation.Valid;
 import tpe.userMS.DTO.DTOAccountResponse;
+import tpe.userMS.DTO.DTOScooterResponse;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
 import tpe.userMS.DTO.DTOUserStatusRequest;
@@ -23,6 +30,18 @@ public class UserService {
 	private UserRepository repository;
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private WebClient restClient;
+	
+	@Transactional(readOnly = true)
+	public List<DTOScooterResponse> getNearbyScooters(double latitude, double longitude) {
+		return restClient
+				.method(HttpMethod.GET)
+				.uri("http://localhost:8002/scooter/latitude/" + latitude + "/longitude/" + longitude)
+				.retrieve()
+				.bodyToMono(new ParameterizedTypeReference<List<DTOScooterResponse>>(){})
+				.block();
+	}
 	
 	@Transactional(readOnly = true)
 	public List<DTOAccountResponse> getUserAccounts(long id) throws Exception {

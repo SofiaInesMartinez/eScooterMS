@@ -65,4 +65,10 @@ public interface ScooterRepository extends JpaRepository<Scooter, Long>{
 	@Modifying
 	@Query("UPDATE Scooter s SET s.timePause = s.timePause + :timePause WHERE s.id = :id")
 	public void incrementScooterTimePause(@Param("id") long id, @Param("timePause") float timePause);
+	
+	@Query("SELECT s"
+			+ " FROM Scooter s"
+			+ " WHERE s.latitude BETWEEN :latitude - 1.0 AND :latitude + 1.0"
+			+ " AND s.longitude BETWEEN :longitude - 1.0 AND :longitude + 1.0")
+	public List<Scooter> getNearbyScooters(@Param("latitude") double latitude, @Param("longitude") double longitude);
 }

@@ -1,20 +1,21 @@
 package tpe.scooterMS.DTO;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class DTOStopRequest {
 	
 	@NotNull(message = "id shouldn't be null")
 	private long id;
-	@NotNull(message = "coordinates shouldn't be null")
-	@NotEmpty(message = "coordinates shouldn't be empty")
-	private long coordinates;
+	@NotNull(message = "latitude shouldn't be null")
+	private double latitude;
+	@NotNull(message = "longitude shouldn't be null")
+	private double longitude;
 	
-	public DTOStopRequest(long id, long coordinates) {
+	public DTOStopRequest(long id, long coordinates, double latitude, double longitude) {
 		super();
 		this.id = id;
-		this.coordinates = coordinates;
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 
 	public long getId() {
@@ -25,17 +26,24 @@ public class DTOStopRequest {
 		this.id = id;
 	}
 
-	public long getCoordinates() {
-		return coordinates;
+	public double getLatitude() {
+		return latitude;
 	}
 
-	public void setCoordinates(long coordinates) {
-		this.coordinates = coordinates;
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 
 	@Override
 	public String toString() {
-		return "DTOStopRequest [id=" + id + ", coordinates=" + coordinates + "]";
+		return "DTOStopRequest [id=" + id + ", latitude=" + latitude + ", longitude=" + longitude + "]";
 	}
-		
 }

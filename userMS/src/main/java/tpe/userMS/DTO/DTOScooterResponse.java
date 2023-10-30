@@ -1,8 +1,6 @@
-package tpe.scooterMS.DTO;
+package tpe.userMS.DTO;
 
 import java.sql.Date;
-
-import tpe.scooterMS.model.Scooter;
 
 public class DTOScooterResponse {
 	private long id;
@@ -18,12 +16,8 @@ public class DTOScooterResponse {
 		this.status = status;
 	}
 	
-	public DTOScooterResponse(Scooter scooter) {
+	public DTOScooterResponse() {
 		super();
-		this.id = scooter.getId();
-		this.lastMaintenanceDate = scooter.getLastMaintenanceDate();
-		this.kilometers = scooter.getKilometers();
-		this.status = scooter.getStatus();
 	}
 	
 	public long getId() {

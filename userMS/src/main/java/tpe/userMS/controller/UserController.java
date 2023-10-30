@@ -29,6 +29,15 @@ public class UserController {
 		this.service = service;
 	}
 	
+	@GetMapping("/scooter/latitude/{latitude}/longitude/{longitude}")
+	public ResponseEntity<?> getNearbyScooters(@PathVariable double latitude, @PathVariable double longitude) {
+		try {
+			return ResponseEntity.ok(service.getNearbyScooters(latitude, longitude));
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
+	
 	@GetMapping("/{id}/accounts")
 	public ResponseEntity<?> getUserAccounts(@PathVariable long id) {
 		try {

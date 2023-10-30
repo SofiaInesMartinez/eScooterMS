@@ -23,12 +23,16 @@ public class Scooter implements Serializable {
 	private long totalTime; // minutos
 	@Column(nullable = false)
 	private long timePause; // minutos
+	@Column(nullable = false)
+	private double latitude;
+	@Column(nullable = false)
+	private double longitude;
 	
 	public Scooter() {
 		super();
 	}
 	
-	public Scooter(long id, Date lastMaintenanceDate, float kilometers) {
+	public Scooter(long id, Date lastMaintenanceDate, float kilometers, double latitude, double longitude) {
 		super();
 		this.id = id;
 		this.lastMaintenanceDate = lastMaintenanceDate;
@@ -36,6 +40,8 @@ public class Scooter implements Serializable {
 		this.status = "available";
 		this.totalTime = 0;
 		this.timePause = 0;
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 
 	public long getId() {
@@ -46,11 +52,11 @@ public class Scooter implements Serializable {
 		this.id = id;
 	}
 	
-	public float getKms() {
+	public float getKilometers() {
 		return kilometers;
 	}
 
-	public void setKms(float kilometers) {
+	public void setKilometers(float kilometers) {
 		this.kilometers = kilometers;
 	}
 
@@ -85,9 +91,28 @@ public class Scooter implements Serializable {
 	public void setTimePause(long timePause) {
 		this.timePause = timePause;
 	}
-	
-	
-	
-	
-	
+
+	public long getTotalTime() {
+		return totalTime;
+	}
+
+	public void setTotalTime(long totalTime) {
+		this.totalTime = totalTime;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 }

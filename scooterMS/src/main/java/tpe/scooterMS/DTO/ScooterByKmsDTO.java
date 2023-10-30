@@ -21,7 +21,7 @@ public class ScooterByKmsDTO {
 	public ScooterByKmsDTO(Scooter scooter) {
 		super();
 		this.idScooter = scooter.getId();
-		this.kilometers = scooter.getKms();
+		this.kilometers = scooter.getKilometers();
 	}
 
 	public long getIdScooter() {

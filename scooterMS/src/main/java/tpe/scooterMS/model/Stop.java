@@ -1,6 +1,7 @@
 package tpe.scooterMS.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,17 +13,20 @@ public class Stop implements Serializable {
 	
 	@Id
 	private long id;
-	@Column(nullable=false)
-	private long coordinates;
+	@Column(nullable = false)
+	private double latitude;
+	@Column(nullable = false)
+	private double longitude;
 	
 	public Stop() {
 		super();
 	}
 	
-	public Stop(long id, long coordinates) {
+	public Stop(long id, double latitude, double longitude) {
 		super();
 		this.id = id;
-		this.coordinates = coordinates;
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 	
 
@@ -35,22 +39,26 @@ public class Stop implements Serializable {
 		this.id = id;
 	}
 
-
-	public long getCoordinates() {
-		return coordinates;
+	public double getLatitude() {
+		return latitude;
 	}
 
-
-	public void setCoordenadas(long coordinates) {
-		this.coordinates = coordinates;
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
 	}
 
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 
 	@Override
-	public String toString() {
-		return "Stop [id=" + id + ", coordinates=" + coordinates + "]";
+	public int hashCode() {
+		return Objects.hash(id, latitude, longitude);
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -61,8 +69,7 @@ public class Stop implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Stop other = (Stop) obj;
-		return coordinates == other.coordinates && id == other.id;
+		return id == other.id && Double.doubleToLongBits(latitude) == Double.doubleToLongBits(other.latitude)
+				&& Double.doubleToLongBits(longitude) == Double.doubleToLongBits(other.longitude);
 	}
-	
-	
 }

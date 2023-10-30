@@ -28,6 +28,15 @@ public class ScooterController {
 		this.service = service;
 	}
 	
+	@GetMapping("/latitude/{latitude}/longitude/{longitude}")
+	public ResponseEntity<?> getNearbyScooters(@PathVariable double latitude, @PathVariable double longitude ) {
+		try {
+			return ResponseEntity.ok(service.getNearbyScooters(latitude, longitude));
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(e.getMessage());
+		}
+	}
+	
 	@PutMapping("/{id}/status")
 	public ResponseEntity<?> updateScooterStatus(@PathVariable long id, @RequestBody @Valid DTOScooterStatusRequest request) {
 		try {

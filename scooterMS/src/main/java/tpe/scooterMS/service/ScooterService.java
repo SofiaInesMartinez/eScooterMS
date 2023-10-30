@@ -24,6 +24,11 @@ public class ScooterService {
 	private ScooterRepository repository;
 	
 	@Transactional
+	public List<DTOScooterResponse> getNearbyScooters(double latitude, double longitude) {
+		return repository.getNearbyScooters(latitude, longitude).stream().map( DTOScooterResponse::new ).toList();
+	}
+	
+	@Transactional
 	public DTOScooterResponse updateScooterStatus(long id, DTOScooterStatusRequest request) throws Exception {
 		Scooter scooter = repository.getScooterById(id);
 		if (scooter != null) {
@@ -46,7 +51,7 @@ public class ScooterService {
 	@Transactional
 	public DTOScooterResponse save(@Valid DTOScooterRequest request) throws Exception {
 		try {
-			Scooter scooter = new Scooter(request.getId(),request.getLastMaintenanceDate(),request.getKms());
+			Scooter scooter = new Scooter(request.getId(),request.getLastMaintenanceDate(),request.getKilometers(), request.getLatitude(), request.getLongitude());
 			scooter = repository.save(scooter);
 			return new DTOScooterResponse(scooter);
 		} catch (Exception e) {

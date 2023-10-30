@@ -31,7 +31,7 @@ public class StopService {
 	@Transactional
 	public DTOStopResponse save(@Valid DTOStopRequest request) throws Exception {
 		try {
-			Stop stop = new Stop(request.getId(), request.getCoordinates());
+			Stop stop = new Stop(request.getId(), request.getLatitude(), request.getLongitude());
 			stop = repository.save(stop);
 			return new DTOStopResponse(stop);
 		} catch (Exception e) {
