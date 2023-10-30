@@ -1,7 +1,7 @@
 package tpe.scooterMS.repository;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,6 +18,12 @@ public interface StopRepository extends JpaRepository<Stop, Long>{
 
 	@Query("SELECT s FROM Stop s ORDER BY s.id DESC")
 	public List<Stop> getStopsBySimpleOrdering();
+	
+	@Query("SELECT s"
+			+ " FROM Stop s"
+			+ " WHERE s.latitude = :latitude"
+			+ " AND s.longitude = :longitude")
+	public Optional<Stop> getStopByCoordinates(@Param("latitude") double latitude, @Param("longitude") double longitude);
 	
 	@Modifying
 	@Query("DELETE FROM Stop s WHERE s.id = :id")

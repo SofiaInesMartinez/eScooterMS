@@ -2,12 +2,14 @@ package tpe.scooterMS.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
+import tpe.scooterMS.DTO.DTOCoordinatesRequest;
 import tpe.scooterMS.DTO.DTOScooterRequest;
 import tpe.scooterMS.DTO.DTOScooterResponse;
 import tpe.scooterMS.DTO.DTOScooterStatusRequest;
@@ -22,6 +24,20 @@ public class ScooterService {
 	
 	@Autowired
 	private ScooterRepository repository;
+	
+	@Transactional
+	public DTOScooterResponse updateScooterCoordinates(long id, DTOCoordinatesRequest request) throws Exception {
+		Optional<Scooter> optional = repository.findById(id);
+		if (optional.isPresent()) {
+			Scooter scooter = optional.get();
+			scooter.setLatitude(request.getLatitude());
+			scooter.setLongitude(request.getLongitude());
+			
+			return new DTOScooterResponse(repository.save(scooter));
+		} else {
+			throw new Exception("Scooter with id " + id + " doesn't exist");
+		}
+	}
 	
 	@Transactional
 	public List<DTOScooterResponse> getNearbyScooters(double latitude, double longitude) {

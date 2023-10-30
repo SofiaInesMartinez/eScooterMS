@@ -116,6 +116,13 @@ public class TripService {
 		if (optional.isPresent()) {
 			Trip trip = optional.get();
 			if (trip.getEndDate() == null) {
+				Optional<Stop> stopOptional = stopRepository.getStopByCoordinates(trip.getScooter().getLatitude(), trip.getScooter().getLongitude());
+				if (stopOptional.isPresent()) {
+					trip.setDestinationStop(stopOptional.get());
+				} else {
+					throw new Exception("The scooter is not located at a stop");
+				}
+				
 				trip.setEndDate(new Date(System.currentTimeMillis()));
 				
 				long time = (trip.getEndDate().getTime() - trip.getStartDate().getTime()) / 60000; // minutos

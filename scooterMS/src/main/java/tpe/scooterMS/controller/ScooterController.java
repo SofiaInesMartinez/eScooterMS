@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import tpe.scooterMS.DTO.DTOCoordinatesRequest;
 import tpe.scooterMS.DTO.DTOScooterRequest;
 import tpe.scooterMS.DTO.DTOScooterStatusRequest;
 import tpe.scooterMS.service.ScooterService;
@@ -26,6 +27,15 @@ public class ScooterController {
 	
 	public ScooterController(ScooterService service) {
 		this.service = service;
+	}
+	
+	@PutMapping("/{id}/coordinates")
+	public ResponseEntity<?> updateScooterCoordinates(@PathVariable long id, @RequestBody @Valid DTOCoordinatesRequest request) {
+		try {
+			return ResponseEntity.ok(service.updateScooterCoordinates(id, request));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
 	@GetMapping("/latitude/{latitude}/longitude/{longitude}")
