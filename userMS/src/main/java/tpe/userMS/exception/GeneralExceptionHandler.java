@@ -10,15 +10,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import jakarta.ws.rs.InternalServerErrorException;
-
 @RestControllerAdvice
 public class GeneralExceptionHandler {
-	
-	@ExceptionHandler(InternalServerErrorException.class)
-	public ResponseEntity<String> handleInternalServerErrorException(InternalServerErrorException exception) {
-		return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-	}
 	
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<String> handleNotFoundException(NotFoundException exception) {

@@ -1,9 +1,11 @@
 package tpe.userMS.DTO;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class DTOAccountRequest {
 	@NotNull(message = "id shouldn't be null")
+	@Positive(message = "id shouldn't be negative or zero")
 	private long id;
 	@NotNull(message = "moneyBalance shouldn't be null")
 	private int moneyBalance;

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
-import jakarta.ws.rs.InternalServerErrorException;
 import tpe.userMS.DTO.DTOAccountRequest;
 import tpe.userMS.DTO.DTOAccountResponse;
 import tpe.userMS.DTO.DTOReduceBalanceRequest;
@@ -74,29 +73,21 @@ public class AccountService {
 	
 	@Transactional
     public void reduceMoneyBalance(long id, DTOReduceBalanceRequest request) throws NotFoundException {
-		try {
-			if (repository.existsById(id)) {
-				repository.reduceAccountMoneyBalance(request.getMoney(), id);
-			} else {
-				throw new NotFoundException("Account", id);
-			}
-		} catch (InternalServerErrorException e) {
-			throw new InternalServerErrorException(e.getMessage());
+		if (repository.existsById(id)) {
+			repository.reduceAccountMoneyBalance(request.getMoney(), id);
+		} else {
+			throw new NotFoundException("Account", id);
 		}
     }
 
 
     @Transactional
     public void updateMoneyBalance(long id, int money) throws NotFoundException  {
-        try {
-        	if (repository.existsById(id)) {
-        		repository.updateAccount(money, id);
-        	} else {
-        		throw new NotFoundException("Account", id);
-        	}
-        } catch (InternalServerErrorException e) {
-            throw new InternalServerErrorException("Failed to update account money balance: " + e.getMessage());
-        }
+    	if (repository.existsById(id)) {
+    		repository.updateAccount(money, id);
+    	} else {
+    		throw new NotFoundException("Account", id);
+    	}
     }
 
 	@Transactional

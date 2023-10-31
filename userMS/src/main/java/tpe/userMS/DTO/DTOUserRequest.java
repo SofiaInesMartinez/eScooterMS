@@ -2,11 +2,13 @@ package tpe.userMS.DTO;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 public class DTOUserRequest {
 	@NotNull(message = "id shouldn't be null")
+	@Positive(message = "id shouldn't be negative or zero")
 	private long id;
 	@NotNull(message = "phone shouldn't be null")
-	@NotEmpty(message = "phone shouldn't be empty")
+	@Positive(message = "phone shouldn't be negative or zero")
 	private int phone;
 
 	@NotNull(message = "email shouldn't be null")
@@ -26,7 +28,6 @@ public class DTOUserRequest {
 	private String username;
 
 	@NotNull(message = "role shouldn't be null")
-	@NotEmpty(message = "role shouldn't be empty")
 	private int role;
 	
 
