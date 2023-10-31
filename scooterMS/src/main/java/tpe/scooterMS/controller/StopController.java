@@ -1,7 +1,8 @@
 package tpe.scooterMS.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tpe.scooterMS.DTO.DTOStopRequest;
+import tpe.scooterMS.DTO.DTOStopResponse;
+import tpe.scooterMS.exception.NotFoundException;
 import tpe.scooterMS.service.StopService;
 
 @RestController
@@ -26,50 +29,29 @@ public class StopController {
 	}
 	
 	@GetMapping("")
-	public ResponseEntity<?> getStop() {
-		try {
-			return ResponseEntity.ok(service.findAll());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<DTOStopResponse>> getStop() {
+		return ResponseEntity.ok(service.findAll());
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<?> saveStop(@RequestBody  DTOStopRequest request){
-		try {
-			return ResponseEntity.ok(service.save(request));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
+	public ResponseEntity<DTOStopResponse> saveStop(@RequestBody  DTOStopRequest request){
+		return ResponseEntity.ok(service.save(request));
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getStopById(@PathVariable long id) {
-		try {
-			return ResponseEntity.ok(service.getStopById(id));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
+	public ResponseEntity<DTOStopResponse> getStopById(@PathVariable long id) throws NotFoundException {
+		return ResponseEntity.ok(service.getStopById(id));
 	}
 
 	
 	@GetMapping("/byId")
-	public ResponseEntity<?> getStopsBySimpleOrdering() {
-		try {
-			return ResponseEntity.ok(service.getStopsBySimpleOrdering());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<DTOStopResponse>> getStopsBySimpleOrdering() {
+		return ResponseEntity.ok(service.getStopsBySimpleOrdering());
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteScooter(@PathVariable long id
-	) {
-	    try {
-	        service.deleteStop(id);
-	        return ResponseEntity.ok("Stop con ID " + id + " eliminada con éxito.");
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: Error interno del servidor");
-	    }
+	public ResponseEntity<String> deleteScooter(@PathVariable long id) throws NotFoundException {
+        service.deleteStop(id);
+        return ResponseEntity.ok("Stop con ID " + id + " eliminada con éxito.");
 	}
 }
