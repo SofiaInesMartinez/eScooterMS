@@ -57,7 +57,7 @@ public class ScooterController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<DTOScooterResponse> saveScooter(@RequestBody  DTOScooterRequest request){
+	public ResponseEntity<DTOScooterResponse> saveScooter(@RequestBody @Valid DTOScooterRequest request){
 		return ResponseEntity.ok(service.save(request));
 	}
 	

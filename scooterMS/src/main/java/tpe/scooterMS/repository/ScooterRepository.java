@@ -30,7 +30,7 @@ public interface ScooterRepository extends JpaRepository<Scooter, Long>{
 	public List<Scooter> getScootersReportByTotalTime();
 	
 	@Query("SELECT "
-			+ "    SUM(CASE WHEN status = 'available' THEN 1 ELSE 0 END) AS en_operacion, "
+			+ "    SUM(CASE WHEN status = 'available' OR status = 'in use' THEN 1 ELSE 0 END) AS en_operacion, "
 			+ "    SUM(CASE WHEN status = 'maintenance' THEN 1 ELSE 0 END) AS en_mantenimiento "
 			+ "FROM Scooter")
 	public Map<String, Long> getScootersByStatus();

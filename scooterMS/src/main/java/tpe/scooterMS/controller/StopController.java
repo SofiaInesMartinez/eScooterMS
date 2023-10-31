@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.DTOStopRequest;
 import tpe.scooterMS.DTO.DTOStopResponse;
 import tpe.scooterMS.exception.NotFoundException;
@@ -34,7 +35,7 @@ public class StopController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<DTOStopResponse> saveStop(@RequestBody  DTOStopRequest request){
+	public ResponseEntity<DTOStopResponse> saveStop(@RequestBody @Valid DTOStopRequest request){
 		return ResponseEntity.ok(service.save(request));
 	}
 	

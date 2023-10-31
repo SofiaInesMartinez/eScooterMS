@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.DTOCoordinatesRequest;
 import tpe.scooterMS.DTO.DTOScooterRequest;
 import tpe.scooterMS.DTO.DTOScooterResponse;
@@ -62,7 +61,7 @@ public class ScooterService {
 	}
 	
 	@Transactional
-	public DTOScooterResponse save(@Valid DTOScooterRequest request) {
+	public DTOScooterResponse save(DTOScooterRequest request) {
 		Scooter scooter = new Scooter(request.getId(),request.getLastMaintenanceDate(),request.getKilometers(), request.getLatitude(), request.getLongitude());
 		scooter = repository.save(scooter);
 		return new DTOScooterResponse(scooter);

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.DTOStopRequest;
 import tpe.scooterMS.DTO.DTOStopResponse;
 import tpe.scooterMS.exception.NotFoundException;
@@ -26,7 +25,7 @@ public class StopService {
 	}
 	
 	@Transactional
-	public DTOStopResponse save(@Valid DTOStopRequest request) {
+	public DTOStopResponse save(DTOStopRequest request) {
 		Stop stop = new Stop(request.getId(), request.getLatitude(), request.getLongitude());
 		stop = repository.save(stop);
 		return new DTOStopResponse(stop);
