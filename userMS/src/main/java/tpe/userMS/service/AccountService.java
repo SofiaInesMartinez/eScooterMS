@@ -34,23 +34,15 @@ public class AccountService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<DTOAccountResponse> findAll() throws InternalServerErrorException {
-		try {
-			return repository.findAll().stream().map(DTOAccountResponse::new).toList();
-		} catch (InternalServerErrorException e) {
-			throw new InternalServerErrorException(e.getMessage());
-		}
+	public List<DTOAccountResponse> findAll() {
+		return repository.findAll().stream().map(DTOAccountResponse::new).toList();
 	}
 
 	@Transactional
 	public DTOAccountResponse save(@Valid DTOAccountRequest request) {
-		try {
-			Account account = new Account(request.getId(), request.getMoneyBalance());
-			account = repository.save(account);
-			return new DTOAccountResponse(account);
-		} catch (InternalServerErrorException e) {
-			throw new InternalServerErrorException(e.getMessage());
-		}
+		Account account = new Account(request.getId(), request.getMoneyBalance());
+		account = repository.save(account);
+		return new DTOAccountResponse(account);
 	}
 
 	
@@ -63,12 +55,8 @@ public class AccountService {
 
 		
 	@Transactional(readOnly = true)
-	public List<DTOAccountResponse> getUsersBySimpleOrdering() throws Exception {
-		try {
-			return repository.getAccountsBySimpleOrdering().stream().map(DTOAccountResponse::new).toList();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public List<DTOAccountResponse> getAccountsBySimpleOrdering() {
+		return repository.getAccountsBySimpleOrdering().stream().map(DTOAccountResponse::new).toList();
 	}
 
 	@Transactional
@@ -113,20 +101,15 @@ public class AccountService {
 
 	@Transactional
 	public void addUserToAccount(Long id, Long userId) throws NotFoundException {
-		try {
-			User user = userRepository.findById(userId)
-					.orElseThrow(() -> new NotFoundException("User", userId));
-			Account account = repository.findById(id)
-					.orElseThrow(() -> new NotFoundException("Account", id));
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new NotFoundException("User", userId));
+		Account account = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Account", id));
 //			account.getUsers().add(user);
 //			repository.save(account); No funciona porque user es el duenio de la relacion
-			
-			user.getAccounts().add(account);
-			userRepository.save(user);
-			
-		} catch (InternalServerErrorException e) {
-			throw new InternalServerErrorException("Failed to update account user: " + e.getMessage());
-		}
+		
+		user.getAccounts().add(account);
+		userRepository.save(user);
 	}
 
 }

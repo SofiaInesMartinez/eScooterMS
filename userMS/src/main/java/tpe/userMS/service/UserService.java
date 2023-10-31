@@ -6,8 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,6 +16,8 @@ import tpe.userMS.DTO.DTOScooterResponse;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
 import tpe.userMS.DTO.DTOUserStatusRequest;
+import tpe.userMS.exception.AccountWithoutMoneyException;
+import tpe.userMS.exception.NotFoundException;
 import tpe.userMS.model.Account;
 import tpe.userMS.model.User;
 import tpe.userMS.repository.AccountRepository;
@@ -44,94 +44,81 @@ public class UserService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<DTOAccountResponse> getUserAccounts(long id) throws Exception {
+	public List<DTOAccountResponse> getUserAccounts(long id) throws NotFoundException {
 		Optional<User> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			User user = optional.get();
 			return repository.getUserAccounts(user).stream().map( DTOAccountResponse::new ).toList();
 		} else {
-			throw new Exception("User with id " + id + " not found");
+			throw new NotFoundException("User", id);
 		}
 	}
 	
 	@Transactional(readOnly = true)
-	public DTOAccountResponse getAccountByUserIdWithBalance(long id) {
-		return repository.getAccountByUserIdWithBalance(id)
-				.map( DTOAccountResponse::new )
-				.orElseThrow(() -> new RuntimeException("Accounts associated to user with id " + id + " don't exist or they do not have balance"));
+	public DTOAccountResponse getAccountByUserIdWithBalance(long id) throws NotFoundException, AccountWithoutMoneyException {
+		if (repository.existsById(id)) {
+			return repository.getAccountByUserIdWithBalance(id)
+					.map( DTOAccountResponse::new )
+					.orElseThrow(() -> new AccountWithoutMoneyException(id));
+		} else {
+			throw new NotFoundException("User", id);
+		}
 	}
 
 	@Transactional(readOnly = true)
-	public List<DTOUserResponse> findAll() throws Exception {
-		try {
-			return repository.findAll().stream().map(DTOUserResponse::new).toList();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public List<DTOUserResponse> findAll() {
+		return repository.findAll().stream().map(DTOUserResponse::new).toList();
 	}
 
 	@Transactional
-	public DTOUserResponse save(@Valid DTOUserRequest request) throws Exception {
-		try {
-			User user = new User(request.getId(), request.getPhone(), request.getEmail(), request.getName(),
-					request.getSurname(), request.getUsername(), request.getRole());
-			user = repository.save(user);
-			return new DTOUserResponse(user);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public DTOUserResponse save(@Valid DTOUserRequest request) {
+		User user = new User(request.getId(), request.getPhone(), request.getEmail(), request.getName(),
+				request.getSurname(), request.getUsername(), request.getRole());
+		user = repository.save(user);
+		return new DTOUserResponse(user);
 	}
 
 	@Transactional(readOnly = true)
-	public DTOUserResponse getUserById(long id) throws Exception {
-		try {
+	public DTOUserResponse getUserById(long id) throws NotFoundException {
+		if (repository.existsById(id)) {
 			return repository.getUserById(id).map(DTOUserResponse::new).get();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+		} else {
+			throw new NotFoundException("User", id);
 		}
 	}
 
 	@Transactional(readOnly = true)
-	public List<DTOUserResponse> getUsersBySimpleOrdering() throws Exception {
-		try {
-			return repository.getUsersBySimpleOrdering().stream().map(DTOUserResponse::new).toList();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public List<DTOUserResponse> getUsersBySimpleOrdering() {
+		return repository.getUsersBySimpleOrdering().stream().map(DTOUserResponse::new).toList();
 	}
 
 	@Transactional
-	public void delete(long id) throws Exception {
-		try {
+	public void delete(long id) throws NotFoundException {
+		if (repository.existsById(id)) {
 			repository.deleteUserById(id);
-		} catch (NumberFormatException e) {
-			throw new Exception("Invalid ID format");
+		} else {
+			throw new NotFoundException("User", id);
 		}
 	}
 
 	@Transactional
-	public DTOUserResponse updateStatus(long id, DTOUserStatusRequest request) throws Exception {
-		try {
+	public DTOUserResponse updateStatus(long id, DTOUserStatusRequest request) throws NotFoundException {
+		if (repository.existsById(id)) {
 			repository.updateUser(request.getStatus(), id);
 			return repository.getUserById(id).map(DTOUserResponse::new).get();
-		} catch (Exception e) {
-			throw new Exception("Failed to update user status: " + e.getMessage());
+		} else {
+			throw new NotFoundException("User", id);
 		}
 	}
 
 	@Transactional
-	public void addAccountToUser(Long id, Long accountId) throws Exception {
-		try {
-			User user = repository.findById(id)
-					.orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-			Account account = accountRepository.findById(accountId)
-					.orElseThrow(() -> new RuntimeException("Account not found with id: " + accountId));
-			user.getAccounts().add(account);
-			repository.save(user);
-			
-		} catch (Exception e) {
-			throw new Exception("Failed to update user account: " + e.getMessage());
-		}
+	public void addAccountToUser(Long id, Long accountId) throws NotFoundException {
+		User user = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("User", id));
+		Account account = accountRepository.findById(accountId)
+				.orElseThrow(() -> new NotFoundException("Account", accountId));
+		user.getAccounts().add(account);
+		repository.save(user);
 	}
 
 }

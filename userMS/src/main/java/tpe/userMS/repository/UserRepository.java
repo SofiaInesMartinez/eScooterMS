@@ -25,9 +25,11 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	@Query("SELECT a"
 			+ " FROM User u"
-			+ " JOIN Account a"
+			+ " JOIN u.accounts a"
 			+ " WHERE u.id = :id"
-			+ " AND a.moneyBalance > 0")
+			+ " AND a.moneyBalance > 0"
+			+ " ORDER BY a.moneyBalance DESC"
+			+ " LIMIT 1")
 	public Optional<Account> getAccountByUserIdWithBalance(@Param("id") long id);
 
 	@Query("SELECT u FROM User u WHERE u.id = :id")

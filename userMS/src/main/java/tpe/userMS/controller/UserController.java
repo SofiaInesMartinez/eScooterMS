@@ -1,7 +1,8 @@
 package tpe.userMS.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import tpe.userMS.DTO.DTOAccountResponse;
+import tpe.userMS.DTO.DTOScooterResponse;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
 import tpe.userMS.DTO.DTOUserStatusRequest;
+import tpe.userMS.exception.AccountWithoutMoneyException;
+import tpe.userMS.exception.NotFoundException;
 import tpe.userMS.service.UserService;
 
 @RestController
@@ -30,96 +35,56 @@ public class UserController {
 	}
 	
 	@GetMapping("/scooter/latitude/{latitude}/longitude/{longitude}")
-	public ResponseEntity<?> getNearbyScooters(@PathVariable double latitude, @PathVariable double longitude) {
-		try {
-			return ResponseEntity.ok(service.getNearbyScooters(latitude, longitude));
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body(e.getMessage());
-		}
+	public ResponseEntity<List<DTOScooterResponse>> getNearbyScooters(@PathVariable double latitude, @PathVariable double longitude) {
+		return ResponseEntity.ok(service.getNearbyScooters(latitude, longitude));
 	}
 	
 	@GetMapping("/{id}/accounts")
-	public ResponseEntity<?> getUserAccounts(@PathVariable long id) {
-		try {
-			return ResponseEntity.ok(service.getUserAccounts(id));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
-		}
+	public ResponseEntity<List<DTOAccountResponse>> getUserAccounts(@PathVariable long id) throws NotFoundException {
+		return ResponseEntity.ok(service.getUserAccounts(id));
 	}
 	
 	@GetMapping("/{id}/account/withBalance")
-	public ResponseEntity<?> getAccountByUserIdWithBalance(@PathVariable long id) {
-		try {
-			return ResponseEntity.ok(service.getAccountByUserIdWithBalance(id));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
-		}
+	public ResponseEntity<DTOAccountResponse> getAccountByUserIdWithBalance(@PathVariable long id) throws NotFoundException, AccountWithoutMoneyException {
+		return ResponseEntity.ok(service.getAccountByUserIdWithBalance(id));
 	}
 
 	@GetMapping("")
-	public ResponseEntity<?> getUsers() {
-		try {
-			return ResponseEntity.ok(service.findAll());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<DTOUserResponse>> getUsers() {
+		return ResponseEntity.ok(service.findAll());
 	}
 
 	@PostMapping("")
-	public ResponseEntity<?> saveUser(@RequestBody @Valid DTOUserRequest request) {
-		try {
-			return ResponseEntity.ok(service.save(request));
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("Error: Failed to save");
-		}
+	public ResponseEntity<DTOUserResponse> saveUser(@RequestBody @Valid DTOUserRequest request) {
+		return ResponseEntity.ok(service.save(request));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable long id) {
-		try {
-			service.delete(id);
-			return ResponseEntity.ok("The user with id " + id + " has been succesfully deleted."); 
-		} catch (Exception e) {	
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
+	public ResponseEntity<String> deleteUser(@PathVariable long id) throws NotFoundException {
+		service.delete(id);
+		return ResponseEntity.ok("The user with id " + id + " has been succesfully deleted."); 
 	}
 	
 	@PutMapping("/{id}/status")
-    public ResponseEntity<?> updateUserStatus(@PathVariable long id, @RequestBody @Valid DTOUserStatusRequest request) {
-        try {
-            DTOUserResponse updatedUser = service.updateStatus(id, request);
-            return ResponseEntity.ok(updatedUser);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
-        }
+    public ResponseEntity<DTOUserResponse> updateUserStatus(@PathVariable long id, @RequestBody @Valid DTOUserStatusRequest request) throws NotFoundException {
+        DTOUserResponse updatedUser = service.updateStatus(id, request);
+        return ResponseEntity.ok(updatedUser);
     }
 	
 	@PostMapping("/{id}/addAccount/{accountId}")
-    public ResponseEntity<?> addAccountToUser(@PathVariable Long id, @PathVariable Long accountId) {
-		try {
+    public ResponseEntity<String> addAccountToUser(@PathVariable Long id, @PathVariable Long accountId) throws NotFoundException {
         service.addAccountToUser(id, accountId);
         return ResponseEntity.ok("Added account " + accountId + " to user " +id);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
     }
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getUserById(@PathVariable long id) {
-		try {
+	public ResponseEntity<DTOUserResponse> getUserById(@PathVariable long id) throws NotFoundException {
 			return ResponseEntity.ok(service.getUserById(id));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
 	}
 
 	@GetMapping("/byCreatedAt")
-	public ResponseEntity<?> getUsersBySimpleOrdering() {
-		try {
-			return ResponseEntity.ok(service.getUsersBySimpleOrdering());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<DTOUserResponse>> getUsersBySimpleOrdering() {
+		return ResponseEntity.ok(service.getUsersBySimpleOrdering());
 	}
 
 }
