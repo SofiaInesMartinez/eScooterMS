@@ -1,7 +1,9 @@
 package tpe.scooterMS.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.DTOCoordinatesRequest;
 import tpe.scooterMS.DTO.DTOScooterRequest;
+import tpe.scooterMS.DTO.DTOScooterResponse;
 import tpe.scooterMS.DTO.DTOScooterStatusRequest;
+import tpe.scooterMS.DTO.ScooterByKmsDTO;
+import tpe.scooterMS.DTO.ScooterByTimeDTO;
+import tpe.scooterMS.DTO.ScooterByTimePauseDTO;
+import tpe.scooterMS.exception.NotFoundException;
 import tpe.scooterMS.service.ScooterService;
 
 @RestController
@@ -30,122 +37,69 @@ public class ScooterController {
 	}
 	
 	@PutMapping("/{id}/coordinates")
-	public ResponseEntity<?> updateScooterCoordinates(@PathVariable long id, @RequestBody @Valid DTOCoordinatesRequest request) {
-		try {
-			return ResponseEntity.ok(service.updateScooterCoordinates(id, request));
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+	public ResponseEntity<DTOScooterResponse> updateScooterCoordinates(@PathVariable long id, @RequestBody @Valid DTOCoordinatesRequest request) throws NotFoundException {
+		return ResponseEntity.ok(service.updateScooterCoordinates(id, request));
 	}
 	
 	@GetMapping("/latitude/{latitude}/longitude/{longitude}")
-	public ResponseEntity<?> getNearbyScooters(@PathVariable double latitude, @PathVariable double longitude ) {
-		try {
-			return ResponseEntity.ok(service.getNearbyScooters(latitude, longitude));
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body(e.getMessage());
-		}
+	public ResponseEntity<List<DTOScooterResponse>> getNearbyScooters(@PathVariable double latitude, @PathVariable double longitude ) {
+		return ResponseEntity.ok(service.getNearbyScooters(latitude, longitude));
 	}
 	
 	@PutMapping("/{id}/status")
-	public ResponseEntity<?> updateScooterStatus(@PathVariable long id, @RequestBody @Valid DTOScooterStatusRequest request) {
-		try {
-			return ResponseEntity.ok(service.updateScooterStatus(id, request));
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("Error: Bad request");
-		}
+	public ResponseEntity<DTOScooterResponse> updateScooterStatus(@PathVariable long id, @RequestBody @Valid DTOScooterStatusRequest request) throws NotFoundException {
+		return ResponseEntity.ok(service.updateScooterStatus(id, request));
 	}
 	
 	@GetMapping("")
-	public ResponseEntity<?> getScooters() {
-		try {
-			return ResponseEntity.ok(service.findAll());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<DTOScooterResponse>> getScooters() {
+		return ResponseEntity.ok(service.findAll());
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<?> saveScooter(@RequestBody  DTOScooterRequest request){
-		try {
-			return ResponseEntity.ok(service.save(request));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
+	public ResponseEntity<DTOScooterResponse> saveScooter(@RequestBody  DTOScooterRequest request){
+		return ResponseEntity.ok(service.save(request));
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getScooterById(@PathVariable long id) {
-		try {
-			return ResponseEntity.ok(service.getScooterById(id));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
+	public ResponseEntity<DTOScooterResponse> getScooterById(@PathVariable long id) throws NotFoundException {
+		return ResponseEntity.ok(service.getScooterById(id));
 	}
 
 	
 	@GetMapping("/byId")
-	public ResponseEntity<?> getScootersBySimpleOrdering() {
-		try {
-			return ResponseEntity.ok(service.getScootersBySimpleOrdering());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<DTOScooterResponse>> getScootersBySimpleOrdering() {
+		return ResponseEntity.ok(service.getScootersBySimpleOrdering());
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteScooter(@PathVariable long id
-	) {
-	    try {
-	        service.deleteScooter(id);
-	        return ResponseEntity.ok("Scooter con ID " + id + " eliminado con éxito.");
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: Error interno del servidor");
-	    }
+	public ResponseEntity<String> deleteScooter(@PathVariable long id) throws NotFoundException {
+        service.deleteScooter(id);
+        return ResponseEntity.ok("Scooter con ID " + id + " eliminado con éxito.");
 	}
 	
 	@GetMapping("/reportByKm")
-	public ResponseEntity<?> getScootersReportByKm() {
-		try {
-			return ResponseEntity.ok(service.getScootersReportByKm());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<ScooterByKmsDTO>> getScootersReportByKm() {
+		return ResponseEntity.ok(service.getScootersReportByKm());
 	}
 	
 	@GetMapping("/reportByTotalTime")
-	public ResponseEntity<?> getScootersReportByTotalTime() {
-		try {
-			return ResponseEntity.ok(service.getScootersReportByTotalTime());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<ScooterByTimePauseDTO>> getScootersReportByTotalTime() {
+		return ResponseEntity.ok(service.getScootersReportByTotalTime());
 	}
 	
 	@GetMapping("/reportByTimeWithPauses")
-	public ResponseEntity<?> getScootersReportByTimeWithPauses() {
-		try {
-			return ResponseEntity.ok(service.getScootersReportByTimeWithPauses());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<ScooterByTimeDTO>> getScootersReportByTimeWithPauses() {
+		return ResponseEntity.ok(service.getScootersReportByTimeWithPauses());
 	}
 	
 	@GetMapping("/minimumNumberOfTrips/{number}/year/{year}")
-	public ResponseEntity<?> getScootersByMinimumNumberOfTrips(@PathVariable int number,@PathVariable int year) {
-		try {
-			return ResponseEntity.ok(service.getScootersByMinimumNumberOfTrips(number,year));
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<List<DTOScooterResponse>> getScootersByMinimumNumberOfTrips(@PathVariable int number,@PathVariable int year) {
+		return ResponseEntity.ok(service.getScootersByMinimumNumberOfTrips(number,year));
 	}
 	
 	@GetMapping("/reportByStatus")
-	public ResponseEntity<?> getScootersByStatus() {
-		try {
-			return ResponseEntity.ok(service.getScootersByStatus());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<Map<String, Long>> getScootersByStatus() {
+		return ResponseEntity.ok(service.getScootersByStatus());
 	}
 }

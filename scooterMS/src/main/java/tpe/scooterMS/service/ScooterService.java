@@ -16,6 +16,7 @@ import tpe.scooterMS.DTO.DTOScooterStatusRequest;
 import tpe.scooterMS.DTO.ScooterByKmsDTO;
 import tpe.scooterMS.DTO.ScooterByTimeDTO;
 import tpe.scooterMS.DTO.ScooterByTimePauseDTO;
+import tpe.scooterMS.exception.NotFoundException;
 import tpe.scooterMS.model.Scooter;
 import tpe.scooterMS.repository.ScooterRepository;
 
@@ -26,7 +27,7 @@ public class ScooterService {
 	private ScooterRepository repository;
 	
 	@Transactional
-	public DTOScooterResponse updateScooterCoordinates(long id, DTOCoordinatesRequest request) throws Exception {
+	public DTOScooterResponse updateScooterCoordinates(long id, DTOCoordinatesRequest request) throws NotFoundException {
 		Optional<Scooter> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			Scooter scooter = optional.get();
@@ -35,7 +36,7 @@ public class ScooterService {
 			
 			return new DTOScooterResponse(repository.save(scooter));
 		} else {
-			throw new Exception("Scooter with id " + id + " doesn't exist");
+			throw new NotFoundException("Scooter", id);
 		}
 	}
 	
@@ -45,106 +46,74 @@ public class ScooterService {
 	}
 	
 	@Transactional
-	public DTOScooterResponse updateScooterStatus(long id, DTOScooterStatusRequest request) throws Exception {
+	public DTOScooterResponse updateScooterStatus(long id, DTOScooterStatusRequest request) throws NotFoundException {
 		Scooter scooter = repository.getScooterById(id);
 		if (scooter != null) {
 			scooter.setStatus(request.getStatus());
 			return new DTOScooterResponse(repository.save(scooter));
 		} else {
-			throw new Exception("scooter not found");
+			throw new NotFoundException("Scooter", id);
 		}
 	}
 	
 	@Transactional ( readOnly = true )
-	public List<DTOScooterResponse> findAll() throws Exception {
-		try {
-			return repository.findAll().stream().map( DTOScooterResponse::new ).toList();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public List<DTOScooterResponse> findAll() {
+		return repository.findAll().stream().map( DTOScooterResponse::new ).toList();
 	}
 	
 	@Transactional
-	public DTOScooterResponse save(@Valid DTOScooterRequest request) throws Exception {
-		try {
-			Scooter scooter = new Scooter(request.getId(),request.getLastMaintenanceDate(),request.getKilometers(), request.getLatitude(), request.getLongitude());
-			scooter = repository.save(scooter);
-			return new DTOScooterResponse(scooter);
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public DTOScooterResponse save(@Valid DTOScooterRequest request) {
+		Scooter scooter = new Scooter(request.getId(),request.getLastMaintenanceDate(),request.getKilometers(), request.getLatitude(), request.getLongitude());
+		scooter = repository.save(scooter);
+		return new DTOScooterResponse(scooter);
 	}
 	
 	@Transactional ( readOnly = true )
-	public DTOScooterResponse getScooterById(long id) throws Exception {
-		try {
+	public DTOScooterResponse getScooterById(long id) throws NotFoundException {
+		if (repository.existsById(id)) {
 			return new DTOScooterResponse(repository.getScooterById(id));
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+		} else {
+			throw new NotFoundException("Scooter", id);
 		}
 	}
 	
 	@Transactional ( readOnly = true )
-	public List<DTOScooterResponse> getScootersBySimpleOrdering() throws Exception {
-		try {
-			return repository.getScootersBySimpleOrdering().stream().map( DTOScooterResponse::new ).toList();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public List<DTOScooterResponse> getScootersBySimpleOrdering()  {
+		return repository.getScootersBySimpleOrdering().stream().map( DTOScooterResponse::new ).toList();
 	}
 	
 	@Transactional
-	public void deleteScooter(long id) throws Exception {
-		try {
-	          repository.deleteScooterById(id);
-	    } catch (Exception e) {
-	        throw new Exception(e.getMessage());
-	    }
-	}
-	
-	@Transactional ( readOnly = true )
-	public List<ScooterByKmsDTO> getScootersReportByKm() throws Exception {
-		try {
-			return repository.getScootersReportByKm().stream().map( ScooterByKmsDTO::new ).toList();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+	public void deleteScooter(long id) throws NotFoundException {
+		if (repository.existsById(id)) {
+			repository.deleteScooterById(id);
+		} else {
+			throw new NotFoundException("Scooter", id);
 		}
 	}
 	
 	@Transactional ( readOnly = true )
-	public List<ScooterByTimePauseDTO> getScootersReportByTotalTime() throws Exception {
-		try {
-			return repository.getScootersReportByTotalTime().stream().map( ScooterByTimePauseDTO::new ).toList();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public List<ScooterByKmsDTO> getScootersReportByKm() {
+		return repository.getScootersReportByKm().stream().map( ScooterByKmsDTO::new ).toList();
 	}
 	
 	@Transactional ( readOnly = true )
-	public List<ScooterByTimeDTO> getScootersReportByTimeWithPauses() throws Exception {
-		try {
-			return repository.getScootersReportByTimeWithPauses().stream().map( ScooterByTimeDTO::new ).toList();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public List<ScooterByTimePauseDTO> getScootersReportByTotalTime() {
+		return repository.getScootersReportByTotalTime().stream().map( ScooterByTimePauseDTO::new ).toList();
 	}
 	
 	@Transactional ( readOnly = true )
-	public List<DTOScooterResponse> getScootersByMinimumNumberOfTrips(int number, int year) throws Exception {
-		try {
-			return repository.getScootersByMinimumNumberOfTrips(number,year).stream().map( DTOScooterResponse::new ).toList();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public List<ScooterByTimeDTO> getScootersReportByTimeWithPauses() {
+		return repository.getScootersReportByTimeWithPauses().stream().map( ScooterByTimeDTO::new ).toList();
 	}
 	
 	@Transactional ( readOnly = true )
-	public  Map<String, Long> getScootersByStatus() throws Exception {
-		try {
-			return repository.getScootersByStatus();
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+	public List<DTOScooterResponse> getScootersByMinimumNumberOfTrips(int number, int year) {
+		return repository.getScootersByMinimumNumberOfTrips(number,year).stream().map( DTOScooterResponse::new ).toList();
+	}
+	
+	@Transactional ( readOnly = true )
+	public  Map<String, Long> getScootersByStatus() {
+		return repository.getScootersByStatus();
 	}
 
 }
