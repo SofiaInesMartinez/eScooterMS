@@ -32,6 +32,7 @@ import tpe.administrationMS.DTO.DTOTariffResponse;
 import tpe.administrationMS.DTO.DTOScooterByKm;
 import tpe.administrationMS.DTO.DTOScooterRequest;
 import tpe.administrationMS.DTO.DTOScooterResponse;
+import tpe.administrationMS.DTO.DTOInvoicedAmountResponse;
 
 @RestController
 @RequestMapping("administration")
@@ -183,5 +184,15 @@ public class AdministrationController {
 		}
 	}
 			
+	@GetMapping("/billingReport/year/{year}/fromMonth/{month1}/ToMonth/{month2}")
+	public Mono<ResponseEntity<?>> getInvoicedAmountByYearAndMonthRange(@PathVariable int year,@PathVariable int month1, @PathVariable int month2) {
+		try {
+			return restClient.method(HttpMethod.GET).uri("http://localhost:8002/trip/year/{year}/fromMonth/{month1}/ToMonth/{month2}", year, month1, month2).retrieve()
+					.bodyToFlux(DTOInvoicedAmountResponse.class).collectList()
+					.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
+		} catch (Exception e) {
+			return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage()));
+		}
+	}
 
 }
