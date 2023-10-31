@@ -14,12 +14,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import tpe.scooterMS.DTO.DTOInvoicedAmountResponse;
 import tpe.scooterMS.DTO.DTOReduceBalanceRequest;
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
+import tpe.scooterMS.exception.AccountWithoutMoneyException;
+import tpe.scooterMS.exception.NotFoundException;
+import tpe.scooterMS.exception.ScooterNotLocatedAtStopException;
+import tpe.scooterMS.exception.ScooterUnavailableException;
+import tpe.scooterMS.exception.TripAlreadyEndedException;
+import tpe.scooterMS.exception.TripInPauseException;
+import tpe.scooterMS.exception.TripNotPausedException;
+import tpe.scooterMS.exception.TripReachedPauseTimeLimitException;
+import tpe.scooterMS.exception.UserOnTripException;
 import tpe.scooterMS.model.Account;
 import tpe.scooterMS.model.Scooter;
 import tpe.scooterMS.model.Stop;
@@ -50,44 +58,44 @@ public class TripService {
 	private TariffRepository tariffRepository;
 	
 	@Transactional
-	public TripResponseDTO endPause(int id) throws Exception {
+	public TripResponseDTO endPause(int id) throws NotFoundException, TripNotPausedException, TripAlreadyEndedException {
 		Optional<Trip> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			Trip trip = optional.get();
 			
-			if (!trip.isPaused()) {
-				throw new Exception("Trip with id " + id + " is not paused");
-			}
 			if (trip.getEndDate() != null) {
-				throw new Exception("Trip with id " + id + " already ended");
+				throw new TripAlreadyEndedException(id);
+			}
+			if (!trip.isPaused()) {
+				throw new TripNotPausedException(id);
 			}
 			
 			trip.setPaused(false);
 			return new TripResponseDTO(repository.save(trip));
 		} else {
-			throw new Exception("Trip with id " + id + " does not exist");
+			throw new NotFoundException("Trip", id);
 		}
 	}
 	
-	public TripResponseDTO startPause(int id) throws Exception {
+	public TripResponseDTO startPause(int id) throws NotFoundException, TripInPauseException, TripAlreadyEndedException, TripReachedPauseTimeLimitException {
 		Optional<Trip> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			Trip trip = optional.get();
 			
-			if (trip.isPaused()) {
-				throw new Exception("Trip with id " + id + " is already in pause");
-			}
 			if (trip.getEndDate() != null) {
-				throw new Exception("Trip with id " + id + " already ended");
+				throw new TripAlreadyEndedException(id);
+			}
+			if (trip.isPaused()) {
+				throw new TripInPauseException(id);
 			}
 			if (trip.getPauseTime() == 0) {
-				throw new Exception("Trip with id " + id + " reached pause limit");
+				throw new TripReachedPauseTimeLimitException(id);
 			}
 			
 			trip.setPaused(true);
 			return new TripResponseDTO(repository.save(trip));
 		} else {
-			throw new Exception("Trip with id " + id + " does not exist");
+			throw new NotFoundException("Trip", id);
 		}
 	}
 	
@@ -109,9 +117,8 @@ public class TripService {
 		}
 	}
 	
-	// VERIFICAR QUE EL MONOPATIN ESTE UBICADO EN UNA PARADA, SINO ERROR
 	@Transactional
-	public TripResponseDTO endTrip(int id) throws Exception {
+	public TripResponseDTO endTrip(int id) throws NotFoundException, TripAlreadyEndedException, ScooterNotLocatedAtStopException {
 		Optional<Trip> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			Trip trip = optional.get();
@@ -120,7 +127,7 @@ public class TripService {
 				if (stopOptional.isPresent()) {
 					trip.setDestinationStop(stopOptional.get());
 				} else {
-					throw new Exception("The scooter is not located at a stop");
+					throw new ScooterNotLocatedAtStopException(id);
 				}
 				
 				trip.setEndDate(new Date(System.currentTimeMillis()));
@@ -155,10 +162,10 @@ public class TripService {
 				
 				return new TripResponseDTO(repository.save(trip));
 			} else {
-				throw new Exception("The trip already ended");
+				throw new TripAlreadyEndedException(id);
 			}
 		} else {
-			throw new Exception("The trip with id " + id + "doesn't exist");
+			throw new NotFoundException("Trip", id);
 		}
 	}
 	
@@ -168,53 +175,63 @@ public class TripService {
 	}
 	
 	@Transactional( readOnly = true )
-	public TripResponseDTO findByid(int id) throws Exception {
+	public TripResponseDTO findByid(int id) throws NotFoundException {
 		return repository.findById(id)
 				.map( TripResponseDTO::new )
-				.orElseThrow(() -> new Exception());
+				.orElseThrow(() -> new NotFoundException("Trip", id));
 	}
 	
 	@Transactional
-	public TripResponseDTO saveTrip(TripRequestDTO request) throws Exception, WebClientResponseException {
+	public TripResponseDTO saveTrip(TripRequestDTO request) throws NotFoundException, AccountWithoutMoneyException, ScooterUnavailableException, UserOnTripException {
 		Account account = webClientBuilder.build()
 				.get()
 				.uri("http://localhost:8003/account/user/" + request.getIdUser() + "/withBalance")
 				.retrieve()
+//				.onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+//					clientResponse.bodyToMono(AccountWithoutMoneyException.class).;
+//					throw new AccountWithoutMoneyException(request.getIdUser());
+//				})
 				.bodyToMono(Account.class)
 				.block();
 		
 		Optional<Scooter> scooterOptional = scooterRepository.findById(request.getIdScooter());
 		Optional<Stop> stopOptional = stopRepository.findById(request.getIdOriginStop());
 		
-		if (scooterOptional.isPresent() && stopOptional.isPresent() && account.getMoneyBalance() > 0) {
-			Scooter scooter = scooterOptional.get();
-			Stop originStop = stopOptional.get();
-			
-			if (scooter.getStatus().equals("available")) {
-				Trip activeTrip = repository.getActiveTripByIdUser(request.getIdUser());
-				if (activeTrip == null) {
-					Trip trip = repository.save(new Trip(request.getIdUser(), account.getId(), scooter, originStop));
-					scooterRepository.updateScooterStatus(scooter.getId(), "in use");
-					return new TripResponseDTO(trip);
-				} else {
-					throw new Exception("The specified user is on a trip");
-				}
+		if (!scooterOptional.isPresent()) {
+			throw new NotFoundException("Scooter", request.getIdScooter());
+		}
+		if (!stopOptional.isPresent()) {
+			throw new NotFoundException("Stop", request.getIdOriginStop());
+		}
+		if (account.getMoneyBalance() == 0) {
+			throw new AccountWithoutMoneyException(request.getIdUser());
+		}
+		
+		Scooter scooter = scooterOptional.get();
+		Stop originStop = stopOptional.get();
+		
+		if (scooter.getStatus().equals("available")) {
+			Trip activeTrip = repository.getActiveTripByIdUser(request.getIdUser());
+			if (activeTrip == null) {
+				Trip trip = repository.save(new Trip(request.getIdUser(), account.getId(), scooter, originStop));
+				scooterRepository.updateScooterStatus(scooter.getId(), "in use");
+				return new TripResponseDTO(trip);
 			} else {
-				throw new Exception("The scooter is unavailable");
+				throw new UserOnTripException(request.getIdUser());
 			}
 		} else {
-			throw new Exception("The scooter, the stop or the user doesn't exist or the user doesn't have money in any account");
+			throw new ScooterUnavailableException(request.getIdScooter());
 		}
 	}
 	
 	@Transactional
-	public TripResponseDTO deleteTrip(int id) throws Exception {
+	public TripResponseDTO deleteTrip(int id) throws NotFoundException {
 		Optional<Trip> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			repository.deleteById(id);
 			return new TripResponseDTO(optional.get());
 		} else {
-			throw new Exception();
+			throw new NotFoundException("Trip", id);
 		}
 			
 	}
