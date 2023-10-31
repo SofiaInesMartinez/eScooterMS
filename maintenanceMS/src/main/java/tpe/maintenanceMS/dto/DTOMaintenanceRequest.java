@@ -3,21 +3,23 @@ package tpe.maintenanceMS.dto;
 import java.sql.Date;
 import java.util.Objects;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class DTOMaintenanceRequest {
 	
 	@NotNull(message = "id shouldn't be null")
+	@Positive(message = "id shouldn't be negative or zero")
 	private long id;
 	@NotNull(message = "description shouldn't be null")
-	@NotEmpty(message = "description shouldn't be empty")
+	@NotBlank(message = "description shouldn't be empty")
 	private String description;
 	@NotNull(message = "startDate shouldn't be null")
-	@NotEmpty(message = "startDate shouldn't be empty")
 	private Date startDate;
 	private Date finishDate;
 	@NotNull(message = "scooter shouldn't be null")
+	@Positive(message = "idScooter shouldn't be negative or zero")
 	private long idScooter;
 	
 	public DTOMaintenanceRequest(long id, String description, Date startDate, Date finishDate, long idScooter) {
