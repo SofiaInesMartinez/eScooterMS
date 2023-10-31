@@ -3,11 +3,14 @@ package tpe.scooterMS.DTO;
 import java.util.Date;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class TariffRequestDTO {
 	@NotNull(message = "normal shouldn't be null")
+	@PositiveOrZero(message = "normal should be positive or zero")
 	private float normal;
 	@NotNull(message = "extra shouldn't be null")
+	@PositiveOrZero(message = "extra should be positive or zero")
 	private float extra;
 	@NotNull(message = "startDate shouldn't be null")
 	private Date startDate;

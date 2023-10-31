@@ -1,10 +1,12 @@
 package tpe.scooterMS.DTO;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class DTOStopRequest {
 	
 	@NotNull(message = "id shouldn't be null")
+	@Positive(message = "id shouldn't be negative or zero")
 	private long id;
 	@NotNull(message = "latitude shouldn't be null")
 	private double latitude;

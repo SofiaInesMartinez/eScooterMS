@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tpe.scooterMS.DTO.TariffRequestDTO;
 import tpe.scooterMS.DTO.TariffResponseDTO;
+import tpe.scooterMS.exception.NotFoundException;
 import tpe.scooterMS.model.Tariff;
 import tpe.scooterMS.repository.TariffRepository;
 
@@ -24,10 +25,10 @@ public class TariffService {
 	}
 	
 	@Transactional( readOnly = true )
-	public TariffResponseDTO findById(int id) throws Exception {
+	public TariffResponseDTO findById(int id) throws NotFoundException {
 		return repository.findById(id)
 				.map( TariffResponseDTO::new )
-				.orElseThrow(() -> new Exception());
+				.orElseThrow(() -> new NotFoundException("Tariff", id));
 	}
 	
 	@Transactional
@@ -37,13 +38,13 @@ public class TariffService {
 	}
 	
 	@Transactional
-	public TariffResponseDTO deleteTariff(int id) throws Exception {
+	public TariffResponseDTO deleteTariff(int id) throws NotFoundException {
 		Optional<Tariff> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			repository.deleteById(id);
 			return new TariffResponseDTO(optional.get());
 		} else {
-			throw new Exception();
+			throw new NotFoundException("Tariff", id);
 		}
 	}
 }

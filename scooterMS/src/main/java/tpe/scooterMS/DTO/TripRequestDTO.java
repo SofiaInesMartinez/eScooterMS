@@ -3,13 +3,17 @@ package tpe.scooterMS.DTO;
 import java.util.Objects;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class TripRequestDTO {
 	@NotNull(message = "idUser shouldn't be null")
+	@Positive(message = "idUser shouldn't be negative or zero")
 	private long idUser;
 	@NotNull(message = "idScooter shouldn't be null")
+	@Positive(message = "idScooter shouldn't be negative or zero")
 	private long idScooter;
 	@NotNull(message = "idOriginStop shouldn't be null")
+	@Positive(message = "idOriginStop shouldn't be negative or zero")
 	private long idOriginStop;
 	
 	public TripRequestDTO(int idUser,int idScooter, int idOriginStop) {

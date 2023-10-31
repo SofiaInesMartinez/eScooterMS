@@ -2,12 +2,16 @@ package tpe.scooterMS.DTO;
 
 import java.sql.Date;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class DTOScooterRequest {
 	
 	@NotNull(message = "id shouldn't be null")
+	@Positive(message = "id should be positive")
 	private long id;
 	private Date lastMaintenanceDate;
+	@PositiveOrZero(message = "kilometers should be positive or zero")
 	private float kilometers;
 	@NotNull(message = "latitude shouldn't be null")
 	private double latitude;

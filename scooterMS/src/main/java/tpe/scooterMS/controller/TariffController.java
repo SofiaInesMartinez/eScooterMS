@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.TariffRequestDTO;
 import tpe.scooterMS.DTO.TariffResponseDTO;
+import tpe.scooterMS.exception.NotFoundException;
 import tpe.scooterMS.service.TariffService;
 
 @RestController
@@ -31,7 +32,7 @@ public class TariffController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<TariffResponseDTO> findById(@PathVariable int id) throws Exception {
+	public ResponseEntity<TariffResponseDTO> findById(@PathVariable int id) throws NotFoundException {
 		return ResponseEntity.ok(service.findById(id));
 	}
 	
@@ -41,7 +42,7 @@ public class TariffController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<TariffResponseDTO> deleteTariff(@PathVariable int id) throws Exception {
+	public ResponseEntity<TariffResponseDTO> deleteTariff(@PathVariable int id) throws NotFoundException {
 		return ResponseEntity.ok(service.deleteTariff(id));
 	}
 }
