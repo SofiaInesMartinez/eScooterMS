@@ -3,6 +3,7 @@ package tpe.userMS.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import jakarta.ws.rs.InternalServerErrorException;
 import tpe.userMS.DTO.DTOAccountRequest;
 import tpe.userMS.DTO.DTOReduceBalanceRequest;
+import tpe.userMS.exception.AccountWithoutMoneyException;
+import tpe.userMS.exception.NotFoundException;
 import tpe.userMS.service.AccountService;
 
 @RestController
@@ -29,69 +33,41 @@ public class AccountController {
 	}
 	
 	@GetMapping("/user/{userId}/withBalance")
-	public ResponseEntity<?> getAccountByUserIdWithBalance(@PathVariable long userId) {
-		try {
-			return ResponseEntity.ok(service.getAccountByUserIdWithBalance(userId));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
-		}
+	public ResponseEntity<?> getAccountByUserIdWithBalance(@PathVariable long userId) throws AccountWithoutMoneyException {
+		return ResponseEntity.ok(service.getAccountByUserIdWithBalance(userId));
 	}
 
 	@GetMapping("")
-	public ResponseEntity<?> getAccounts() {
-		try {
-			return ResponseEntity.ok(service.findAll());
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body("Error: Internal server error");
-		}
+	public ResponseEntity<?> getAccounts() throws InternalServerErrorException {
+		return ResponseEntity.ok(service.findAll());
 	}
 
 	@PostMapping("")
 	public ResponseEntity<?> saveAccount(@RequestBody @Valid DTOAccountRequest request) {
-		try {
-			return ResponseEntity.ok(service.save(request));
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().body("Error: Failed to save");
-		}
+		return ResponseEntity.ok(service.save(request));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteAccount(@PathVariable long id) {
-		try {
+	public ResponseEntity<?> deleteAccount(@PathVariable long id) throws NotFoundException {
 			service.delete(id);
 			return ResponseEntity.ok("The account with id " + id + " has been succesfully deleted."); 
-		} catch (Exception e) {	
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
 	}
 	
 	@PutMapping("/{id}/reduceMoneyBalance")
-    public ResponseEntity<?> reduceAccountMoneyBalance(@PathVariable long id, @RequestBody @Valid DTOReduceBalanceRequest request) {
-        try {
-            service.reduceMoneyBalance(id, request);
-            return ResponseEntity.ok("Account with ID " + id + " has reduced its balance an amount of " + request.getMoney());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
-        }
+    public ResponseEntity<?> reduceAccountMoneyBalance(@PathVariable long id, @RequestBody @Valid DTOReduceBalanceRequest request) throws NotFoundException {
+        service.reduceMoneyBalance(id, request);
+        return ResponseEntity.ok("Account with ID " + id + " has reduced its balance an amount of " + request.getMoney());
     }
 	
 	@PutMapping("/{id}/moneyBalance/{moneyBalance}")
-    public ResponseEntity<?> updateAccountMoneyBalance(@PathVariable long id, @PathVariable int moneyBalance) {
-        try {
-            service.updateMoneyBalance(id, moneyBalance);
-            return ResponseEntity.ok("Account with ID " + id + " has been updated money balance to " + moneyBalance);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
-        }
+    public ResponseEntity<?> updateAccountMoneyBalance(@PathVariable long id, @PathVariable int moneyBalance) throws NotFoundException {
+        service.updateMoneyBalance(id, moneyBalance);
+        return ResponseEntity.ok("Account with ID " + id + " has been updated money balance to " + moneyBalance);
     }
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getAccountById(@PathVariable long id) {
-		try {
-			return ResponseEntity.ok(service.getAccountById(id));
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
+	public ResponseEntity<?> getAccountById(@PathVariable long id) throws NotFoundException {
+		return ResponseEntity.ok(service.getAccountById(id));
 	}
 
 	@GetMapping("/byId")
@@ -104,13 +80,9 @@ public class AccountController {
 	}
 	
 	@PostMapping("/{id}/addUser/{userId}")
-    public ResponseEntity<?> addUserToAccount(@PathVariable Long id, @PathVariable Long userId) {
-		try {
+    public ResponseEntity<?> addUserToAccount(@PathVariable Long id, @PathVariable Long userId) throws NotFoundException {
         service.addUserToAccount(id, userId);
         return ResponseEntity.ok("Added user " + userId + " to account " +id);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Not found");
-		}
     }
 
 }

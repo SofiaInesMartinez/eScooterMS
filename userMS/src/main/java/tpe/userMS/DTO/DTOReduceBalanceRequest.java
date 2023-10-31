@@ -3,9 +3,11 @@ package tpe.userMS.DTO;
 import java.util.Objects;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class DTOReduceBalanceRequest {
 	@NotNull(message = "money shouldn't be null")
+	@PositiveOrZero(message = "money should be positive or zero")
 	private int money;
 	
 	public DTOReduceBalanceRequest() {
