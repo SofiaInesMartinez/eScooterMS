@@ -80,7 +80,7 @@ public class AdministrationController {
 	}
 
 	@PostMapping("/scooter")
-	public Mono<?> saveScooter(@RequestBody @Valid DTOScooterRequest request) throws WebClientResponseException {
+	public Mono<?> saveScooter(@RequestBody @Valid DTOScooterRequest request) {
 		return restClient.method(HttpMethod.POST).uri("http://localhost:8002/scooter")
 				.body(BodyInserters.fromValue(request)).retrieve().bodyToMono(DTOScooterResponse.class)
 				.map(responseBody -> ResponseEntity.status(HttpStatus.OK).body(responseBody));
