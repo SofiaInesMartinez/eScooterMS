@@ -2,10 +2,14 @@ package tpe.administrationMS.DTO;
 
 import java.util.Objects;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public class DTOUserStatusRequest {
 	@NotNull(message = "status shouldn't be null")
+	@Min(0)
+	@Max(1)
 	private int status;
 	
 	public DTOUserStatusRequest() {

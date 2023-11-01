@@ -15,11 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import tpe.scooterMS.DTO.DTOAccountUserStatusResponse;
 import tpe.scooterMS.DTO.DTOInvoicedAmountResponse;
 import tpe.scooterMS.DTO.DTOReduceBalanceRequest;
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
 import tpe.scooterMS.exception.AccountWithoutMoneyException;
+import tpe.scooterMS.exception.DisabledUserException;
 import tpe.scooterMS.exception.NotFoundException;
 import tpe.scooterMS.exception.ScooterNotLocatedAtStopException;
 import tpe.scooterMS.exception.ScooterUnavailableException;
@@ -182,17 +184,21 @@ public class TripService {
 	}
 	
 	@Transactional
-	public TripResponseDTO saveTrip(TripRequestDTO request) throws NotFoundException, AccountWithoutMoneyException, ScooterUnavailableException, UserOnTripException {
-		Account account = null;
+	public TripResponseDTO saveTrip(TripRequestDTO request) throws NotFoundException, AccountWithoutMoneyException, ScooterUnavailableException, UserOnTripException, DisabledUserException {
+		DTOAccountUserStatusResponse account = null;
 		try {
 			account = webClientBuilder.build()
 					.get()
 					.uri("http://localhost:8003/account/user/" + request.getIdUser() + "/withBalance")
 					.retrieve()
-					.bodyToMono(Account.class)
+					.bodyToMono(DTOAccountUserStatusResponse.class)
 					.block();
 		} catch (Exception e) {
 			throw new AccountWithoutMoneyException(request.getIdUser());
+		}
+		
+		if (account.getUserStatus() == 0) {
+			throw new DisabledUserException(request.getIdUser());
 		}
 			
 		Optional<Scooter> scooterOptional = scooterRepository.findById(request.getIdScooter());

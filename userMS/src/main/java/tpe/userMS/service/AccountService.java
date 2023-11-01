@@ -1,6 +1,7 @@
 package tpe.userMS.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import tpe.userMS.DTO.DTOAccountRequest;
 import tpe.userMS.DTO.DTOAccountResponse;
+import tpe.userMS.DTO.DTOAccountUserStatusResponse;
 import tpe.userMS.DTO.DTOReduceBalanceRequest;
 import tpe.userMS.exception.AccountWithoutMoneyException;
+import tpe.userMS.exception.DisabledUserException;
 import tpe.userMS.exception.NotFoundException;
 import tpe.userMS.model.Account;
 import tpe.userMS.model.User;
@@ -26,10 +29,16 @@ public class AccountService {
 	private UserRepository userRepository;
 	
 	@Transactional(readOnly = true)
-	public DTOAccountResponse getAccountByUserIdWithBalance(long userId) throws AccountWithoutMoneyException {
-		return repository.getAccountByUserIdWithBalance(userId)
-				.map( DTOAccountResponse::new )
-				.orElseThrow(() -> new AccountWithoutMoneyException(userId));
+	public DTOAccountUserStatusResponse getAccountByUserIdWithBalance(long userId) throws AccountWithoutMoneyException {
+//		return repository.getAccountByUserIdWithBalance(userId)
+//				.map( DTOAccountResponse::new )
+//				.orElseThrow(() -> new AccountWithoutMoneyException(userId));
+		Optional<DTOAccountUserStatusResponse> optional = repository.getAccountByUserIdWithBalance(userId);
+		if (optional.isPresent()) {
+			return optional.get();
+		} else {
+			throw new AccountWithoutMoneyException(userId);
+		}
 	}
 
 	@Transactional(readOnly = true)
@@ -91,9 +100,14 @@ public class AccountService {
     }
 
 	@Transactional
-	public void addUserToAccount(Long id, Long userId) throws NotFoundException {
+	public void addUserToAccount(Long id, Long userId) throws NotFoundException, DisabledUserException {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new NotFoundException("User", userId));
+		
+		if (user.getStatus() == 0) {
+			throw new DisabledUserException(userId);
+		}
+		
 		Account account = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Account", id));
 //			account.getUsers().add(user);

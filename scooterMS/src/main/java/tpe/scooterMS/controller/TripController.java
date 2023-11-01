@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import tpe.scooterMS.DTO.TripRequestDTO;
 import tpe.scooterMS.DTO.TripResponseDTO;
 import tpe.scooterMS.exception.AccountWithoutMoneyException;
+import tpe.scooterMS.exception.DisabledUserException;
 import tpe.scooterMS.exception.NotFoundException;
 import tpe.scooterMS.exception.ScooterNotLocatedAtStopException;
 import tpe.scooterMS.exception.ScooterUnavailableException;
@@ -66,7 +67,7 @@ public class TripController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) throws NotFoundException, AccountWithoutMoneyException, ScooterUnavailableException, UserOnTripException {
+	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) throws NotFoundException, AccountWithoutMoneyException, ScooterUnavailableException, UserOnTripException, DisabledUserException {
 		return new ResponseEntity<>(service.saveTrip(request), HttpStatus.CREATED);
 	}
 	

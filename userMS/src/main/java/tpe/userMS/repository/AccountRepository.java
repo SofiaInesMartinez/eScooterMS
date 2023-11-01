@@ -9,17 +9,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tpe.userMS.DTO.DTOAccountUserStatusResponse;
 import tpe.userMS.model.Account;
 
 @Repository("accountRepository")
 public interface AccountRepository extends JpaRepository<Account, Long> {
 	
-	@Query("SELECT a"
+	@Query("SELECT new tpe.userMS.DTO.DTOAccountUserStatusResponse(a.id, a.moneyBalance, u.id, u.status)"
 			+ " FROM Account a"
 			+ " JOIN a.users u"
 			+ " WHERE u.id = :userId"
-			+ " AND a.moneyBalance > 0") 
-	public Optional<Account> getAccountByUserIdWithBalance(@Param("userId") long userId);
+			+ " AND a.moneyBalance > 0"
+			+ " ORDER BY a.moneyBalance DESC"
+			+ " LIMIT 1") 
+	public Optional<DTOAccountUserStatusResponse> getAccountByUserIdWithBalance(@Param("userId") long userId);
 
 	@Query("SELECT a FROM Account a WHERE a.id = :id")
 	public Optional<Account> getAccountById(long id);

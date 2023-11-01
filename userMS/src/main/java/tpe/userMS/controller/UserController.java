@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import tpe.userMS.DTO.DTOAccountResponse;
+import tpe.userMS.DTO.DTOAccountUserStatusResponse;
 import tpe.userMS.DTO.DTOScooterResponse;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
 import tpe.userMS.DTO.DTOUserStatusRequest;
 import tpe.userMS.exception.AccountWithoutMoneyException;
+import tpe.userMS.exception.DisabledUserException;
 import tpe.userMS.exception.NotFoundException;
 import tpe.userMS.service.UserService;
 
@@ -45,7 +47,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}/account/withBalance")
-	public ResponseEntity<DTOAccountResponse> getAccountByUserIdWithBalance(@PathVariable long id) throws NotFoundException, AccountWithoutMoneyException {
+	public ResponseEntity<DTOAccountUserStatusResponse> getAccountByUserIdWithBalance(@PathVariable long id) throws NotFoundException, AccountWithoutMoneyException {
 		return ResponseEntity.ok(service.getAccountByUserIdWithBalance(id));
 	}
 
@@ -72,7 +74,7 @@ public class UserController {
     }
 	
 	@PostMapping("/{id}/addAccount/{accountId}")
-    public ResponseEntity<String> addAccountToUser(@PathVariable Long id, @PathVariable Long accountId) throws NotFoundException {
+    public ResponseEntity<String> addAccountToUser(@PathVariable Long id, @PathVariable Long accountId) throws NotFoundException, DisabledUserException {
         service.addAccountToUser(id, accountId);
         return ResponseEntity.ok("Added account " + accountId + " to user " +id);
     }

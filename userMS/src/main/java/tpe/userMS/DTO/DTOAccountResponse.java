@@ -12,11 +12,6 @@ public class DTOAccountResponse {
 		this.id = a.getId();
 		this.moneyBalance = a.getMoneyBalance();
 	}
-	public DTOAccountResponse(long id, int moneyBalance) {
-		super();
-		this.id = id;
-		this.moneyBalance = moneyBalance;
-	}
 	public long getId() {
 		return id;
 	}

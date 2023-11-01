@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GeneralExceptionHandler {
 	
+	@ExceptionHandler(DisabledUserException.class)
+	public ResponseEntity<String> handleDisabledUserException(DisabledUserException exception) {
+		return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+	
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<String> handleNotFoundException(NotFoundException exception) {
 		return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
