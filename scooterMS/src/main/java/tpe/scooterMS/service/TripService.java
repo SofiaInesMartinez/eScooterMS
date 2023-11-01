@@ -183,17 +183,18 @@ public class TripService {
 	
 	@Transactional
 	public TripResponseDTO saveTrip(TripRequestDTO request) throws NotFoundException, AccountWithoutMoneyException, ScooterUnavailableException, UserOnTripException {
-		Account account = webClientBuilder.build()
-				.get()
-				.uri("http://localhost:8003/account/user/" + request.getIdUser() + "/withBalance")
-				.retrieve()
-//				.onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-//					clientResponse.bodyToMono(AccountWithoutMoneyException.class).;
-//					throw new AccountWithoutMoneyException(request.getIdUser());
-//				})
-				.bodyToMono(Account.class)
-				.block();
-		
+		Account account = null;
+		try {
+			account = webClientBuilder.build()
+					.get()
+					.uri("http://localhost:8003/account/user/" + request.getIdUser() + "/withBalance")
+					.retrieve()
+					.bodyToMono(Account.class)
+					.block();
+		} catch (Exception e) {
+			throw new AccountWithoutMoneyException(request.getIdUser());
+		}
+			
 		Optional<Scooter> scooterOptional = scooterRepository.findById(request.getIdScooter());
 		Optional<Stop> stopOptional = stopRepository.findById(request.getIdOriginStop());
 		
@@ -203,7 +204,7 @@ public class TripService {
 		if (!stopOptional.isPresent()) {
 			throw new NotFoundException("Stop", request.getIdOriginStop());
 		}
-		if (account.getMoneyBalance() == 0) {
+		if (account.getMoneyBalance() == 0 || account == null) {
 			throw new AccountWithoutMoneyException(request.getIdUser());
 		}
 		
