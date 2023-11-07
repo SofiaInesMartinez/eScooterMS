@@ -15,8 +15,10 @@ public class MongoDbConfig {
 	@Bean
     MongoClient mongo() {
 		ConnectionString connectionString = new ConnectionString(
-				"mongodb://root:root@localhost:27017/maintenance?authSource=manager");
-				//"mongodb://somartinez:YK8nMub94Jhh7o90@localhost:27017/maintenance");
+				//"mongodb://root:root@localhost:27017/maintenance?authSource=manager");
+				//url provista en mongodb para conectarse
+				//"mongodb+srv://somartinez:YK8nMub94Jhh7o90@cluster0.ccilnwp.mongodb.net/?retryWrites=true&w=majority");
+				"mongodb://somartinez:YK8nMub94Jhh7o90@localhost:27017/maintenance");
 		MongoClientSettings mongoClientSettings = MongoClientSettings.builder().applyConnectionString(connectionString)
 				.build();
 
