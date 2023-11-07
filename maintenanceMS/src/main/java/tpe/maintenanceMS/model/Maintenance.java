@@ -5,11 +5,12 @@ import java.sql.Date;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 @SuppressWarnings("serial")
-@Entity
+@Document(collection = "maintenance")
 public class Maintenance implements Serializable {
 	
 	@Id

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -119,7 +120,7 @@ public class MaintenanceService {
 	
 	@Transactional
 	public DTOMaintenanceResponse save(DTOMaintenanceRequest request) throws NotFoundException, ScooterAlreadyInMaintenanceException {
-		Optional<Maintenance> activeMaintenance = repository.getActiveMaintenanceByIdScooter(request.getIdScooter());
+		Optional<Maintenance> activeMaintenance = repository.findByFinishDateIsNullAndIdScooter(request.getIdScooter());
 		if (activeMaintenance.isPresent()) {
 			throw new ScooterAlreadyInMaintenanceException(request.getIdScooter());
 		}
@@ -154,6 +155,6 @@ public class MaintenanceService {
 	
 	@Transactional ( readOnly = true )
 	public List<DTOMaintenanceResponse> getMaintenancesBySimpleOrdering() {
-		return repository.getMaintenancesBySimpleOrdering().stream().map( DTOMaintenanceResponse::new ).toList();
+		return repository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream().map( DTOMaintenanceResponse::new ).toList();
 	}
 }

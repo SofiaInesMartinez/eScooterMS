@@ -3,24 +3,18 @@ package tpe.maintenanceMS.repository;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import tpe.maintenanceMS.model.Maintenance;
 
 @Repository("maintenanceRepository")
-public interface MaintenanceRepository extends JpaRepository<Maintenance, Long>{
-	@Query("SELECT m FROM Maintenance m WHERE m.id = :id")
-	public Maintenance getMaintenanceById(@Param("id")long id);
+public interface MaintenanceRepository extends MongoRepository<Maintenance, Long> {
 
-	@Query("SELECT m FROM Maintenance m ORDER BY m.id DESC")
-	public List<Maintenance> getMaintenancesBySimpleOrdering();
+	Maintenance getMaintenanceById(long id);
+
+	List<Maintenance> findAll(Sort sort);
 	
-	@Query("SELECT m"
-			+ " FROM Maintenance m"
-			+ " WHERE m.finishDate IS NULL"
-			+ " AND m.idScooter = :idScooter")
-	public Optional<Maintenance> getActiveMaintenanceByIdScooter(@Param("idScooter") long idScooter);
+	Optional<Maintenance> findByFinishDateIsNullAndIdScooter(long idScooter);
 }
