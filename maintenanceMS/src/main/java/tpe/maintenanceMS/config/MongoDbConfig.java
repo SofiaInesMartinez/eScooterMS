@@ -12,19 +12,18 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 //@EnableMongoRepositories(basePackages = "tpe.maintenance.authservice.repository.mongodb")
 public class MongoDbConfig {
 
-	@Bean
-    MongoClient mongo() {
-		ConnectionString connectionString = new ConnectionString(
-				"mongodb://root:root@localhost:27017/maintenance?authSource=manager");
+    @Bean
+    public MongoClient mongo() {
+        ConnectionString connectionString = new ConnectionString("mongodb://root:root@localhost:27017/maintenance?authSource=admin");
+        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+                .applyConnectionString(connectionString)
+                .build();
 
-		MongoClientSettings mongoClientSettings = MongoClientSettings.builder().applyConnectionString(connectionString)
-				.build();
+        return MongoClients.create(mongoClientSettings);
+    }
 
-		return MongoClients.create(mongoClientSettings);
-	}
-
-	@Bean
-	MongoTemplate mongoTemplate() throws Exception {
-		return new MongoTemplate(mongo(), "maintenance");
-	}
+    @Bean
+    public MongoTemplate mongoTemplate() throws Exception {
+        return new MongoTemplate(mongo(), "maintenance");
+    }
 }

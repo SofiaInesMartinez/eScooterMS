@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,13 +14,9 @@ public class Maintenance implements Serializable {
 	
 	@Id
 	private long id;
-	@Column(nullable=false)
 	private String description;
-	@Column(nullable = false)
 	private Date startDate;
-	@Column(nullable = true)
 	private Date finishDate;
-	@Column(name = "id_scooter")
 	private long idScooter;
 	
 	public Maintenance() {
