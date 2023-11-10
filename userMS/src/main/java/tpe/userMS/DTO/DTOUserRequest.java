@@ -14,6 +14,10 @@ public class DTOUserRequest {
 	@NotNull(message = "email shouldn't be null")
 	@NotEmpty(message = "email shouldn't be empty")
 	private String email;
+	
+	@NotNull(message = "password shouldn't be null")
+	@NotEmpty(message = "password shouldn't be empty")
+	private String password;
 
 	@NotNull(message = "name shouldn't be null")
 	@NotEmpty(message = "name shouldn't be empty")
@@ -31,11 +35,12 @@ public class DTOUserRequest {
 	private int role;
 	
 
-	public DTOUserRequest(long id, int phone, String email, String name, String surname, String username, int role) {
+	public DTOUserRequest(long id, int phone, String email, String password, String name, String surname, String username, int role) {
 		super();
 		this.id = id;
 		this.phone = phone;
 		this.email = email;
+		this.password = password;
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
@@ -64,6 +69,14 @@ public class DTOUserRequest {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getName() {

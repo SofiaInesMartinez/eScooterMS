@@ -26,6 +26,8 @@ public class User implements Serializable{
 	@Column(nullable=false)
 	private String email;
 	@Column(nullable=false)
+	private String password;
+	@Column(nullable=false)
 	private String name;
 	@Column(nullable=false)
 	private String surname;
@@ -48,11 +50,12 @@ public class User implements Serializable{
 	public User() {
 		super();
 	}
-	public User(long id, int phone, String email, String name, String surname, String username, int role) {
+	public User(long id, int phone, String email, String password, String name, String surname, String username, int role) {
 		super();
 		this.id = id;
 		this.phone = phone;
 		this.email = email;
+		this.password = password;
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
@@ -77,6 +80,12 @@ public class User implements Serializable{
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	public String getName() {
 		return name;

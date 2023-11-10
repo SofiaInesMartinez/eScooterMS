@@ -80,7 +80,7 @@ public class UserService {
 
 	@Transactional
 	public DTOUserResponse save(@Valid DTOUserRequest request) {
-		User user = new User(request.getId(), request.getPhone(), request.getEmail(), request.getName(),
+		User user = new User(request.getId(), request.getPhone(), request.getEmail(), request.getPassword(), request.getName(),
 				request.getSurname(), request.getUsername(), request.getRole());
 		user = repository.save(user);
 		return new DTOUserResponse(user);
