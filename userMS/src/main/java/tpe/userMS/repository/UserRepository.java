@@ -17,6 +17,12 @@ import tpe.userMS.model.User;
 @Repository("userRepository")
 public interface UserRepository extends JpaRepository<User, Long>{
 	
+	@Query("SELECT CASE WHEN EXISTS("
+			+ "SELECT 1"
+			+ " FROM User u"
+			+ " WHERE u.email = :email)")
+	public boolean existsUserByEmail(@Param("email") String email);
+	
 	@Query("SELECT a"
 			+ " FROM User u"
 			+ " JOIN u.accounts a"

@@ -41,16 +41,17 @@ public class User implements Serializable{
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "accountId"))
 	private List<Account> accounts;
-	@Column(nullable = false)
-	private int role;
 	
-	
-	
+	@ManyToMany
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+	private List<Role> roles;
 	
 	public User() {
 		super();
 	}
-	public User(long id, int phone, String email, String password, String name, String surname, String username, int role) {
+	public User(long id, int phone, String email, String password, String name, String surname, String username, List<Role> roles) {
 		super();
 		this.id = id;
 		this.phone = phone;
@@ -59,9 +60,9 @@ public class User implements Serializable{
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
-		this.role = role;
+		this.roles = roles;
 		this.accounts = new ArrayList<>();
-		this.status = 3;
+		this.status = 1;
 	}
 	public long getId() {
 		return id;
@@ -108,25 +109,23 @@ public class User implements Serializable{
 	
 	
 	
-public List<Account> getAccounts() {
+	public List<Account> getAccounts() {
 		return accounts;
 	}
 	public void setAccounts(List<Account> accounts) {
 		this.accounts = accounts;
 	}
 
-
-	public Integer getRole() {
-		return role;
-	}
-	public void setRole(int role) {
-		this.role = role;
-	}
 	public void setId(long id) {
 		this.id = id;
 	}
 	
-	
+	public List<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
 	public Integer getStatus() {
 		return status;
 	}

@@ -1,23 +1,19 @@
 package tpe.administrationMS.config;
 
-import tpe.administrationMS.model.Role;
+import tpe.administrationMS.model.Roles;
 import tpe.administrationMS.security.JwtConfigurer;
 import tpe.administrationMS.security.TokenProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpMethod;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
@@ -27,15 +23,6 @@ public class SecurityConfiguration {
 
 	@Autowired
     private TokenProvider tokenProvider;
-
-
-    /**
-     * Password encoder
-     */
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public SecurityFilterChain filterChain( HttpSecurity http ) throws Exception {
@@ -50,7 +37,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/api/register").permitAll()
                     .requestMatchers("/api/prueba").authenticated()
                     .requestMatchers(HttpMethod.GET, "/api/producto/**").authenticated()
-                    .requestMatchers(HttpMethod.POST, "/api/producto").hasAuthority(Role.ADMIN)
+                    .requestMatchers(HttpMethod.POST, "/api/producto").hasAuthority(Roles.ADMIN)
             )
             .anonymous( AbstractHttpConfigurer::disable )
             .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );

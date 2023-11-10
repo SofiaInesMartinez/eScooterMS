@@ -20,9 +20,11 @@ import tpe.userMS.DTO.DTOScooterResponse;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
 import tpe.userMS.DTO.DTOUserStatusRequest;
+import tpe.userMS.DTO.InvalidRolesRequestException;
 import tpe.userMS.exception.AccountWithoutMoneyException;
 import tpe.userMS.exception.DisabledUserException;
 import tpe.userMS.exception.NotFoundException;
+import tpe.userMS.exception.UserWithEmailAlreadyExistsException;
 import tpe.userMS.service.UserService;
 
 @RestController
@@ -57,7 +59,7 @@ public class UserController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<DTOUserResponse> saveUser(@RequestBody @Valid DTOUserRequest request) {
+	public ResponseEntity<DTOUserResponse> saveUser(@RequestBody @Valid DTOUserRequest request) throws UserWithEmailAlreadyExistsException, InvalidRolesRequestException {
 		return ResponseEntity.ok(service.save(request));
 	}
 

@@ -1,5 +1,7 @@
 package tpe.userMS.DTO;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -30,12 +32,13 @@ public class DTOUserRequest {
 	@NotNull(message = "username shouldn't be null")
 	@NotEmpty(message = "username shouldn't be empty")
 	private String username;
-
-	@NotNull(message = "role shouldn't be null")
-	private int role;
+	
+	@NotNull(message = "roles shouldn't be null")
+	@NotEmpty(message = "roles shouldn't be empty")
+	private List<String> roles;
 	
 
-	public DTOUserRequest(long id, int phone, String email, String password, String name, String surname, String username, int role) {
+	public DTOUserRequest(long id, int phone, String email, String password, String name, String surname, String username, List<String> roles) {
 		super();
 		this.id = id;
 		this.phone = phone;
@@ -44,7 +47,7 @@ public class DTOUserRequest {
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
-		this.role = role;
+		this.roles = roles;
 	}
 
 	public long getId() {
@@ -103,12 +106,11 @@ public class DTOUserRequest {
 		this.username = username;
 	}
 
-	public Integer getRole() {
-		return role;
+	public List<String> getRoles() {
+		return roles;
 	}
 
-	public void setRole(int role) {
-		this.role = role;
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
-
 }

@@ -6,23 +6,28 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import jakarta.validation.Valid;
 import tpe.userMS.DTO.DTOAccountResponse;
 import tpe.userMS.DTO.DTOAccountUserStatusResponse;
 import tpe.userMS.DTO.DTOScooterResponse;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
 import tpe.userMS.DTO.DTOUserStatusRequest;
+import tpe.userMS.DTO.InvalidRolesRequestException;
 import tpe.userMS.exception.AccountWithoutMoneyException;
 import tpe.userMS.exception.DisabledUserException;
 import tpe.userMS.exception.NotFoundException;
+import tpe.userMS.exception.RoleWithNameNotFoundException;
+import tpe.userMS.exception.UserWithEmailAlreadyExistsException;
 import tpe.userMS.model.Account;
+import tpe.userMS.model.Role;
 import tpe.userMS.model.User;
 import tpe.userMS.repository.AccountRepository;
+import tpe.userMS.repository.RoleRepository;
 import tpe.userMS.repository.UserRepository;
 
 @Service("userService")
@@ -33,7 +38,11 @@ public class UserService {
 	@Autowired
 	private AccountRepository accountRepository;
 	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
 	private WebClient restClient;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Transactional(readOnly = true)
 	public List<DTOScooterResponse> getNearbyScooters(double latitude, double longitude) {
@@ -78,13 +87,43 @@ public class UserService {
 		return repository.findAll().stream().map(DTOUserResponse::new).toList();
 	}
 
+//	@Transactional
+//	public DTOUserResponse save(@Valid DTOUserRequest request) {
+//		User user = new User(request.getId(), request.getPhone(), request.getEmail(), request.getPassword(), request.getName(),
+//				request.getSurname(), request.getUsername(), request.getRole());
+//		user = repository.save(user);
+//		return new DTOUserResponse(user);
+//	}
+	
 	@Transactional
-	public DTOUserResponse save(@Valid DTOUserRequest request) {
-		User user = new User(request.getId(), request.getPhone(), request.getEmail(), request.getPassword(), request.getName(),
-				request.getSurname(), request.getUsername(), request.getRole());
-		user = repository.save(user);
-		return new DTOUserResponse(user);
-	}
+	public DTOUserResponse save(DTOUserRequest request) throws UserWithEmailAlreadyExistsException, InvalidRolesRequestException {
+        if( this.repository.existsUserByEmail(request.getEmail())) {
+        	throw new UserWithEmailAlreadyExistsException(request.getEmail());
+        }
+        
+        // Devuelve null cuando alguno de los roles indicados en el request no existen 
+        List<Role> roles = request.getRoles().stream().map(name ->
+        	{
+				try {
+					return roleRepository.findByName(name)
+						.orElseThrow(() -> new RoleWithNameNotFoundException(name));
+				} catch (RoleWithNameNotFoundException e) {
+					e.printStackTrace();
+					return null;
+				}
+			}
+        ).toList();
+        
+        if (roles.contains(null)) {
+        	throw new InvalidRolesRequestException();
+        }
+        
+        String encryptedPassword = passwordEncoder.encode(request.getPassword());
+        User user = new User(request.getId(), request.getPhone(), request.getEmail(), encryptedPassword, request.getName(), request.getSurname(), request.getUsername(), roles);
+        
+        User createdUser = repository.save(user);
+        return new DTOUserResponse(createdUser);
+    }
 
 	@Transactional(readOnly = true)
 	public DTOUserResponse getUserById(long id) throws NotFoundException {

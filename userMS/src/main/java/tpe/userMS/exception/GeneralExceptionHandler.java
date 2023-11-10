@@ -10,8 +10,30 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import tpe.userMS.DTO.InvalidRolesRequestException;
+
 @RestControllerAdvice
 public class GeneralExceptionHandler {
+	
+	@ExceptionHandler(InvalidRolesRequestException.class)
+	public ResponseEntity<String> handleInvalidRolesRequestException(InvalidRolesRequestException exception) {
+		return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(RoleWithNameNotFoundException.class)
+	public ResponseEntity<String> handleRoleWithNameNotFoundException(RoleWithNameNotFoundException exception) {
+		return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(RoleWithNameAlreadyExistsException.class)
+	public ResponseEntity<String> handleRoleWithNameAlreadyExistsException(RoleWithNameAlreadyExistsException exception) {
+		return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(UserWithEmailAlreadyExistsException.class)
+	public ResponseEntity<String> handleUserWithEmailAlreadyExistsException(UserWithEmailAlreadyExistsException exception) {
+		return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 	
 	@ExceptionHandler(DisabledUserException.class)
 	public ResponseEntity<String> handleDisabledUserException(DisabledUserException exception) {
