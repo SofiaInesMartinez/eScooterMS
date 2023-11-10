@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
@@ -23,6 +25,11 @@ public class SecurityConfiguration {
 
 	@Autowired
     private TokenProvider tokenProvider;
+	
+	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
     @Bean
     public SecurityFilterChain filterChain( HttpSecurity http ) throws Exception {
@@ -33,11 +40,12 @@ public class SecurityConfiguration {
             .csrf( AbstractHttpConfigurer::disable )
             // MANEJAMOS LOS PERMISOS A LOS ENDPOINTS.
             .authorizeHttpRequests( auth -> auth
-                    .requestMatchers("/api/authenticate").permitAll() //CAMBIAR TODODS
-                    .requestMatchers("/api/register").permitAll()
-                    .requestMatchers("/api/prueba").authenticated()
-                    .requestMatchers(HttpMethod.GET, "/api/producto/**").authenticated()
-                    .requestMatchers(HttpMethod.POST, "/api/producto").hasAuthority(Roles.ADMIN)
+            		.requestMatchers("/**").permitAll()
+//                    .requestMatchers("/api/authenticate").permitAll() //CAMBIAR TODODS
+//                    .requestMatchers("/api/register").permitAll()
+//                    .requestMatchers("/api/prueba").authenticated()
+//                    .requestMatchers(HttpMethod.GET, "/api/producto/**").authenticated()
+//                    .requestMatchers(HttpMethod.POST, "/api/producto").hasAuthority(Roles.ADMIN)
             )
             .anonymous( AbstractHttpConfigurer::disable )
             .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );

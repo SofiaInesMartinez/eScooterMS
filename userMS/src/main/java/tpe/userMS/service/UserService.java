@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -41,8 +40,6 @@ public class UserService {
 	private RoleRepository roleRepository;
 	@Autowired
 	private WebClient restClient;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 	
 	@Transactional(readOnly = true)
 	public List<DTOScooterResponse> getNearbyScooters(double latitude, double longitude) {
@@ -118,8 +115,9 @@ public class UserService {
         	throw new InvalidRolesRequestException();
         }
         
-        String encryptedPassword = passwordEncoder.encode(request.getPassword());
-        User user = new User(request.getId(), request.getPhone(), request.getEmail(), encryptedPassword, request.getName(), request.getSurname(), request.getUsername(), roles);
+//        String encryptedPassword = passwordEncoder.encode(request.getPassword());
+//        User user = new User(request.getId(), request.getPhone(), request.getEmail(), encryptedPassword, request.getName(), request.getSurname(), request.getUsername(), roles);
+        User user = new User(request.getId(), request.getPhone(), request.getEmail(), request.getPassword(), request.getName(), request.getSurname(), request.getUsername(), roles);
         
         User createdUser = repository.save(user);
         return new DTOUserResponse(createdUser);
