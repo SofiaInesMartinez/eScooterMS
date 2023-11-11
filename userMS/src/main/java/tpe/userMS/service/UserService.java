@@ -5,13 +5,17 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import tpe.userMS.DTO.DTOAccountResponse;
 import tpe.userMS.DTO.DTOAccountUserStatusResponse;
+import tpe.userMS.DTO.DTOEncodeRequest;
 import tpe.userMS.DTO.DTOScooterResponse;
 import tpe.userMS.DTO.DTOUserRequest;
 import tpe.userMS.DTO.DTOUserResponse;
@@ -117,7 +121,16 @@ public class UserService {
         
 //        String encryptedPassword = passwordEncoder.encode(request.getPassword());
 //        User user = new User(request.getId(), request.getPhone(), request.getEmail(), encryptedPassword, request.getName(), request.getSurname(), request.getUsername(), roles);
-        User user = new User(request.getId(), request.getPhone(), request.getEmail(), request.getPassword(), request.getName(), request.getSurname(), request.getUsername(), roles);
+        DTOEncodeRequest encodeRequest = new DTOEncodeRequest(request.getPassword());
+        String encryptedPassword =  restClient
+				.method(HttpMethod.PUT)
+				.uri("http://localhost:8005/administration/encode")
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.body(BodyInserters.fromValue(encodeRequest))
+				.retrieve()
+				.bodyToMono(String.class)
+				.block();
+        User user = new User(request.getId(), request.getPhone(), request.getEmail(), encryptedPassword, request.getName(), request.getSurname(), request.getUsername(), roles);
         
         User createdUser = repository.save(user);
         return new DTOUserResponse(createdUser);
