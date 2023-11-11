@@ -1,5 +1,20 @@
 # TPEArqui
 
+OPEN API docs:
+
+ScooterMs
+http://localhost:8002/swagger-ui/index.html
+
+UserMs
+http://localhost:8003/swagger-ui/index.html
+
+MaintenanceMs
+http://localhost:8004/swagger-ui/index.html
+
+AdministrationMs
+http://localhost:8005/swagger-ui/index.html
+
+
 #API Rest - Endpoints and ports
 
 1. Un primer análisis del problema reveló las siguientes funcionalidades (si bien podrían existir otras funcionalidades no detectadas, o variaciones de las planteadas):  
