@@ -49,6 +49,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+        <dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-api</artifactId>
+		    <!-- Asegúrate de utilizar la versión más reciente de JUnit 5 -->
+		    <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-core</artifactId>
+		     <!-- Asegúrate de utilizar la versión más reciente de Mockito -->
+		    <scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

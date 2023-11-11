@@ -51,7 +51,7 @@ public class StopController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteScooter(@PathVariable long id) throws NotFoundException {
+	public ResponseEntity<String> deleteStop(@PathVariable long id) throws NotFoundException {
         service.deleteStop(id);
         return ResponseEntity.ok("Stop con ID " + id + " eliminada con éxito.");
 	}
