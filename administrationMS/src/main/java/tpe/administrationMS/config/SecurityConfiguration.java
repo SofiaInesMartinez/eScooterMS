@@ -40,7 +40,7 @@ public class SecurityConfiguration {
             .csrf( AbstractHttpConfigurer::disable )
             // MANEJAMOS LOS PERMISOS A LOS ENDPOINTS.
             .authorizeHttpRequests( auth -> auth
-            		.requestMatchers("/**").permitAll()
+            		.requestMatchers("/administration/**").permitAll()
 //                    .requestMatchers("/api/authenticate").permitAll() //CAMBIAR TODODS
 //                    .requestMatchers("/api/register").permitAll()
 //                    .requestMatchers("/api/prueba").authenticated()

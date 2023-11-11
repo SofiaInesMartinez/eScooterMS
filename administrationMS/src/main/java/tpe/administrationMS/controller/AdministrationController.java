@@ -5,9 +5,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +25,14 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.Valid;
 import reactor.core.publisher.Mono;
 import tpe.administrationMS.DTO.DTOUserResponse;
 import tpe.administrationMS.DTO.DTOUserStatusRequest;
+import tpe.administrationMS.security.JWTFilter;
+import tpe.administrationMS.security.TokenProvider;
 import tpe.administrationMS.DTO.DTOStopRequest;
 import tpe.administrationMS.DTO.DTOScooterStatusRequest;
 import tpe.administrationMS.DTO.DTOStopResponse;
@@ -32,6 +41,7 @@ import tpe.administrationMS.DTO.DTOTariffResponse;
 import tpe.administrationMS.DTO.DTOScooterByKm;
 import tpe.administrationMS.DTO.DTOScooterRequest;
 import tpe.administrationMS.DTO.DTOScooterResponse;
+import tpe.administrationMS.DTO.DTOAuthRequest;
 import tpe.administrationMS.DTO.DTOInvoicedAmountResponse;
 
 @RestController
@@ -39,13 +49,34 @@ import tpe.administrationMS.DTO.DTOInvoicedAmountResponse;
 public class AdministrationController {
 
 	@Autowired
-	private final WebClient restClient;
-
-	public AdministrationController(@Qualifier("restClient") WebClient restClient) {
-		this.restClient = restClient;
+	private WebClient restClient;
+	
+	@Autowired
+	private TokenProvider tokenProvider;
+	
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+	
+	public AdministrationController(AuthenticationManagerBuilder authenticationManagerBuilder) {
+		this.authenticationManagerBuilder = authenticationManagerBuilder;
 	}
+	
+//	public AdministrationController(@Qualifier("restClient") WebClient restClient) {
+//		this.restClient = restClient;
+//	}
 
 /// USER SERVICES
+	
+	@PostMapping("/authenticate")
+    public ResponseEntity<JWTToken> authenticate( @Valid @RequestBody DTOAuthRequest request ) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken( request.getEmail(), request.getPassword() );
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final var jwt = tokenProvider.createToken (authentication );
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add( JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt );
+        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+    }
 	
 	@GetMapping("/user")
 	public Mono<ResponseEntity<?>> getUsers() {
@@ -194,5 +225,22 @@ public class AdministrationController {
 			return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage()));
 		}
 	}
+	
+	static class JWTToken {
+        private String idToken;
+
+        JWTToken(String idToken) {
+            this.idToken = idToken;
+        }
+
+        @JsonProperty("id_token")
+        String getIdToken() {
+            return idToken;
+        }
+
+        void setIdToken(String idToken) {
+            this.idToken = idToken;
+        }
+    }
 
 }
