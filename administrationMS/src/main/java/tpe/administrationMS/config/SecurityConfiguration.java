@@ -42,7 +42,6 @@ public class SecurityConfiguration {
             .authorizeHttpRequests( auth -> auth
             		.requestMatchers("/administration/authenticate").permitAll()
             		.requestMatchers("/administration/encode").permitAll()
-            		.requestMatchers("/administration/hola").permitAll()
             )
             .anonymous( AbstractHttpConfigurer::disable )
             .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );

@@ -13,9 +13,12 @@ spring:
        - id: administrationMS
          uri: http://localhost:8005
          predicates:
-           - Path=/administration/**
+            - Path=/administration/**
          filters:
-           - AuthenticationFilter
+            - name: AuthenticationFilter
+              args:
+                roles: "ADMIN"
+            
            
            
        - id: userMS

@@ -1,15 +1,13 @@
 package tpe.APIGateway.filter;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import tpe.APIGateway.DTO.DTOValidateToken;
 import tpe.APIGateway.util.JwtUtil;
 
 @Component
@@ -17,9 +15,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
     @Autowired
     private RouteValidator validator;
-    
-//    @Autowired
-//    private WebClient.Builder webClientBuilder;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -42,25 +37,34 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     authHeader = authHeader.substring(7);
                 }
                 try {
-//                    //REST call to AUTH service
-//                    template.getForObject("http://IDENTITY-SERVICE//validate?token" + authHeader, String.class);
-//                	boolean response = webClientBuilder.build()
-//	                	.post()
-//						.uri("http://localhost:8005/administration/validate")
-//						.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//						.body(BodyInserters.fromValue(new DTOValidateToken(authHeader)))
-//						.retrieve()
-//						.bodyToMono(Boolean.class)
-//						.block();
-                    jwtUtil.validateToken(authHeader);
-                    
-//                    if (!response) {
-//                    	throw new RuntimeException("un authorized access to application");
-//                    }
-
+					// Validate the token
+					jwtUtil.validateToken(authHeader);
+					
+					// Extract roles from the token
+					List<String> userRoles = jwtUtil.extractRoles(authHeader);
+					 
+					// Check if the user has the required role (e.g., "ADMIN")
+					if (!config.getRoles().isEmpty()) {
+						if (userRoles.isEmpty()) {
+							throw new RuntimeException("User does not have the required role for access");
+						}
+						
+						boolean containsRequiredRole = false;
+						int i = 0;
+						while (!containsRequiredRole && i < userRoles.size()) {
+							if (config.getRoles().contains(userRoles.get(i))) {
+								containsRequiredRole = true;
+							}
+							i++;
+						}
+						
+						if (!containsRequiredRole) {
+							throw new RuntimeException("User does not have the required role for access");
+						}
+					}
                 } catch (Exception e) {
                     System.out.println("invalid access...!");
-                    throw new RuntimeException("un authorized access to application");
+                    throw new RuntimeException("unauthorized access to application");
                 }
             }
             return chain.filter(exchange);
@@ -68,6 +72,14 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     }
 
     public static class Config {
+    	private String roles = ""; // Valor por defecto si no se especifica un valor en el application.yml
 
+		public String getRoles() {
+			return roles;
+		}
+
+		public void setRoles(String roles) {
+			this.roles = roles;
+		}
     }
 }
