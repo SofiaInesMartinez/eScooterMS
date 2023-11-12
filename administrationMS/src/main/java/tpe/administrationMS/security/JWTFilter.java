@@ -28,16 +28,22 @@ public class JWTFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     
-    @Autowired
+//    @Autowired
+//    private TokenProvider tokenProvider;
+    
     private TokenProvider tokenProvider;
+    
+    public JWTFilter(TokenProvider tokenProvider) {
+    	this.tokenProvider = tokenProvider;
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String jwt = this.getToken( httpServletRequest );
+        String jwt = getToken( httpServletRequest );
         try {
-            if ( StringUtils.hasText( jwt ) && this.tokenProvider.validateToken( jwt ) ) {
-                Authentication authentication = this.tokenProvider.getAuthentication( jwt );
+            if ( StringUtils.hasText( jwt ) && tokenProvider.validateToken( jwt ) ) {
+                Authentication authentication = tokenProvider.getAuthentication( jwt );
                 SecurityContextHolder.getContext().setAuthentication( authentication );
             }
         } catch ( ExpiredJwtException e ) { // Manejo el token expirado
@@ -70,7 +76,7 @@ public class JWTFilter extends GenericFilterBean {
             try {
                 return new ObjectMapper().writeValueAsString(this);
             } catch (RuntimeException | JsonProcessingException ex ) {
-                return String.format("{ message: %s }", this.message );
+                return String.format("{ message: %s }", message );
             }
         }
     }

@@ -40,14 +40,9 @@ public class SecurityConfiguration {
             .csrf( AbstractHttpConfigurer::disable )
             // MANEJAMOS LOS PERMISOS A LOS ENDPOINTS.
             .authorizeHttpRequests( auth -> auth
-//            		.requestMatchers("/administration/**").permitAll()
             		.requestMatchers("/administration/authenticate").permitAll()
             		.requestMatchers("/administration/encode").permitAll()
-//                    .requestMatchers("/api/authenticate").permitAll() //CAMBIAR TODODS
-//                    .requestMatchers("/api/register").permitAll()
-//                    .requestMatchers("/api/prueba").authenticated()
-//                    .requestMatchers(HttpMethod.GET, "/api/producto/**").authenticated()
-//                    .requestMatchers(HttpMethod.POST, "/api/producto").hasAuthority(Roles.ADMIN)
+            		.requestMatchers("/administration/hola").permitAll()
             )
             .anonymous( AbstractHttpConfigurer::disable )
             .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );
@@ -60,7 +55,7 @@ public class SecurityConfiguration {
      * Nuestra configuracion de JWT.
      */
     private JwtConfigurer securityConfigurerAdapter() {
-        return new JwtConfigurer();
+        return new JwtConfigurer(tokenProvider);
     }
 
 

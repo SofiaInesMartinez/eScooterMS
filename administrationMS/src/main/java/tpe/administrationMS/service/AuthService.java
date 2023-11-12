@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tpe.administrationMS.DTO.DTOAuthRequest;
 import tpe.administrationMS.DTO.DTOAuthResponse;
 import tpe.administrationMS.DTO.DTOEncodeRequest;
+import tpe.administrationMS.DTO.DTOValidateToken;
 import tpe.administrationMS.model.JWTToken;
 import tpe.administrationMS.security.JWTFilter;
 import tpe.administrationMS.security.TokenProvider;
@@ -46,5 +47,9 @@ public class AuthService {
 	
 	public String encodePassword(DTOEncodeRequest request) {
 		return passwordEncoder.encode(request.getPassword());
+	}
+	
+	public boolean validate(DTOValidateToken request) {
+		return tokenProvider.validateToken(request.getToken());
 	}
 }
