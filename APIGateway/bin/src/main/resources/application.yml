@@ -1,0 +1,48 @@
+spring:
+ cloud:
+   gateway:
+     routes:
+       - id: APIGateway
+         uri: http://localhost:8001
+         predicates:
+           - Path=/APIGateway/**
+         filters:
+           - AuthenticationFilter
+
+
+       - id: administrationMS
+         uri: http://localhost:8005
+         predicates:
+            - Path=/administration/**
+         filters:
+            - name: AuthenticationFilter
+              args:
+                roles: "ADMIN"
+            
+           
+           
+       - id: userMS
+         uri: http://localhost:8003
+         predicates:
+           - Path=/user/**
+         filters:
+           - AuthenticationFilter
+           
+           
+       - id: scooterMS
+         uri: http://localhost:8002
+         predicates:
+           - Path=/scooter/**
+         filters:
+           - AuthenticationFilter
+           
+           
+       - id: maintenanceMS
+         uri: http://localhost:8004
+         predicates:
+           - Path=/maintenance/**
+         filters:
+           - AuthenticationFilter
+
+ application:
+   name: APIGateway

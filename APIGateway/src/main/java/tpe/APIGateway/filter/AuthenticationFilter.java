@@ -10,9 +10,13 @@ import org.springframework.stereotype.Component;
 
 import tpe.APIGateway.util.JwtUtil;
 
+//PARA REUBICAR CLASE. NO SE USARÍA EN EL API GATEWAY 
+
+/*
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
+	
     @Autowired
     private RouteValidator validator;
 
@@ -82,4 +86,4 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 			this.roles = roles;
 		}
     }
-}
+}*/

@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.function.Predicate;
 
-@Component
+//VER SI QUEDA ESTA CLASE O Route.reouteConfig
+
+/*@Component
 public class RouteValidator {
 
     public static final List<String> openApiEndpoints = List.of(
@@ -20,3 +22,4 @@ public class RouteValidator {
                     .noneMatch(uri -> request.getURI().getPath().contains(uri));
 
 }
+*/
