@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 public class MongoDbConfig {
 
     @Bean
-    public MongoClient mongo() {
+    MongoClient mongo() {
         ConnectionString connectionString = new ConnectionString("mongodb://root:root@localhost:27017/maintenance?authSource=admin");
         MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
@@ -23,7 +23,7 @@ public class MongoDbConfig {
     }
 
     @Bean
-    public MongoTemplate mongoTemplate() throws Exception {
+    MongoTemplate mongoTemplate() throws Exception {
         return new MongoTemplate(mongo(), "maintenance");
     }
 }
