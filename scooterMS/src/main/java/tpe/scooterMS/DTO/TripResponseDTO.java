@@ -23,6 +23,22 @@ public class TripResponseDTO {
 		this.startDate = trip.getStartDate();
 		this.endDate = trip.getEndDate();
 	}
+	
+	
+
+	public TripResponseDTO(long idTrip, long idUser, long idScooter, float kms, float amount, Date startDate,
+			Date endDate) {
+		super();
+		this.idTrip = idTrip;
+		this.idUser = idUser;
+		this.idScooter = idScooter;
+		this.kms = kms;
+		this.amount = amount;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
+
 
 	public long getIdTrip() {
 		return idTrip;

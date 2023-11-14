@@ -21,6 +21,16 @@ public class TariffResponseDTO {
 		this.extra = tariff.getExtra();
 		this.startDate = tariff.getStartDate();
 	}
+	
+	
+
+	public TariffResponseDTO(int idTariff, float normal, float extra, Date startDate) {
+		super();
+		this.idTariff = idTariff;
+		this.normal = normal;
+		this.extra = extra;
+		this.startDate = startDate;
+	}
 
 	public int getIdTariff() {
 		return idTariff;

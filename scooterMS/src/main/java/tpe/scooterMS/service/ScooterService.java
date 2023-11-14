@@ -62,7 +62,7 @@ public class ScooterService {
 	
 	@Transactional
 	public DTOScooterResponse save(DTOScooterRequest request) {
-		Scooter scooter = new Scooter(request.getId(),request.getLastMaintenanceDate(),request.getKilometers(), request.getLatitude(), request.getLongitude());
+		Scooter scooter = new Scooter(request.getId(),request.getLastMaintenanceDate(),request.getKilometers(), request.getLatitude(), request.getLongitude());		
 		scooter = repository.save(scooter);
 		return new DTOScooterResponse(scooter);
 	}
