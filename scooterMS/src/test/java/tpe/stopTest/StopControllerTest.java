@@ -29,14 +29,14 @@ public class StopControllerTest {
 
     @Test
     public void testSaveStop() {
-        DTOStopRequest request = new DTOStopRequest(1, 0, 40.0, -74.0); // Ajusta los valores según tus necesidades.
-        DTOStopResponse expectedResponse = new DTOStopResponse(1, 40.0, -74.0); // Ajusta los valores según tus necesidades.
+        DTOStopRequest request = new DTOStopRequest(1, 0, 40.0, -74.0); 
+        DTOStopResponse expectedResponse = new DTOStopResponse(1, 40.0, -74.0); 
+        
         when(service.save(request)).thenReturn(expectedResponse);
-
-        // Act
+        
         ResponseEntity<DTOStopResponse> responseEntity = controller.saveStop(request);
-
-        // Assert
+        System.out.println(responseEntity);
+        
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expectedResponse, responseEntity.getBody());
     }
@@ -44,13 +44,11 @@ public class StopControllerTest {
     @Test
     public void testGetStopById() throws NotFoundException {
         long stopId = 1;
-        DTOStopResponse expectedResponse = new DTOStopResponse(stopId, 40.0, -74.0); // Ajusta los valores según tus necesidades.
+        DTOStopResponse expectedResponse = new DTOStopResponse(stopId, 40.0, -74.0);
         when(service.getStopById(stopId)).thenReturn(expectedResponse);
 
-        // Act
         ResponseEntity<DTOStopResponse> responseEntity = controller.getStopById(stopId);
 
-        // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expectedResponse, responseEntity.getBody());
     }
@@ -65,7 +63,6 @@ public class StopControllerTest {
 
         ResponseEntity<List<DTOStopResponse>> responseEntity = controller.getStopsBySimpleOrdering();
 
-        // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expectedResponse, responseEntity.getBody());
     }
@@ -74,17 +71,13 @@ public class StopControllerTest {
     public void testDeleteStop() throws NotFoundException {
         long stopId = 1;
 
-        // Configura el comportamiento del servicio al llamar al método deleteStop con el ID proporcionado
         doNothing().when(service).deleteStop(stopId);
 
-        // Act
         ResponseEntity<String> responseEntity = controller.deleteStop(stopId);
 
-        // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("Stop con ID " + stopId + " eliminada con éxito.", responseEntity.getBody());
 
-        // Verifica que el servicio deleteStop fue invocado exactamente una vez con el ID proporcionado
         verify(service, times(1)).deleteStop(stopId);
     }
     
@@ -93,19 +86,16 @@ public class StopControllerTest {
         List<DTOStopResponse> stopList = Arrays.asList(
                 new DTOStopResponse(1, 40.0, -74.0),
                 new DTOStopResponse(2, 41.0, -75.0)
-                // Agrega más elementos según sea necesario
         );
 
-        // Configura el comportamiento del servicio al llamar al método findAll
+
         when(service.findAll()).thenReturn(stopList);
 
         ResponseEntity<List<DTOStopResponse>> responseEntity = controller.getStop();
 
-        // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(stopList, responseEntity.getBody());
 
-        // Verifica que el servicio findAll fue invocado exactamente una vez
         verify(service, times(1)).findAll();
     }
 }

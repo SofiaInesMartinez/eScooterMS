@@ -26,6 +26,7 @@ public class StopController {
 	private final StopService service;
 	
 	public StopController(StopService service) {
+		System.out.println(service);
 		this.service = service;
 	}
 	
@@ -36,6 +37,7 @@ public class StopController {
 	
 	@PostMapping("")
 	public ResponseEntity<DTOStopResponse> saveStop(@RequestBody @Valid DTOStopRequest request){
+		System.out.println(service.save(request));
 		return ResponseEntity.ok(service.save(request));
 	}
 	
