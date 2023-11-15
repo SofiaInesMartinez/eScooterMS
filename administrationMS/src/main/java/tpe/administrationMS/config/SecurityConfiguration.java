@@ -1,13 +1,11 @@
 package tpe.administrationMS.config;
 
-import tpe.administrationMS.model.Roles;
 import tpe.administrationMS.security.JwtConfigurer;
 import tpe.administrationMS.security.TokenProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
