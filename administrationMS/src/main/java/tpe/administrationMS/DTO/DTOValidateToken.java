@@ -1,26 +1,45 @@
 package tpe.administrationMS.DTO;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import java.util.List;
 
 public class DTOValidateToken {
-	@NotNull(message = "token should't be null")
-	@NotBlank(message = "token should't be empty")
-	private String token;
-	
+    private boolean isAuthenticated;
+    private String username;
+    private List<String> authorities;
+    
 	public DTOValidateToken() {
 		super();
 	}
 	
-	public DTOValidateToken(String token) {
-		this.token = token;
+	public DTOValidateToken(boolean isAuthenticated, String username, List<String> authorities) {
+		this.isAuthenticated = isAuthenticated;
+		this.username = username;
+		this.authorities = authorities;
 	}
 
-	public String getToken() {
-		return token;
+	public boolean isAuthenticated() {
+		return isAuthenticated;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public String getUsername() {
+		return username;
 	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setAuthenticated(boolean isAuthenticated) {
+		this.isAuthenticated = isAuthenticated;
+	}
+
+	public List<String> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(List<String> authorities) {
+		this.authorities = authorities;
+	}
+	
+	
 }

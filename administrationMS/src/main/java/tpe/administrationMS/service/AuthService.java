@@ -6,14 +6,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import tpe.administrationMS.DTO.DTOAuthRequest;
 import tpe.administrationMS.DTO.DTOAuthResponse;
-import tpe.administrationMS.DTO.DTOEncodeRequest;
-import tpe.administrationMS.DTO.DTOValidateToken;
 import tpe.administrationMS.model.JWTToken;
 import tpe.administrationMS.security.JWTFilter;
 import tpe.administrationMS.security.TokenProvider;
@@ -24,9 +21,6 @@ public class AuthService {
 	
 	@Autowired
 	private TokenProvider tokenProvider;
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 	
 	private AuthenticationManagerBuilder authenticationManagerBuilder;
 	
@@ -43,13 +37,5 @@ public class AuthService {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add( JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt );
         return new DTOAuthResponse(new JWTToken(jwt), httpHeaders);
-	}
-	
-	public String encodePassword(DTOEncodeRequest request) {
-		return passwordEncoder.encode(request.getPassword());
-	}
-	
-	public boolean validate(DTOValidateToken request) {
-		return tokenProvider.validateToken(request.getToken());
 	}
 }

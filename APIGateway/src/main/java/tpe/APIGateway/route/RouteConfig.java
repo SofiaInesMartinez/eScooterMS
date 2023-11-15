@@ -14,26 +14,26 @@ public class RouteConfig {
     RouteLocator routes( RouteLocatorBuilder builder, AuthenticationFilter authFilter ) {
     	//FALTA CORREGIR RUTAS!!
         return builder.routes()
-                .route("lll", r -> r.path("/api/authenticate" )
+                .route("administrationMS", r -> r.path("/administration/**" )
                         .filters( f ->
                                 f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
                         )
-                        .uri("http://localhost:8080"))
-                .route("auth-service", r -> r.path("/api/register" )
-                        .filters( f ->
-                                f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
-                        )
-                        .uri("http://localhost:8080"))
-                .route("micro-a-product", r -> r.path( "/api/admin/products/**" )
+                        .uri("http://localhost:8005"))
+                .route("scooterMS", r -> r.path("/scooter/**" )
                         .filters( f ->
                                 f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
                         )
                         .uri("http://localhost:8002"))
-                .route("micro-a-product", r -> r.path("/api/products/**")
-                        .filters(f ->
-                            f.filter(authFilter.apply(new AuthenticationFilter.Config()))
+                .route("userMS", r -> r.path( "/user/**" )
+                        .filters( f ->
+                                f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
                         )
-                        .uri("http://localhost:8002"))
+                        .uri("http://localhost:8003"))
+                .route("maintenanceMS", r -> r.path( "/maintenance/**" )
+                        .filters( f ->
+                                f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
+                        )
+                        .uri("http://localhost:8004"))
                 .build();
     }
 
