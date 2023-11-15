@@ -5,17 +5,14 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import tpe.administrationMS.DTO.DTOAccountResponse;
 import tpe.administrationMS.DTO.DTOAccountUserStatusResponse;
-import tpe.administrationMS.DTO.DTOEncodeRequest;
 import tpe.administrationMS.DTO.DTOScooterResponse;
 import tpe.administrationMS.DTO.DTOUserRequest;
 import tpe.administrationMS.DTO.DTOUserResponse;
@@ -44,6 +41,8 @@ public class UserService {
 	private RoleRepository roleRepository;
 	@Autowired
 	private WebClient restClient;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Transactional(readOnly = true)
 	public List<DTOScooterResponse> getNearbyScooters(double latitude, double longitude) {
@@ -69,9 +68,6 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public DTOAccountUserStatusResponse getAccountByUserIdWithBalance(long id) throws NotFoundException, AccountWithoutMoneyException {
 		if (repository.existsById(id)) {
-//			return repository.getAccountByUserIdWithBalance(id)
-//					.map( DTOAccountResponse::new )
-//					.orElseThrow(() -> new AccountWithoutMoneyException(id));
 			Optional<DTOAccountUserStatusResponse> optional = repository.getAccountByUserIdWithBalance(id);
 			if (optional.isPresent()) {
 				return optional.get();
@@ -87,14 +83,6 @@ public class UserService {
 	public List<DTOUserResponse> findAll() {
 		return repository.findAll().stream().map(DTOUserResponse::new).toList();
 	}
-
-//	@Transactional
-//	public DTOUserResponse save(@Valid DTOUserRequest request) {
-//		User user = new User(request.getId(), request.getPhone(), request.getEmail(), request.getPassword(), request.getName(),
-//				request.getSurname(), request.getUsername(), request.getRole());
-//		user = repository.save(user);
-//		return new DTOUserResponse(user);
-//	}
 	
 	@Transactional
 	public DTOUserResponse save(DTOUserRequest request) throws UserWithEmailAlreadyExistsException, InvalidRolesRequestException {
@@ -119,17 +107,7 @@ public class UserService {
         	throw new InvalidRolesRequestException();
         }
         
-//        String encryptedPassword = passwordEncoder.encode(request.getPassword());
-//        User user = new User(request.getId(), request.getPhone(), request.getEmail(), encryptedPassword, request.getName(), request.getSurname(), request.getUsername(), roles);
-        DTOEncodeRequest encodeRequest = new DTOEncodeRequest(request.getPassword());
-        String encryptedPassword =  restClient
-				.method(HttpMethod.PUT)
-				.uri("http://localhost:8005/administration/encode")
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.body(BodyInserters.fromValue(encodeRequest))
-				.retrieve()
-				.bodyToMono(String.class)
-				.block();
+        String encryptedPassword = passwordEncoder.encode(request.getPassword());
         User user = new User(request.getId(), request.getPhone(), request.getEmail(), encryptedPassword, request.getName(), request.getSurname(), request.getUsername(), roles);
         
         User createdUser = repository.save(user);
