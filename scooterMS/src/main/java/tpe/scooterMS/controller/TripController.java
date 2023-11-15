@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import tpe.scooterMS.exception.TripInPauseException;
 import tpe.scooterMS.exception.TripNotPausedException;
 import tpe.scooterMS.exception.TripReachedPauseTimeLimitException;
 import tpe.scooterMS.exception.UserOnTripException;
+import tpe.scooterMS.model.Roles;
 import tpe.scooterMS.service.TripService;
 
 @RestController
@@ -47,6 +49,7 @@ public class TripController {
 	}
 	
 	@GetMapping("/year/{year}/fromMonth/{month1}/ToMonth/{month2}")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<?> getInvoicedAmountByYearAndMonthRange(@PathVariable int year, @PathVariable int month1, @PathVariable int month2) {
 		return ResponseEntity.ok(service.getInvoicedAmountByYearAndMonthRange(year, month1, month2));
 	}
@@ -72,6 +75,7 @@ public class TripController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<TripResponseDTO> deleteTrip(@PathVariable int id) throws NotFoundException {
 		return ResponseEntity.ok(service.deleteTrip(id));
 	}

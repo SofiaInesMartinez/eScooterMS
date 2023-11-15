@@ -39,11 +39,10 @@ public class HttpConfig {
 		http
 		    .csrf( AbstractHttpConfigurer::disable )
 		    .authorizeHttpRequests( auth -> auth
-		    		.requestMatchers("/administration/authenticate").permitAll()
-		    		.requestMatchers("/administration/encode").permitAll()
-		    		.requestMatchers("/user/**").permitAll() // CONFIGURAR BIEN LAS RUTAS Y PERMISOS
-		    		.requestMatchers("/account/**").hasAnyAuthority( Roles.ADMIN )
-		    		.requestMatchers("/role/**").permitAll()
+		    		.requestMatchers("/trip/**").authenticated()
+		    		.requestMatchers("tariff/**").hasAuthority(Roles.ADMIN)
+		    		.requestMatchers("stop/**").hasAuthority(Roles.ADMIN)
+		    		.requestMatchers("scooter/**").authenticated()
 		    )
 		    .anonymous( AbstractHttpConfigurer::disable )
 		    .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );

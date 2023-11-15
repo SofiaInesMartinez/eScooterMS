@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import tpe.scooterMS.DTO.ScooterByKmsDTO;
 import tpe.scooterMS.DTO.ScooterByTimeDTO;
 import tpe.scooterMS.DTO.ScooterByTimePauseDTO;
 import tpe.scooterMS.exception.NotFoundException;
+import tpe.scooterMS.model.Roles;
 import tpe.scooterMS.service.ScooterService;
 
 @RestController
@@ -57,6 +59,7 @@ public class ScooterController {
 	}
 	
 	@PostMapping("")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<DTOScooterResponse> saveScooter(@RequestBody @Valid DTOScooterRequest request){
 		return ResponseEntity.ok(service.save(request));
 	}
@@ -68,37 +71,44 @@ public class ScooterController {
 
 	
 	@GetMapping("/byId")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<List<DTOScooterResponse>> getScootersBySimpleOrdering() {
 		return ResponseEntity.ok(service.getScootersBySimpleOrdering());
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<String> deleteScooter(@PathVariable long id) throws NotFoundException {
         service.deleteScooter(id);
         return ResponseEntity.ok("Scooter con ID " + id + " eliminado con éxito.");
 	}
 	
 	@GetMapping("/reportByKm")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<List<ScooterByKmsDTO>> getScootersReportByKm() {
 		return ResponseEntity.ok(service.getScootersReportByKm());
 	}
 	
 	@GetMapping("/reportByTotalTime")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<List<ScooterByTimePauseDTO>> getScootersReportByTotalTime() {
 		return ResponseEntity.ok(service.getScootersReportByTotalTime());
 	}
 	
 	@GetMapping("/reportByTimeWithPauses")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<List<ScooterByTimeDTO>> getScootersReportByTimeWithPauses() {
 		return ResponseEntity.ok(service.getScootersReportByTimeWithPauses());
 	}
 	
 	@GetMapping("/minimumNumberOfTrips/{number}/year/{year}")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<List<DTOScooterResponse>> getScootersByMinimumNumberOfTrips(@PathVariable int number,@PathVariable int year) {
 		return ResponseEntity.ok(service.getScootersByMinimumNumberOfTrips(number,year));
 	}
 	
 	@GetMapping("/reportByStatus")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<Map<String, Long>> getScootersByStatus() {
 		return ResponseEntity.ok(service.getScootersByStatus());
 	}
