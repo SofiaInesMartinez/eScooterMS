@@ -44,5 +44,4 @@ public class DTOUserStatusRequest {
 		DTOUserStatusRequest other = (DTOUserStatusRequest) obj;
 		return Objects.equals(status, other.status);
 	}
-
 }

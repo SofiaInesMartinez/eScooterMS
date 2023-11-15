@@ -1,24 +1,34 @@
 package tpe.administrationMS.DTO;
 
+import java.util.List;
+
+import tpe.administrationMS.model.Role;
+import tpe.administrationMS.model.User;
 
 public class DTOUserResponse {
 	private long id;
 	private String surname;
 	private String email;
-	private int phone;
+	private List<Role> roles;
 	private int status;
 	
 	
-	public DTOUserResponse() {
+	public DTOUserResponse(User user) {
 		super();
+		this.id = user.getId();
+		this.surname = user.getSurname();
+		this.email = user.getEmail();
+		this.roles = user.getRoles();
+		this.status = user.getStatus();
 	}
-
-	public DTOUserResponse(long id, String surname, String email, int phone, int status) {
+	
+	
+	public DTOUserResponse(long id, String surname, String email, List<Role> roles, int status) {
 		super();
 		this.id = id;
 		this.surname = surname;
 		this.email = email;
-		this.phone = phone;
+		this.roles = roles;
 		this.status = status;
 	}
 	
@@ -34,16 +44,16 @@ public class DTOUserResponse {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public int getPhone() {
-		return phone;
-	}
-	public void setPhone(int phone) {
-		this.phone = phone;
-	}
-	
-	
 	public long getId() {
 		return id;
+	}
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 
@@ -64,7 +74,7 @@ public class DTOUserResponse {
 
 	@Override
 	public String toString() {
-		return "DTOUserResponse [surname=" + surname + ", email=" + email + ", phone=" + phone + ", status=" + status +"]";
+		return "DTOUserResponse [id=" + id + ", surname=" + surname + ", email=" + email + ", roles=" + roles
+				+ ", status=" + status + "]";
 	}
-	
 }
