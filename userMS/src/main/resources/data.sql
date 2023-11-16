@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS user_role (
 );
 
 
-----------
+-- ----------
 -- Poblate table `user`
 --
 
