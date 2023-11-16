@@ -39,21 +39,25 @@ public class ScooterController {
 	}
 	
 	@PutMapping("/{id}/coordinates")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<DTOScooterResponse> updateScooterCoordinates(@PathVariable long id, @RequestBody @Valid DTOCoordinatesRequest request) throws NotFoundException {
 		return ResponseEntity.ok(service.updateScooterCoordinates(id, request));
 	}
 	
 	@GetMapping("/latitude/{latitude}/longitude/{longitude}")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<List<DTOScooterResponse>> getNearbyScooters(@PathVariable double latitude, @PathVariable double longitude ) {
 		return ResponseEntity.ok(service.getNearbyScooters(latitude, longitude));
 	}
 	
 	@PutMapping("/{id}/status")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<DTOScooterResponse> updateScooterStatus(@PathVariable long id, @RequestBody @Valid DTOScooterStatusRequest request) throws NotFoundException {
 		return ResponseEntity.ok(service.updateScooterStatus(id, request));
 	}
 	
 	@GetMapping("")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<List<DTOScooterResponse>> getScooters() {
 		return ResponseEntity.ok(service.findAll());
 	}
