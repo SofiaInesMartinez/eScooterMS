@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import tpe.userMS.exception.DisabledUserException;
 import tpe.userMS.exception.InvalidRolesRequestException;
 import tpe.userMS.exception.NotFoundException;
 import tpe.userMS.exception.UserWithEmailAlreadyExistsException;
+import tpe.userMS.model.Roles;
 import tpe.userMS.service.UserService;
 
 @RestController
@@ -58,18 +60,20 @@ public class UserController {
 		return ResponseEntity.ok(service.findAll());
 	}
 
-	@PostMapping("")
+	@PostMapping("/register")
 	public ResponseEntity<DTOUserResponse> saveUser(@RequestBody @Valid DTOUserRequest request) throws UserWithEmailAlreadyExistsException, InvalidRolesRequestException {
 		return ResponseEntity.ok(service.save(request));
 	}
 
 	@DeleteMapping("/{id}")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<String> deleteUser(@PathVariable long id) throws NotFoundException {
 		service.delete(id);
 		return ResponseEntity.ok("The user with id " + id + " has been succesfully deleted."); 
 	}
 	
 	@PutMapping("/{id}/status")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
     public ResponseEntity<DTOUserResponse> updateUserStatus(@PathVariable long id, @RequestBody @Valid DTOUserStatusRequest request) throws NotFoundException {
         DTOUserResponse updatedUser = service.updateStatus(id, request);
         return ResponseEntity.ok(updatedUser);
@@ -87,6 +91,7 @@ public class UserController {
 	}
 
 	@GetMapping("/byCreatedAt")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<List<DTOUserResponse>> getUsersBySimpleOrdering() {
 		return ResponseEntity.ok(service.getUsersBySimpleOrdering());
 	}

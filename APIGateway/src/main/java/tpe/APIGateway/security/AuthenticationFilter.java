@@ -21,7 +21,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
 	//FALTA CORREGIR RUTAS!!!
     private static final String _AuthHeader = "Authorization";
-    List<String> excludedUrls = List.of("/administration/authenticate", "administration/validate");
+    List<String> excludedUrls = List.of("/administration/authenticate", "administration/validate", "user/register");
     private final WebClient.Builder webClientBuilder;
 
 

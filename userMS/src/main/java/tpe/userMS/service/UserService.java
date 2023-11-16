@@ -8,6 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -44,6 +45,8 @@ public class UserService {
 	private RoleRepository roleRepository;
 	@Autowired
 	private WebClient restClient;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Transactional(readOnly = true)
 	public List<DTOScooterResponse> getNearbyScooters(double latitude, double longitude) {
@@ -121,15 +124,16 @@ public class UserService {
         
 //        String encryptedPassword = passwordEncoder.encode(request.getPassword());
 //        User user = new User(request.getId(), request.getPhone(), request.getEmail(), encryptedPassword, request.getName(), request.getSurname(), request.getUsername(), roles);
-        DTOEncodeRequest encodeRequest = new DTOEncodeRequest(request.getPassword());
-        String encryptedPassword =  restClient
-				.method(HttpMethod.PUT)
-				.uri("http://localhost:8005/administration/encode")
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.body(BodyInserters.fromValue(encodeRequest))
-				.retrieve()
-				.bodyToMono(String.class)
-				.block();
+//        DTOEncodeRequest encodeRequest = new DTOEncodeRequest(request.getPassword());
+//        String encryptedPassword =  restClient
+//				.method(HttpMethod.PUT)
+//				.uri("http://localhost:8005/administration/encode")
+//				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+//				.body(BodyInserters.fromValue(encodeRequest))
+//				.retrieve()
+//				.bodyToMono(String.class)
+//				.block();
+        String encryptedPassword = passwordEncoder.encode(request.getPassword());
         User user = new User(request.getId(), request.getPhone(), request.getEmail(), encryptedPassword, request.getName(), request.getSurname(), request.getUsername(), roles);
         
         User createdUser = repository.save(user);
