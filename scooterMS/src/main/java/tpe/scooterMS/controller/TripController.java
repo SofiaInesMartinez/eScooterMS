@@ -39,11 +39,13 @@ public class TripController {
 	private TripService service;
 	
 	@PutMapping("/{id}/endPause")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<TripResponseDTO> endPause(@PathVariable int id) throws NotFoundException, TripNotPausedException, TripAlreadyEndedException {
 		return ResponseEntity.ok(service.endPause(id));
 	}
 	
 	@PutMapping("/{id}/startPause")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<TripResponseDTO> startPause(@PathVariable int id) throws NotFoundException, TripInPauseException, TripAlreadyEndedException, TripReachedPauseTimeLimitException {
 		return ResponseEntity.ok(service.startPause(id));
 	}
@@ -55,21 +57,25 @@ public class TripController {
 	}
 	
 	@PutMapping("/{id}/end")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<TripResponseDTO> endTrip(@PathVariable int id) throws NotFoundException, TripAlreadyEndedException, ScooterNotLocatedAtStopException {
 		return ResponseEntity.ok(service.endTrip(id));
 	}
 	
 	@GetMapping("")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<List<TripResponseDTO>> findAll() {
 		return ResponseEntity.ok(service.findAll());
 	}
 	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<TripResponseDTO> findById(@PathVariable int id) throws NotFoundException {
 		return ResponseEntity.ok(service.findByid(id));
 	}
 	
 	@PostMapping("")
+	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
 	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) throws NotFoundException, AccountWithoutMoneyException, ScooterUnavailableException, UserOnTripException, DisabledUserException {
 		return new ResponseEntity<>(service.saveTrip(request), HttpStatus.CREATED);
 	}
