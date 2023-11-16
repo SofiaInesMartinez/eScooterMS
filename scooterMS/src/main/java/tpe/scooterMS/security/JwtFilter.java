@@ -28,11 +28,6 @@ public class JwtFilter extends GenericFilterBean {
     private static final String AUTHORITIES_KEY = "auth";
     private final JwtParser jwtParser;
 
-	public JwtFilter(JwtParser jwtParser) {
-		super();
-		this.jwtParser = jwtParser;
-	}
-
 	@Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
