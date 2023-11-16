@@ -33,7 +33,7 @@ public class HttpConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http ) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http ) throws Exception {
         http
         	.addFilterBefore( new JwtFilter( jwtParser ), UsernamePasswordAuthenticationFilter.class);
 		http
