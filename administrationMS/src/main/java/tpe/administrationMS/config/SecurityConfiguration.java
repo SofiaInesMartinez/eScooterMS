@@ -38,11 +38,9 @@ public class SecurityConfiguration {
             .csrf( AbstractHttpConfigurer::disable )
             // MANEJAMOS LOS PERMISOS A LOS ENDPOINTS.
             .authorizeHttpRequests( auth -> auth
-            		.requestMatchers("/administration/authenticate").permitAll()
-            		.requestMatchers("/administration/encode").permitAll()
-            		.requestMatchers("/user/**").permitAll() // CONFIGURAR BIEN LAS RUTAS Y PERMISOS
-            		.requestMatchers("/account/**").permitAll()
-            		.requestMatchers("/role/**").permitAll()
+            		.anyRequest().permitAll()
+//            		.requestMatchers("/administration/authenticate").permitAll()
+//            		.requestMatchers("/administration/encode").permitAll()
             )
             .anonymous( AbstractHttpConfigurer::disable )
             .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );
