@@ -39,7 +39,7 @@ public class HttpConfig {
 		http
 		    .csrf( AbstractHttpConfigurer::disable )
 		    .authorizeHttpRequests( auth -> auth
-		    		.requestMatchers("/trip/**").authenticated()
+		    		.requestMatchers("trip/**").authenticated()
 		    		.requestMatchers("tariff/**").hasAuthority(Roles.ADMIN)
 		    		.requestMatchers("stop/**").hasAuthority(Roles.ADMIN)
 		    		.requestMatchers("scooter/**").authenticated()

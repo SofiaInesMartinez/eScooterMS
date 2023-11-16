@@ -21,7 +21,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
 	//FALTA CORREGIR RUTAS!!!
     private static final String _AuthHeader = "Authorization";
-    List<String> excludedUrls = List.of("administration/authenticate", "administration/validate");
+    List<String> excludedUrls = List.of("/administration/authenticate", "administration/validate");
     private final WebClient.Builder webClientBuilder;
 
 
@@ -38,7 +38,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
             if( this.isSecured.test( request ) ) {
                 return webClientBuilder.build().get()
-                        .uri("http://localhost:8005/administration/authenticate")
+                        .uri("http://localhost:8005/administration/validate")
                         .header( _AuthHeader, bearerToken )
                         .retrieve().bodyToMono( DTOValidateToken.class )
                         .map( response -> {
