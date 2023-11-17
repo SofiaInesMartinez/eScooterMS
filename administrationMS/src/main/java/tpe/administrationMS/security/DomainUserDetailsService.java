@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DomainUserDetailsService implements UserDetailsService {
 
+
     private final UserRepository userRepository;
 
     @Override
@@ -39,4 +40,12 @@ public class DomainUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
     }
+
+
+	public DomainUserDetailsService(UserRepository userRepository) {
+		super();
+		this.userRepository = userRepository;
+	}
+    
+    
 }

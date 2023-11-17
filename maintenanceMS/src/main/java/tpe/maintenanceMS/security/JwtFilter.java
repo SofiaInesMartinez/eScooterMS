@@ -74,4 +74,11 @@ public class JwtFilter extends GenericFilterBean {
         }
     }
 
+	public JwtFilter(JwtParser jwtParser) {
+		super();
+		this.jwtParser = jwtParser;
+	}
+    
+    
+
 }
