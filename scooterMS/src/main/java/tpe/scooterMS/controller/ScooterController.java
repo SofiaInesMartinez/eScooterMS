@@ -39,7 +39,7 @@ public class ScooterController {
 	}
 	
 	@PutMapping("/{id}/coordinates")
-	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<DTOScooterResponse> updateScooterCoordinates(@PathVariable long id, @RequestBody @Valid DTOCoordinatesRequest request) throws NotFoundException {
 		return ResponseEntity.ok(service.updateScooterCoordinates(id, request));
 	}

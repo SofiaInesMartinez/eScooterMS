@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import tpe.administrationMS.DTO.DTORoleRequest;
 import tpe.administrationMS.DTO.DTORoleResponse;
 import tpe.administrationMS.exception.NotFoundException;
 import tpe.administrationMS.exception.RoleWithNameAlreadyExistsException;
+import tpe.administrationMS.model.Roles;
 import tpe.administrationMS.service.RoleService;
 
 @RestController
@@ -26,16 +28,19 @@ public class RoleController {
 	private RoleService service;
 	
 	@GetMapping("")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<List<DTORoleResponse>> findAll() {
 		return ResponseEntity.ok(service.findAll());
 	}
 	
 	@GetMapping("/{id}")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<DTORoleResponse> findById(@PathVariable long id) throws NotFoundException {
 		return ResponseEntity.ok(service.findById(id));
 	}
 	
 	@PostMapping("")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<DTORoleResponse> saveRole(@RequestBody @Valid DTORoleRequest request) throws RoleWithNameAlreadyExistsException {
 		return ResponseEntity.ok(service.saveRole(request));
 	}

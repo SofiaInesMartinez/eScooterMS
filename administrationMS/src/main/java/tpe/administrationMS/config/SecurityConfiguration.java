@@ -1,5 +1,6 @@
 package tpe.administrationMS.config;
 
+import tpe.administrationMS.model.Roles;
 import tpe.administrationMS.security.JwtConfigurer;
 import tpe.administrationMS.security.TokenProvider;
 
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -39,8 +41,6 @@ public class SecurityConfiguration {
             // MANEJAMOS LOS PERMISOS A LOS ENDPOINTS.
             .authorizeHttpRequests( auth -> auth
             		.anyRequest().permitAll()
-//            		.requestMatchers("/administration/authenticate").permitAll()
-//            		.requestMatchers("/administration/encode").permitAll()
             )
             .anonymous( AbstractHttpConfigurer::disable )
             .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );

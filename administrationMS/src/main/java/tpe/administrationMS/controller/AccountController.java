@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import tpe.administrationMS.DTO.DTOReduceBalanceRequest;
 import tpe.administrationMS.exception.AccountWithoutMoneyException;
 import tpe.administrationMS.exception.DisabledUserException;
 import tpe.administrationMS.exception.NotFoundException;
+import tpe.administrationMS.model.Roles;
 import tpe.administrationMS.service.AccountService;
 
 @RestController
@@ -61,7 +63,7 @@ public class AccountController {
         return ResponseEntity.ok("Account with ID " + id + " has reduced its balance an amount of " + request.getMoney());
     }
 	
-	@PutMapping("/{id}/moneyBalance/{moneyBalance}")
+	@PutMapping("/{id}/moneyBalance/{moneyBalance}")	
     public ResponseEntity<String> updateAccountMoneyBalance(@PathVariable long id, @PathVariable int moneyBalance) throws NotFoundException {
         service.updateMoneyBalance(id, moneyBalance);
         return ResponseEntity.ok("Account with ID " + id + " has been updated money balance to " + moneyBalance);
@@ -73,6 +75,7 @@ public class AccountController {
 	}
 
 	@GetMapping("/byId")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<List<DTOAccountResponse>> getAccountsBySimpleOrdering() {
 		return ResponseEntity.ok(service.getAccountsBySimpleOrdering());
 	}

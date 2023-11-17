@@ -59,6 +59,7 @@ public class StopController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<String> deleteStop(@PathVariable long id) throws NotFoundException {
         service.deleteStop(id);
         return ResponseEntity.ok("Stop con ID " + id + " eliminada con éxito.");
