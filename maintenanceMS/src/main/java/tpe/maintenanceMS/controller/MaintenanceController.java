@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,26 +35,26 @@ public class MaintenanceController {
 	
 	@GetMapping("/reportByTimeWithPauses")
 	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
-	public ResponseEntity<?> getScootersReportByTimeWithPauses() throws ServiceCommunicationException {
-		return ResponseEntity.ok(service.getScootersReportByTimeWithPauses());
+	public ResponseEntity<?> getScootersReportByTimeWithPauses(@RequestHeader("Authorization") String authorizationHeader) throws ServiceCommunicationException {
+		return ResponseEntity.ok(service.getScootersReportByTimeWithPauses(authorizationHeader));
 	}
 	
 	@GetMapping("/reportByTotalTime")
 	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
-	public ResponseEntity<?> getScootersReportByTotalTime() throws ServiceCommunicationException {
-		return ResponseEntity.ok(service.getScootersReportByTotalTime());
+	public ResponseEntity<?> getScootersReportByTotalTime(@RequestHeader("Authorization") String authorizationHeader) throws ServiceCommunicationException {
+		return ResponseEntity.ok(service.getScootersReportByTotalTime(authorizationHeader));
 	}
 	
 	@PutMapping("/{id}/finish")
 	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
-	public ResponseEntity<?> finishMaintenance(@PathVariable long id) throws NotFoundException, MaintenanceAlreadyFinishedException, ServiceCommunicationException {
-		return ResponseEntity.ok(service.finishMaintenance(id));
+	public ResponseEntity<?> finishMaintenance(@RequestHeader("Authorization") String authorizationHeader, @PathVariable long id) throws NotFoundException, MaintenanceAlreadyFinishedException, ServiceCommunicationException {
+		return ResponseEntity.ok(service.finishMaintenance(authorizationHeader, id));
 	}
 	
 	@PutMapping("/scooter/{id}/status")
 	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
-	public ResponseEntity<?> updateScooterStatus(@PathVariable long id, @RequestBody @Valid DTOScooterStatusRequest request) throws NotFoundException {
-		return ResponseEntity.ok(service.updateScooterStatus(id, request));
+	public ResponseEntity<?> updateScooterStatus(@RequestHeader("Authorization") String authorizationHeader, @PathVariable long id, @RequestBody @Valid DTOScooterStatusRequest request) throws NotFoundException {
+		return ResponseEntity.ok(service.updateScooterStatus(authorizationHeader, id, request));
 	}
 	
 	@GetMapping("")
@@ -64,8 +65,8 @@ public class MaintenanceController {
 	
 	@PostMapping("")
 	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
-	public ResponseEntity<?> saveMaintenance(@RequestBody @Valid DTOMaintenanceRequest request) throws NotFoundException, ScooterAlreadyInMaintenanceException{
-		return ResponseEntity.ok(service.save(request));
+	public ResponseEntity<?> saveMaintenance(@RequestHeader("Authorization") String authorizationHeader, @RequestBody @Valid DTOMaintenanceRequest request) throws NotFoundException, ScooterAlreadyInMaintenanceException{
+		return ResponseEntity.ok(service.save(authorizationHeader, request));
 	}
 	
 	@GetMapping("/{id}")

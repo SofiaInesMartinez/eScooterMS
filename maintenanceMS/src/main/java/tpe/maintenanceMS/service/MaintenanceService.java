@@ -37,11 +37,12 @@ public class MaintenanceService {
 	private WebClient.Builder webClientBuilder;
 	
 	@Transactional
-	public List<ScooterByTimePauseDTO> getScootersReportByTimeWithPauses() throws ServiceCommunicationException {
+	public List<ScooterByTimePauseDTO> getScootersReportByTimeWithPauses(String token) throws ServiceCommunicationException {
 		try {
 			List<ScooterByTimePauseDTO> scooters = webClientBuilder.build()
 					.get()
-					.uri("http://localhost:8002/scooter/reportByTimeWithPauses")
+					.uri("http://localhost:8001/scooter/reportByTimeWithPauses")
+					.header("Authorization", token)
 					.retrieve()
 					.bodyToMono(new ParameterizedTypeReference<List<ScooterByTimePauseDTO>>(){})
 					.block();
@@ -53,11 +54,12 @@ public class MaintenanceService {
 	}
 	
 	@Transactional
-	public List<ScooterByTimeDTO> getScootersReportByTotalTime() throws ServiceCommunicationException {
+	public List<ScooterByTimeDTO> getScootersReportByTotalTime(String token) throws ServiceCommunicationException {
 		try {
 			List<ScooterByTimeDTO> scooters = webClientBuilder.build()
 					.get()
-					.uri("http://localhost:8002/scooter/reportByTotalTime")
+					.uri("http://localhost:8001/scooter/reportByTotalTime")
+					.header("Authorization", token)
 					.retrieve()
 					.bodyToMono(new ParameterizedTypeReference<List<ScooterByTimeDTO>>(){})
 					.block();
@@ -69,7 +71,7 @@ public class MaintenanceService {
 	}
 	
 	@Transactional
-	public DTOMaintenanceResponse finishMaintenance(long id) throws NotFoundException, MaintenanceAlreadyFinishedException, ServiceCommunicationException {
+	public DTOMaintenanceResponse finishMaintenance(String token, long id) throws NotFoundException, MaintenanceAlreadyFinishedException, ServiceCommunicationException {
 		Maintenance maintenance = repository.getMaintenanceById(id);
 		if (maintenance == null) {
 			throw new NotFoundException("Maintenance", id);
@@ -78,10 +80,12 @@ public class MaintenanceService {
 			throw new MaintenanceAlreadyFinishedException(id);
 		}
 		
+		long idScooter = maintenance.getIdScooter();
 		try {
 			webClientBuilder.build()
 				.put()
-				.uri("http://localhost:8002/scooter/" + maintenance.getIdScooter() + "/status")
+				.uri("http://localhost:8001/scooter/" + idScooter + "/status")
+				.header("Authorization", token)
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				.body(BodyInserters.fromValue(new DTOScooterStatusRequest("available")))
 				.retrieve()
@@ -96,11 +100,12 @@ public class MaintenanceService {
 	}
 	
 	@Transactional
-	public DTOScooterResponse updateScooterStatus(long id, DTOScooterStatusRequest request) throws NotFoundException {
+	public DTOScooterResponse updateScooterStatus(String token, long id, DTOScooterStatusRequest request) throws NotFoundException {
 		try {
 			DTOScooterResponse scooter = webClientBuilder.build()
 				.put()
-				.uri("http://localhost:8002/scooter/" + id + "/status")
+				.uri("http://localhost:8001/scooter/" + id + "/status")
+				.header("Authorization", token)
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				.body(BodyInserters.fromValue(request))
 				.retrieve()
@@ -119,28 +124,30 @@ public class MaintenanceService {
 	}
 	
 	@Transactional
-	public DTOMaintenanceResponse save(DTOMaintenanceRequest request) throws NotFoundException, ScooterAlreadyInMaintenanceException {
+	public DTOMaintenanceResponse save(String token, DTOMaintenanceRequest request) throws NotFoundException, ScooterAlreadyInMaintenanceException {
 		Optional<Maintenance> activeMaintenance = repository.findByFinishDateIsNullAndIdScooter(request.getIdScooter());
 		if (activeMaintenance.isPresent()) {
 			throw new ScooterAlreadyInMaintenanceException(request.getIdScooter());
 		}
 		
 		try {
+			long idScooter = request.getIdScooter();
 			webClientBuilder.build()
 				.put()
-				.uri("http://localhost:8002/scooter/" + request.getIdScooter() + "/status")
+				.uri("http://localhost:8001/scooter/" + idScooter + "/status")
+				.header("Authorization", token)
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				.body(BodyInserters.fromValue(new DTOScooterStatusRequest("maintenance")))
 				.retrieve()
 				.bodyToMono(DTOScooterResponse.class)
 				.block();
-			
 			Maintenance maintenance = new Maintenance(request.getId(), request.getDescription(),request.getStartDate(),request.getFinishDate(),request.getIdScooter());
 			maintenance = repository.save(maintenance);
 			return new DTOMaintenanceResponse(maintenance);
 		} catch (Exception e) {
 			throw new NotFoundException("Scooter", request.getIdScooter());
 		}
+
 	}
 	
 	@Transactional ( readOnly = true )
