@@ -32,7 +32,7 @@ import tpe.scooterMS.model.Roles;
 import tpe.scooterMS.service.TripService;
 
 @RestController
-@RequestMapping("/trip")
+@RequestMapping("trip")
 public class TripController {
 
 	@Autowired

@@ -19,7 +19,32 @@ public class RouteConfig {
                                 f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
                         )
                         .uri("http://localhost:8005"))
+                .route("administrationMS", r -> r.path("/account/**" )
+                        .filters( f ->
+                                f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
+                        )
+                        .uri("http://localhost:8005"))
+                .route("administrationMS", r -> r.path("/role/**" )
+                        .filters( f ->
+                                f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
+                        )
+                        .uri("http://localhost:8005"))
                 .route("scooterMS", r -> r.path("/scooter/**" )
+                        .filters( f ->
+                                f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
+                        )
+                        .uri("http://localhost:8002"))
+                .route("scooterMS", r -> r.path("/trip/**" )
+                        .filters( f ->
+                                f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
+                        )
+                        .uri("http://localhost:8002"))
+                .route("scooterMS", r -> r.path("/stop/**" )
+                        .filters( f ->
+                                f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
+                        )
+                        .uri("http://localhost:8002"))
+                .route("scooterMS", r -> r.path("/tariff/**" )
                         .filters( f ->
                                 f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
                         )
