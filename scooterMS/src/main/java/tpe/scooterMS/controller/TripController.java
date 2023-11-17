@@ -51,7 +51,7 @@ public class TripController {
 	}
 	
 	@GetMapping("/year/{year}/fromMonth/{month1}/ToMonth/{month2}")
-	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<?> getInvoicedAmountByYearAndMonthRange(@PathVariable int year, @PathVariable int month1, @PathVariable int month2) {
 		return ResponseEntity.ok(service.getInvoicedAmountByYearAndMonthRange(year, month1, month2));
 	}
@@ -63,25 +63,25 @@ public class TripController {
 	}
 	
 	@GetMapping("")
-	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<List<TripResponseDTO>> findAll() {
 		return ResponseEntity.ok(service.findAll());
 	}
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<TripResponseDTO> findById(@PathVariable int id) throws NotFoundException {
 		return ResponseEntity.ok(service.findByid(id));
 	}
 	
 	@PostMapping("")
-	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) throws NotFoundException, AccountWithoutMoneyException, ScooterUnavailableException, UserOnTripException, DisabledUserException {
 		return new ResponseEntity<>(service.saveTrip(request), HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasAnyAuthority(" + Roles.ADMIN + ")")
+	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
 	public ResponseEntity<TripResponseDTO> deleteTrip(@PathVariable int id) throws NotFoundException {
 		return ResponseEntity.ok(service.deleteTrip(id));
 	}
