@@ -155,7 +155,7 @@ public class TripService {
 				
 				webClientBuilder.build()
 					.put()
-					.uri("http://localhost:8003/account/" + trip.getIdAccount() + "/reduceMoneyBalance")
+					.uri("http://localhost:8005/account/" + trip.getIdAccount() + "/reduceMoneyBalance")
 					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 					.body(BodyInserters.fromValue(new DTOReduceBalanceRequest((int) amount)))
 					.retrieve()
