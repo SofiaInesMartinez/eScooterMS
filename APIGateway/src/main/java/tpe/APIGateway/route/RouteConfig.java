@@ -12,7 +12,7 @@ public class RouteConfig {
 
     @Bean
     RouteLocator routes( RouteLocatorBuilder builder, AuthenticationFilter authFilter ) {
-    	//FALTA CORREGIR RUTAS!!
+ 
         return builder.routes()
                 .route("administrationMS", r -> r.path("/administration/**" )
                         .filters( f ->
