@@ -19,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
 
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -47,9 +49,9 @@ public class HttpConfig {
 		http
 		    .csrf( AbstractHttpConfigurer::disable )
 		    .authorizeHttpRequests( auth -> auth
-		    		.requestMatchers("user/**").authenticated()
+		    		.requestMatchers(new AntPathRequestMatcher("user/register")).permitAll()
+		    		.requestMatchers(new AntPathRequestMatcher("user/**")).authenticated()
 //		    		.requestMatchers("user/**").authenticated()
-		    		.requestMatchers("user/register").permitAll()
 		    )
 		    .anonymous( AbstractHttpConfigurer::disable )
 		    .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );
