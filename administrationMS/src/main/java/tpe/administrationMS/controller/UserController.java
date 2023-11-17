@@ -41,21 +41,25 @@ public class UserController {
 	}
 	
 	@GetMapping("/scooter/latitude/{latitude}/longitude/{longitude}")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<List<DTOScooterResponse>> getNearbyScooters(@PathVariable double latitude, @PathVariable double longitude) {
 		return ResponseEntity.ok(service.getNearbyScooters(latitude, longitude));
 	}
 	
 	@GetMapping("/{id}/accounts")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<List<DTOAccountResponse>> getUserAccounts(@PathVariable long id) throws NotFoundException {
 		return ResponseEntity.ok(service.getUserAccounts(id));
 	}
 	
 	@GetMapping("/{id}/account/withBalance")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<DTOAccountUserStatusResponse> getAccountByUserIdWithBalance(@PathVariable long id) throws NotFoundException, AccountWithoutMoneyException {
 		return ResponseEntity.ok(service.getAccountByUserIdWithBalance(id));
 	}
 
 	@GetMapping("")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<List<DTOUserResponse>> getUsers() {
 		return ResponseEntity.ok(service.findAll());
 	}
@@ -80,12 +84,14 @@ public class UserController {
     }
 	
 	@PostMapping("/{id}/addAccount/{accountId}")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
     public ResponseEntity<String> addAccountToUser(@PathVariable Long id, @PathVariable Long accountId) throws NotFoundException, DisabledUserException {
         service.addAccountToUser(id, accountId);
         return ResponseEntity.ok("Added account " + accountId + " to user " +id);
     }
 	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<DTOUserResponse> getUserById(@PathVariable long id) throws NotFoundException {
 			return ResponseEntity.ok(service.getUserById(id));
 	}

@@ -49,7 +49,7 @@ public class RouteConfig {
                                 f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
                         )
                         .uri("http://localhost:8002"))
-                .route("userMS", r -> r.path( "/user/**" )
+                .route("administrationMS", r -> r.path( "/user/**" )
                         .filters( f ->
                                 f.filter( authFilter.apply( new AuthenticationFilter.Config() ) )
                         )
