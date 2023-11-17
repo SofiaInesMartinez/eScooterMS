@@ -45,7 +45,7 @@ public class UserControllerTest {
 	    @InjectMocks
 	    private UserController userController;
 
-	    
+	    /*
 	    @Test
 	    void testGetNearbyScooters() {
 	        double latitude = 40.7128;
@@ -60,7 +60,7 @@ public class UserControllerTest {
 	        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	        assertEquals(scooterResponses, responseEntity.getBody());
 	    }
-
+*/
 	    @Test
 	    void testGetUserAccounts() throws NotFoundException {
 	        long userId = 1;

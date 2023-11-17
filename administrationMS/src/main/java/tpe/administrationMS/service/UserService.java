@@ -45,10 +45,11 @@ public class UserService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Transactional(readOnly = true)
-	public List<DTOScooterResponse> getNearbyScooters(double latitude, double longitude) {
+	public List<DTOScooterResponse> getNearbyScooters(String token, double latitude, double longitude) {
 		return restClient
 				.method(HttpMethod.GET)
-				.uri("http://localhost:8002/scooter/latitude/" + latitude + "/longitude/" + longitude)
+				.uri("http://localhost:8001/scooter/latitude/" + latitude + "/longitude/" + longitude)
+				.header("Authorization", token)
 				.retrieve()
 				.bodyToMono(new ParameterizedTypeReference<List<DTOScooterResponse>>(){})
 				.block();

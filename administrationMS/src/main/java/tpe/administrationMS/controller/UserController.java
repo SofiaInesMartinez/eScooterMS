@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,8 +43,8 @@ public class UserController {
 	
 	@GetMapping("/scooter/latitude/{latitude}/longitude/{longitude}")
 	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
-	public ResponseEntity<List<DTOScooterResponse>> getNearbyScooters(@PathVariable double latitude, @PathVariable double longitude) {
-		return ResponseEntity.ok(service.getNearbyScooters(latitude, longitude));
+	public ResponseEntity<List<DTOScooterResponse>> getNearbyScooters(@RequestHeader("Authorization") String authorizationHeader, @PathVariable double latitude, @PathVariable double longitude) {
+		return ResponseEntity.ok(service.getNearbyScooters(authorizationHeader, latitude, longitude));
 	}
 	
 	@GetMapping("/{id}/accounts")
