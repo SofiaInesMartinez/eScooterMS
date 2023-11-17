@@ -75,7 +75,7 @@ public class TripController {
 	}
 	
 	@PostMapping("")
-	@PreAuthorize( "hasAnyAuthority(\"" + Roles.ADMIN + "\" )" )
+	@PreAuthorize("hasAnyAuthority('" + Roles.ADMIN + "', '" + Roles.USER + "')")
 	public ResponseEntity<TripResponseDTO> saveTrip(@RequestBody @Valid TripRequestDTO request) throws NotFoundException, AccountWithoutMoneyException, ScooterUnavailableException, UserOnTripException, DisabledUserException {
 		return new ResponseEntity<>(service.saveTrip(request), HttpStatus.CREATED);
 	}
