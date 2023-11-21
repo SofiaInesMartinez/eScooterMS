@@ -38,10 +38,7 @@ public class HttpConfig {
 		http
 		    .csrf( AbstractHttpConfigurer::disable )
 		    .authorizeHttpRequests( auth -> auth
-		    		.requestMatchers("trip/**").authenticated()
-		    		.requestMatchers("tariff/**").hasAuthority(Roles.ADMIN)
-		    		.requestMatchers("stop/**").hasAuthority(Roles.ADMIN)
-		    		.requestMatchers("scooter/**").authenticated()
+		    		.anyRequest().authenticated()
 		    )
 		    .anonymous( AbstractHttpConfigurer::disable )
 		    .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );
