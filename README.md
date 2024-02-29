@@ -1,8 +1,21 @@
-# TPEArqui
+# Problem/system description
+A company wants to launch a business to allow the rental of electronic scooters at different stops in a capital city, for which it requires the development of a mobile application for the users of the service, and additionally a Web application for the corresponding management. The service consists of having a fleet of e-scooters, initially parked at different previously defined stops, within the city center and nearby areas. E-scooters are picked up and left at these stops, this is a basic condition for the operation of the service. The operation of the service is described below.
+In order to use the e-scooter, the user must create an account in the app, associated with a Mercado Pago account. Prior to using the service, you must have loaded an amount of money into your account,
+which will be deducted depending on the time of use of the e-scooter. The same Mercado Pago account can be used for several service accounts.
+An account may have several associated users who will use the credits loaded into the account, and a user may be associated with more than one account. Each user will have a name and must register their
+cell phone number, valid email, first and last name. The account will have an identification number and a registration date.
+Once the account has money loaded, the user will be able to activate a e-scooter for use, using a QR code reader. At that moment a trip associated with the user's account will be generated.
+that you are using your app, recording start date and time. The use of the skateboard is by time, the credit begins to be consumed when the skateboard is activated, and this will allow it to turn on in
+that moment. From there the service user will be able to use the e-scooter, and once they no longer require it, they must leave it at a previously established stop. At this moment, select the option to cut the service, once the e-scooter is parked, ending the trip. At the end of the trip, the date and time of completion and the kilometers traveled will be recorded. It should be noted that the app should not allow you to end a trip if it does not detect, using the GPS that the skateboard has, that it is at a permitted stop.
+If the user needed to stop for no more than 15 minutes at some intermediate point in the trip, the app will have a Pause option. With this option, a pause associated with the trip is recorded, to establish that the e-scooter is not being used, although credits are still being spent.
+
+In this way, the actual use of the e-scooter can be established, and the app allows it to be turned off, but does not unassign it to the current account. Once the pause is finished, the user can indicate it through the app, to be able to turn on the skateboard. If the 15 minutes pass, the skateboard will automatically be considered in use again, and a larger amount of credit will begin to be collected until the end of the trip.
+The e-scooter will have a GPS and is uniquely identified with ID, so you can determine where each e-scooter is at all times. This way, if a user needs a e-scooter they can find the closest one through an interactive map in the app that shows the e-scooters in the area.
+For the maintenance of the e-scooters, a Web application will be created to record all the maintenance actions carried out by the Skateboard Maintenance Managers. To establish whether a skateboard requires maintenance, the time of use and the kilometers traveled are considered, which requires the recording of this information, as well as the generation of reports.
+associated with the use of e-scooters, with respect to kilometers and time of use, including time with breaks and without breaks. It is necessary to know if a e-scooter is undergoing maintenance, or is enabled for use, when it is at a defined stop after completing maintenance.
+In addition, the e-scooter Manager is the one who manages the skateboards and stops in the application (e.g. adding, removing, updating data as required), also sets the normal fare prices and extras for restarting long breaks. On the other hand, it is capable of canceling accounts when for some reason it is considered necessary.
 
 #API Rest - Endpoints and ports
-
-1. Un primer análisis del problema reveló las siguientes funcionalidades (si bien podrían existir otras funcionalidades no detectadas, o variaciones de las planteadas):  
 
 a. Registrar monopatín en mantenimiento (debe marcarse como no disponible para su uso)  
 
